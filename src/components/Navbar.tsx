@@ -25,6 +25,10 @@ const routeList: RouteProps[] = [
     label: 'About',
   },
   {
+    href: RoutePaths.BLOG,
+    label: 'Blog',
+  },
+  {
     href: RoutePaths.CONTACT,
     label: 'Contact',
   },
