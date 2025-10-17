@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/providers/authProvider/authProvider';
 import { RoutePaths } from '@/types/route.type';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 
@@ -108,6 +108,12 @@ export function SignInPage() {
                   <Button type="submit" variant={'secondary'} className="w-full">
                     Login
                   </Button>
+                  <h1 className="mx-auto">
+                    No Account?{' '}
+                    <Link to="/join" className="font-semibold text-primary">
+                      Join US!
+                    </Link>
+                  </h1>
                 </form>
               </Form>
             )}
