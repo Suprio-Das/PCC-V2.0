@@ -29,12 +29,11 @@ export function SignInPage() {
   const navigate = useNavigate();
   const auth = getAuth();
   const { user } = useAuth();
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     await signInWithEmailAndPassword(auth, data.email, data.password)
       .then(() => {
-        // Signed in
         navigate(RoutePaths.MEMBER_LIST);
-        // ...
       })
       .catch(() => {});
   }
@@ -52,53 +51,68 @@ export function SignInPage() {
   return (
     <>
       <Navbar />
-      <div className="container min-h-[calc(100vh-100px)] flex flex-col items-center justify-center">
-        {user ? (
-          <>
-            Already logged in with <span className="text-primary">{user.email}</span>
-            <Button onClick={handleLogout} variant={'link'} className="text-red-600 underline">
-              Logout
-            </Button>
-          </>
-        ) : (
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="lg:w-[500px] lg:py-11 p-5 space-y-6 flex flex-col items-center bg-white dark:bg-black border dark:border-white/[0.2]"
-            >
-              <h1 className="text-4xl font-semibold text-primary">Login</h1>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="yourmail@mail.com" {...field} className="w-[256px]" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your Password" type="password" {...field} className="w-[256px]" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" variant={'secondary'} className="w-[256px]">
-                Login
-              </Button>
-            </form>
-          </Form>
-        )}
+      <div className="container min-h-[calc(100vh-100px)] flex items-center justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 w-full max-w-6xl bg-white dark:bg-black rounded-xl overflow-hidden shadow-md">
+          <div className="hidden lg:flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/40">
+            <div>
+              <h1 className="text-center lg:text-3xl font-semibold">Let’s Build the Future Together</h1>
+              <p className="w-4/5 text-center mx-auto mt-3">
+                Log in to access your community of tech enthusiasts. Participate in workshops, hackathons, and projects
+                that shape tomorrow’s innovators.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col items-center justify-center p-8 lg:p-16">
+            {user ? (
+              <div className="text-center space-y-3">
+                <p>
+                  Already logged in with <span className="text-primary font-semibold">{user.email}</span>
+                </p>
+                <Button onClick={handleLogout} variant={'link'} className="text-red-600 underline">
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-sm space-y-6 flex flex-col">
+                  <h1 className="text-4xl font-semibold text-primary text-center">Login</h1>
+
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="yourmail@mail.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Your Password" type="password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button type="submit" variant={'secondary'} className="w-full">
+                    Login
+                  </Button>
+                </form>
+              </Form>
+            )}
+          </div>
+        </div>
       </div>
       <Footer />
     </>
