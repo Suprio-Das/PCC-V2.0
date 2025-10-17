@@ -62,7 +62,7 @@ export const Navbar = () => {
                   <div className="mt-3 flex flex-col gap-2 items-center">
                     <ThemeToggle />
                     <Link
-                      to={RoutePaths.LOGIN}
+                      to={RoutePaths.SIGN_IN}
                       className="px-4 py-2 rounded-full text-white bg-[#16A34A] hover:bg-green-700 transition-colors font-medium"
                       onClick={() => setIsOpen(false)}
                     >
@@ -89,7 +89,7 @@ export const Navbar = () => {
             ))}
             {/* Desktop Login button */}
             <Link
-              to={RoutePaths.LOGIN}
+              to={RoutePaths.SIGN_IN}
               className="px-6 py-2 rounded-full text-white bg-[#16A34A] hover:bg-green-700 transition-colors text-sm ml-2"
             >
               Login
