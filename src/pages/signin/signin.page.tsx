@@ -52,7 +52,7 @@ export function SignInPage() {
   return (
     <>
       <Navbar />
-      <div className="container h-screen flex flex-col items-center justify-center">
+      <div className="container min-h-[calc(100vh-100px)] flex flex-col items-center justify-center">
         {user ? (
           <>
             Already logged in with <span className="text-primary">{user.email}</span>
@@ -62,8 +62,11 @@ export function SignInPage() {
           </>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col items-center">
-              <h1 className="text-xl font-semibold text-primary">PCIU Computer Club | Admin Login</h1>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="lg:w-[500px] lg:py-11 p-5 space-y-6 flex flex-col items-center bg-white dark:bg-black border dark:border-white/[0.2]"
+            >
+              <h1 className="text-4xl font-semibold text-primary">Login</h1>
               <FormField
                 control={form.control}
                 name="email"
@@ -90,7 +93,7 @@ export function SignInPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" variant={'secondary'} className="px-6">
+              <Button type="submit" variant={'secondary'} className="w-[256px]">
                 Login
               </Button>
             </form>
