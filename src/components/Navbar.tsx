@@ -95,7 +95,7 @@ export const Navbar = () => {
               Login
             </Link>
 
-            {/* Optional ThemeToggle */}
+            {/* ThemeToggle */}
             {/* <ThemeToggle /> */}
           </nav>
         </NavigationMenuList>
