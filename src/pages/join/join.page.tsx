@@ -8,7 +8,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
+  // DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,7 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import DocumentTitle from '@/lib/documentTitle';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Badge } from 'lucide-react';
+// import { Badge } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -201,7 +201,7 @@ export const JoinPage = () => {
   const recruitmentOngoing = true;
   const paymentMethod = form.watch('payment.method');
   // const [submitDisabled, setSubmitDisabled] = useState(true);
-  const [copied, setCopied] = useState(false);
+  // const [copied, setCopied] = useState(false);
 
   return (
     <>
@@ -226,7 +226,7 @@ export const JoinPage = () => {
               </div> */}
             </div>
           ) : (
-            <div className="py-8 lg:py-2 container space-y-4 max-w-lg mx-auto">
+            <div className="py-8 lg:py-2 container space-y-4 max-w-2xl mx-auto">
               <div className="space-y-2">
                 <h2 className="text-xl font-semibold text-center">Join PCIU Computer Club</h2>
                 <Accordion type="single" defaultValue="instructions" collapsible>
@@ -256,13 +256,22 @@ export const JoinPage = () => {
                 </Accordion>
               </div>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full md:w-60vw lg:w-30vw">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-300"
+                >
+                  <div className="col-span-1 md:col-span-2 text-center mb-4">
+                    <h2 className="text-2xl font-semibold text-primary">Join PCIU Computer Club</h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Fill in your details carefully to become part of our growing tech community.
+                    </p>
+                  </div>
                   <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold">Name *</FormLabel>
+                        <FormLabel className="font-semibold">Full Name *</FormLabel>
                         <FormControl>
                           <Input placeholder="Your Name" {...field} />
                         </FormControl>
@@ -270,22 +279,19 @@ export const JoinPage = () => {
                       </FormItem>
                     )}
                   />
-                  <div className="flex gap-8 w-full justify-between">
-                    <FormField
-                      control={form.control}
-                      name="universityID"
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormLabel className="font-semibold">University ID *</FormLabel>
-                          <FormControl>
-                            <Input placeholder="CSE 123 45678" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
+                  <FormField
+                    control={form.control}
+                    name="universityID"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold">University ID *</FormLabel>
+                        <FormControl>
+                          <Input placeholder="CSE 123 45678" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="email"
@@ -316,85 +322,13 @@ export const JoinPage = () => {
                     control={form.control}
                     name="payment.method"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-semibold">
-                          Payment Method *&nbsp;&#40;
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <span className=" text-slate-400 text-xs cursor-pointer">See Payment Instructions</span>
-                            </DialogTrigger>
-                            <DialogContent className="w-90vw rounded-md sm:max-w-md overflow-y-auto max-h-screen">
-                              <DialogHeader>
-                                <DialogTitle>PCC Joining Fee Payment Instructions</DialogTitle>
-                                <DialogDescription>The joining fee is BDT 100. </DialogDescription>
-                              </DialogHeader>
-                              <div className="flex flex-col items-start gap-2">
-                                {/* Dialog description here */}
-                                <h1 className="w-full font-semibold text-primary text-center">Paying Hand Cash</h1>
-                                <span className="">
-                                  <span className="flex gap-2 items-center justify-start text-sm">
-                                    <Badge className="w-2 h-2 text-primary" />
-                                    Contact Your Section Representative
-                                  </span>
-                                </span>
-                                <h1 className="w-full font-semibold text-primary text-center">
-                                  Paying with Bkash/Nagad
-                                </h1>
-                                <span className="flex flex-col gap-1">
-                                  <span className="flex gap-2 items-center justify-start text-sm">
-                                    <Badge className="w-2 h-2 text-primary" />
-                                    Go to Bkash/Nagad
-                                  </span>
-                                  <span className="flex gap-2 items-center justify-start text-sm">
-                                    <Badge className="w-2 h-2 text-primary" />
-                                    <span>
-                                      Send Money to&nbsp;
-                                      <span
-                                        className="bg-slate-300 dark:bg-slate-900 px-1 py-[1px] rounded-sm cursor-pointer"
-                                        onClick={async () => {
-                                          await navigator.clipboard.writeText(`01973773627`);
-                                          toast.success(`Number Copied`);
-                                          setCopied(true);
-                                          setTimeout(() => setCopied(false), 2000);
-                                        }}
-                                      >
-                                        01973773627&nbsp;
-                                        {!copied ? (
-                                          <Icon icon={'cuida:copy-outline'} />
-                                        ) : (
-                                          <Icon icon={'ic:outline-done'} />
-                                        )}
-                                      </span>
-                                    </span>
-                                  </span>
-                                  <span className="flex gap-2 items-center justify-start text-sm">
-                                    <Badge className="w-2 h-2 text-primary" />
-                                    Copy the Transaction ID
-                                  </span>
-                                  <span className="flex gap-2 items-center justify-start text-sm">
-                                    <Badge className="w-2 h-2 text-primary" />
-                                    You&apos;re done!
-                                  </span>
-                                </span>
-                              </div>
-                              <DialogFooter className="flex flex-row justify-end">
-                                <DialogClose asChild className="justify-end">
-                                  <Button type="button" variant="outline" className="w-fit">
-                                    Close
-                                  </Button>
-                                </DialogClose>
-                              </DialogFooter>
-                            </DialogContent>
-                          </Dialog>
-                          &#41;
-                        </FormLabel>
+                      <FormItem className="col-span-1 md:col-span-2">
+                        <FormLabel className="font-semibold">Payment Method *</FormLabel>
                         <FormControl>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select Payment Method" />
-                              </SelectTrigger>
-                            </FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Payment Method" />
+                            </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="Handcash">Hand Cash</SelectItem>
                               <SelectItem value="Bkash">Bkash</SelectItem>
@@ -425,7 +359,7 @@ export const JoinPage = () => {
                     control={form.control}
                     name="expectation"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="col-span-1 md:col-span-2">
                         <FormLabel className="font-semibold">Expectations from PCC</FormLabel>
                         <FormControl>
                           <Textarea
@@ -442,14 +376,13 @@ export const JoinPage = () => {
                     control={form.control}
                     name="agreeTerms"
                     render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <div className="flex flex-row items-start space-y-0 space-x-2">
+                      <FormItem className="col-span-1 md:col-span-2">
+                        <div className="flex flex-row items-start gap-2">
                           <FormControl>
                             <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                           </FormControl>
-
-                          <FormDescription className="leading-none">
-                            I agree to PCIU Computer Club&apos;s&nbsp;
+                          <FormDescription className="leading-tight">
+                            I agree to PCIU Computer Club&apos;s{' '}
                             <Dialog>
                               <DialogTrigger asChild>
                                 <span className="underline text-primary cursor-pointer">Monthly Fee Policy</span>
@@ -457,39 +390,15 @@ export const JoinPage = () => {
                               <DialogContent className="w-90vw rounded-md sm:max-w-md overflow-y-auto max-h-screen">
                                 <DialogHeader>
                                   <DialogTitle>PCC Monthly Fees Policy</DialogTitle>
-                                  {/* <DialogDescription>
-                                    PCIU Computer Club members must pay 
-                                  </DialogDescription> */}
                                 </DialogHeader>
-                                <div className="flex flex-col items-start gap-2">
-                                  {/* Dialog description here */}
-                                  <span className="flex flex-col gap-2">
-                                    <span className="flex gap-2 items-center justify-start text-sm">
-                                      <Icon icon={'ion:arrow-redo'} className="text-primary" />
-                                      Each month, a fee of BDT 40 will be charged to all members to support club
-                                      activities, events, and resources.
-                                    </span>
-                                    <span className="flex gap-2 items-center justify-start text-sm">
-                                      <Icon icon={'ion:arrow-redo'} className="text-primary" />
-                                      Membership fees provide reduced entry fees for certain club events and special
-                                      sessions. However, bigger events may require specific contribution from the
-                                      participants.
-                                    </span>
-                                    <span className="flex gap-2 items-center justify-start text-sm">
-                                      <Icon icon={'ion:arrow-redo'} className="text-primary" />
-                                      Fees can be paid via Hand Cash, Bkash and Nagad.
-                                    </span>
-                                    <span className="flex gap-2 items-center justify-start text-sm">
-                                      <Icon icon={'ion:arrow-redo'} className="text-primary" />
-                                      Monthly fees are non-refundable, as they are used for ongoing club activities.
-                                    </span>
-                                  </span>
+                                <div className="flex flex-col gap-2 text-sm">
+                                  <p>• A fee of BDT 40 will be charged monthly to support club activities.</p>
+                                  <p>• Fees are non-refundable and used for ongoing development.</p>
+                                  <p>• Payments can be made via Hand Cash, Bkash, or Nagad.</p>
                                 </div>
-                                <DialogFooter className="flex flex-row justify-end">
-                                  <DialogClose asChild className="justify-end">
-                                    <Button type="button" variant="outline" className="w-fit">
-                                      Close
-                                    </Button>
+                                <DialogFooter>
+                                  <DialogClose asChild>
+                                    <Button variant="outline">Close</Button>
                                   </DialogClose>
                                 </DialogFooter>
                               </DialogContent>
@@ -502,10 +411,15 @@ export const JoinPage = () => {
                     )}
                   />
 
-                  <Button type="submit" disabled={false} className="w-[96px]">
-                    {!loading && <>Submit</>}
-                    {loading && <ThreeDots width={'24px'} height={'8px'} color="#fff" />}
-                  </Button>
+                  <div className="col-span-1 md:col-span-2 flex justify-center pt-2">
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="px-8 py-2 w-40 text-white bg-primary hover:bg-primary/90 transition-all duration-200"
+                    >
+                      {!loading ? 'Submit' : <ThreeDots width="24px" height="8px" color="#fff" />}
+                    </Button>
+                  </div>
                 </form>
               </Form>
             </div>
