@@ -1,11 +1,13 @@
 export enum RoutePaths {
   ROOT = '/',
   ABOUT = '/about',
+  BLOG = '/blog',
   EVENTS = '/events',
   TIMELINE = '/timeline',
   PEOPLE = '/committee',
   CONTACT = '/contact',
   JOIN = '/join',
+  LOGIN = '/login',
   SIGN_IN = '/signin',
   MEMBER_LIST = '/member-list',
   DEV = '/dev',

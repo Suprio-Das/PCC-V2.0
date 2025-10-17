@@ -59,7 +59,7 @@ module.exports = {
         },
         facebook: {
           DEFAULT: 'hsl(var(--facebook))',
-        }
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -90,7 +90,7 @@ module.exports = {
         'meteor-effect': 'meteor 5s linear infinite',
       },
       fontFamily: {
-        "Carattere": `"Carattere", serif`,
+        Carattere: `"Carattere", serif`,
       },
       backgroundImage: {
         'radial-primary-1': 'radial-gradient(circle at 60%, hsl(var(--primary)) 40%, transparent 30%)',
