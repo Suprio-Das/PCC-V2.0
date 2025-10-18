@@ -40,7 +40,7 @@ export const Hero = () => {
             />
           </div>
         </main>
-        <p className="max-w-full text-sm md:text-base lg:max-w-60dvw md:max-w-60dvw text-center tracking-wide">
+        <p className="max-w-full text-xs md:text-base lg:max-w-60dvw md:max-w-60dvw text-center tracking-wide">
           We are a group of passionate students who are always looking to learn and grow. We are a community of
           developers, designers, and tech enthusiasts who are always looking to innovate and create.
         </p>
