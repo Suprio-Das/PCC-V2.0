@@ -1,6 +1,7 @@
 import './App.css';
 import { About } from './components/About';
 import { CoreValues } from './components/CoreValues';
+import { Marquee } from './components/customized/Marquee/Marquee';
 import { Events } from './components/Events';
 import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
@@ -16,6 +17,7 @@ function App() {
     <>
       <Navbar />
       <Hero />
+      <Marquee></Marquee>
       <About />
       <CoreValues />
       <People />

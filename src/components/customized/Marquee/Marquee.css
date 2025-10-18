@@ -1,0 +1,43 @@
+.marquee-diagonal {
+  animation: scroll-diagonal 30s linear infinite;
+  transform-origin: top left;
+}
+
+.marquee-diagonal-reverse {
+  animation: scroll-diagonal-reverse 30s linear infinite;
+  transform-origin: top left;
+}
+
+.track-diagonal,
+.track-diagonal-reverse {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transform: translateY(50vh) translateX(50vh);
+}
+
+@keyframes scroll-diagonal {
+  0% {
+    transform: rotate(-45deg) translateY(0) translateX(0);
+  }
+  100% {
+    transform: rotate(-45deg) translateY(-200vh) translateX(-200vh);
+  }
+}
+
+@keyframes scroll-diagonal-reverse {
+  0% {
+    transform: rotate(45deg) translateY(-200vh) translateX(200vh);
+  }
+  100% {
+    transform: rotate(45deg) translateY(0) translateX(0);
+  }
+}
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
