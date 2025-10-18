@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 import JoinPccBtn from './customized/JoinPccBtn/JoinPccBtn';
@@ -12,14 +11,7 @@ export const Hero = () => {
         <span></span>
       </BackgroundLines>
       <div className="flex flex-col gap-5 text-center place-items-center space-y-5 z-10">
-        <Badge
-          variant={'outline'}
-          className="flex items-center max-w-prose-50 md:max-w-prose px-3 py-0 text-xs font-medium tracking-wide dark:text-home text-black border-black dark:border-inherit shadow-2xl shadow-destructive dark:shadow-none"
-        >
-          <span className="font-semibold">Latest</span>
-          <span className="bg-black dark:bg-white rounded-full p-xxs mx-2"></span>
-          <span className="truncate">Exciting Events are Ongoing</span>
-        </Badge>
+        <p className="px-4 py-2 text-white bg-[#16A34A] hover:bg-green-700 transition-colors font-medium">Hey👋</p>
         <main className="text-center z-10">
           <div className="text-3xl md:text-3xl font-medium">PCIU Computer Club</div>
           <div className="text-4xl md:text-6xl font-bold leading-tight">
