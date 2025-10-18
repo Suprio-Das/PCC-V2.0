@@ -28,8 +28,23 @@ import SpiderWeb from '@/assets/spider-web.jpg';
 import Team from '@/assets/tean.jpg';
 import workshop from '@/assets/workshop.jpg';
 import ShohanOfficial from '@/assets/shohan_official.png';
+import Suprio from '@/assets/suprio.png';
+import Jarin from '@/assets/jarin.png';
+import Tajrian from '@/assets/tajrian.png';
 
 export const ImageContainer = {
+  Suprio: {
+    src: Suprio,
+    alt: 'Suprio',
+  },
+  Jarin: {
+    src: Jarin,
+    alt: 'Jarin',
+  },
+  Tajrian: {
+    src: Tajrian,
+    alt: 'Tajrian',
+  },
   Akib: {
     src: Akib,
     alt: 'Akib',

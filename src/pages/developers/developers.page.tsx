@@ -23,6 +23,76 @@ interface Social {
   link: string;
 }
 
+// PeopleList V2.0
+const PeopleListV2: People[] = [
+  {
+    name: 'Suprio Das',
+    designation: 'Leader & Backend Dev.',
+    photo: {
+      src: ImageContainer.Suprio.src,
+      alt: ImageContainer.Suprio.alt,
+    },
+    social: [
+      {
+        icon: <Facebook className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://www.facebook.com/supriodas07',
+      },
+      {
+        icon: <Github className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://github.com/Suprio-Das',
+      },
+      {
+        icon: <Linkedin className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://www.linkedin.com/in/supriodas03/',
+      },
+    ],
+  },
+  {
+    name: 'Jarin Tasnin',
+    designation: 'Frontend Developer',
+    photo: {
+      src: ImageContainer.Jarin.src,
+      alt: ImageContainer.Jarin.alt,
+    },
+    social: [
+      {
+        icon: <Facebook className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://www.facebook.com/7278491.8289a',
+      },
+      {
+        icon: <Github className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://github.com/tasninanika',
+      },
+      {
+        icon: <Linkedin className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://www.linkedin.com/in/jarin-tasnin-dev/',
+      },
+    ],
+  },
+  {
+    name: 'Kazi Tajrian Mostafa',
+    designation: 'UI/UX Designer',
+    photo: {
+      src: ImageContainer.Tajrian.src,
+      alt: ImageContainer.Tajrian.alt,
+    },
+    social: [
+      {
+        icon: <Facebook className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://www.facebook.com/',
+      },
+      {
+        icon: <Github className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://github.com/',
+      },
+      {
+        icon: <Linkedin className="w-5 h-5 transition duration-200 hover:text-primary" />,
+        link: 'https://www.linkedin.com/in/kazi-tajrian-mostafa/',
+      },
+    ],
+  },
+];
+
 const PeopleList: People[] = [
   {
     name: 'Jubayer Hossain',
@@ -165,12 +235,67 @@ export const Developers = () => {
       <Navbar />
       <section id="people" className="container flex flex-col gap-12 items-center py-16">
         <div className="text-center w-full">
-          <h2 className="font-bold text-3xl mb-4">Our Development Team</h2>
-          <p className="text-muted-foreground">
-            Meet the minds{' '}
-            <span className="text-muted-foreground/70 dark:text-muted-foreground/30">(of course, from CSE 27B)</span>{' '}
-            behind this awesome website.
-          </p>
+          <h2 className="font-bold text-3xl mb-4">Our V2.0 Development Team</h2>
+          <p className="text-muted-foreground">Meet the minds behind this awesome website.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 w-full max-w-4xl mx-auto">
+          {PeopleListV2.map((person, idx) => (
+            <Card
+              key={idx}
+              className="group relative bg-gradient-to-br from-background to-background/95 border-round shadow-x1 hover:shadow-2xl transition-all duration-300 p-8 md:max-w-72 aspect-square"
+            >
+              <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-primary/5" />
+                <div className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-primary/10" />
+              </div>
+
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full border-2 border-primary/20 animate-[spin_8s_linear_infinite]">
+                    <div className="absolute -top-1 left-1/2 w-2 h-2 bg-primary rounded-full transform -translate-x-1/2" />
+                  </div>
+
+                  <div className="relative w-32 h-32 rounded-full bg-neutral-400 dark:bg-secondary/20 overflow-hidden border-4 border-background shadow-lg">
+                    <img src={person.photo.src} alt={person.photo.alt} className="w-full h-full object-cover" />
+                  </div>
+                </div>
+
+                <div className="absolute top-20 left-4 w-3 h-3 rounded-full bg-primary/20" />
+                <div className="absolute bottom-12 right-6 w-2 h-2 rounded-full bg-primary/30" />
+                <div className="absolute top-1/2 right-4 w-4 h-4 rounded-full bg-primary/10" />
+
+                <div className="space-y-2 mt-4 flex flex-col gap-3 items-center">
+                  <h3 className="font-bold text-xl leading-tight">{person.name}</h3>
+
+                  <Badge
+                    className={`px-4 text-sm w-fit text-primary bg-primary/10 ${person.designation === 'Project Lead' && 'border-primary'}`}
+                    variant={'outline'}
+                  >
+                    {person.designation}
+                  </Badge>
+
+                  <div className="flex gap-3">
+                    {person.social.map((social, socialIdx) => (
+                      <Link
+                        key={socialIdx}
+                        to={social.link}
+                        target="_blank"
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-muted hover:bg-primary/20 transition-colors"
+                      >
+                        {React.cloneElement(social.icon, {
+                          className: 'w-4 h-4',
+                        })}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+        <div className="text-center w-full">
+          <h2 className="font-bold text-3xl mb-4">Our V1.1 Development Team</h2>
+          <p className="text-muted-foreground">Meet the minds behind this awesome website.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 w-full max-w-4xl mx-auto">
           {PeopleList.map((person, idx) => (
