@@ -24,7 +24,7 @@ export const About = () => {
       <p className="text-green-500 text-sm md:text-[18px] font-garamond text-center mb-6">About Us</p>
 
       {/* Main heading */}
-      <h2 className="text-3xl md:text-5xl font-bold text-center mt-2">About PCIU Computer Club</h2>
+      <h2 className="text-3xl md:text-6xl font-bold text-center mt-2">About PCIU Computer Club</h2>
 
       {/* Description */}
       <p className="max-w-3xl text-sm md:text-base mx-auto text-center text-gray-600 dark:text-gray-300 mt-6">

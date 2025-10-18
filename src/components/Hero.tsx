@@ -13,7 +13,7 @@ export const Hero = () => {
       <div className="flex flex-col text-center place-items-center space-y-5 z-10">
         <p className="px-4 py-2 button-color button-hover mb-2 font-garamond">Hey👋</p>
         <main className="text-center z-10">
-          <div className="text-3xl md:text-3xl font-medium font-garamond mb-4">PCIU Computer Club</div>
+          <div className="text-3xl md:text-4xl font-medium font-garamond mb-4">PCIU Computer Club</div>
           <div className="text-4xl md:text-6xl font-bold leading-tight mb-2">
             A&nbsp;
             <span className="bg-gradient-to-r from-primary to-black dark:to-white  text-transparent bg-clip-text font-garamond">
