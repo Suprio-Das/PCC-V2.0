@@ -52,7 +52,7 @@ const appRouter = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
-    path: RoutePaths.LOGIN,
+    path: RoutePaths.JOIN,
     element: <JoinPage />,
     errorElement: <NotFound />,
   },
