@@ -96,7 +96,7 @@ export const Navbar = () => {
             </Link>
 
             {/* ThemeToggle */}
-            {/* <ThemeToggle /> */}
+            <ThemeToggle />
           </nav>
         </NavigationMenuList>
       </NavigationMenu>
