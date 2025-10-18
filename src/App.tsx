@@ -1,5 +1,6 @@
 import './App.css';
 import { About } from './components/About';
+import { Advisor } from './components/Advisor';
 import { CoreValues } from './components/CoreValues';
 import { Marquee } from './components/customized/Marquee/Marquee';
 import { Events } from './components/Events';
@@ -19,6 +20,7 @@ function App() {
       <Hero />
       <Marquee></Marquee>
       <About />
+      <Advisor></Advisor>
       <CoreValues />
       <People />
       <Events />
