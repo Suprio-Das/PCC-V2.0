@@ -83,7 +83,7 @@ const BlogPage = () => {
 
         <div className="h-[15rem] md:h-[25rem] lg:h-[30rem]  w-full flex flex-col items-center justify-center overflow-hidden rounded-md">
           <Link
-            to={RoutePaths.LOGIN}
+            to={RoutePaths.JOIN}
             className="md:text-7xl text-3xl lg:text-9xl font-bold text-center text-black dark:text-white relative z-20 hover:cursor-pointer hover:text-primary transition-all"
           >
             Join PCC

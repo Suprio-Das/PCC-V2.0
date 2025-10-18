@@ -29,8 +29,8 @@ const PeopleListV2: People[] = [
     name: 'Suprio Das',
     designation: 'Leader & Backend Dev.',
     photo: {
-      src: ImageContainer.Suprio.src,
-      alt: ImageContainer.Suprio.alt,
+      src: ImageContainer.SuprioOfficial.src,
+      alt: ImageContainer.SuprioOfficial.alt,
     },
     social: [
       {
