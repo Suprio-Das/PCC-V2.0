@@ -92,12 +92,12 @@ export const Footer = () => {
 
       <section className="mx-0 pt-2 pb-3 flex  justify-between bg-secondary">
         <div className="container flex flex-wrap gap-y-4 gap-x-4 justify-center">
-          <span className="min-w-fit">&copy; 2024 PCIU Computer Club</span>
+          <span className="min-w-fit">&copy; 2025 PCIU Computer Club</span>
           <span className={`hidden md:block`}>|</span>
           <span className="">
-            Developed with ♡ by&nbsp;
+            PCC V2.0 Developed with ♡ by&nbsp;
             <Link to={RoutePaths.DEV} className="font-bold text-primary hover:underline hover:underline-offset-2">
-              CSE 27
+              PCC Executive Committee 2024-25
             </Link>
           </span>
         </div>
