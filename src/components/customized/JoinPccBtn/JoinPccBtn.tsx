@@ -7,7 +7,7 @@ interface JoinPccBtnProps {
 
 const JoinPccBtn: FC<JoinPccBtnProps> = ({ onClick }) => {
   return (
-    <button className="join-pcc-btn" onClick={onClick}>
+    <button className="join-pcc-btn font-garamond" onClick={onClick}>
       Join PCC
       <svg fill="currentColor" viewBox="0 0 24 24" className="icon">
         <path
