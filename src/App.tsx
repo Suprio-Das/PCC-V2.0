@@ -8,7 +8,7 @@ import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
 import { Join } from './components/Join';
 import { Navbar } from './components/Navbar';
-import { People } from './components/people';
+import { Executive } from './components/Executive';
 import { ScrollToTop } from './components/ScrollToTop';
 import DocumentTitle from './lib/documentTitle';
 
@@ -21,8 +21,8 @@ function App() {
       <Marquee></Marquee>
       <About />
       <Advisor></Advisor>
+      <Executive></Executive>
       <CoreValues />
-      <People />
       <Events />
       {/* <QuoteCard /> */}
       <Join />
