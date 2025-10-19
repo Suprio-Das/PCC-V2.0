@@ -14,6 +14,7 @@ import { RoutePaths } from '@/types/route.type';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { ProtectedRoutes } from './private.route';
 import BlogPage from '@/pages/blog/blog.page';
+import { AdvisorPage } from '@/pages/advisor/AdvisorPage';
 
 const appRouter = createBrowserRouter([
   {
@@ -24,6 +25,11 @@ const appRouter = createBrowserRouter([
   {
     path: RoutePaths.ABOUT,
     element: <AboutPage />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: RoutePaths.ADVISOR,
+    element: <AdvisorPage></AdvisorPage>,
     errorElement: <NotFound />,
   },
   {
