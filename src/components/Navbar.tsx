@@ -38,7 +38,7 @@ export const Navbar = () => {
           </NavigationMenuItem>
 
           {/* Mobile Menu */}
-          <span className="flex md:hidden">
+          <span className="flex md:hidden font-poppins">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger className="px-2">
                 <Menu className="h-8 w-8" onClick={() => setIsOpen(true)} />
@@ -75,12 +75,12 @@ export const Navbar = () => {
           </span>
 
           {/* Desktop Menu */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-8 font-poppins">
             {routeList.map((route: RouteProps) => (
               <Link
                 key={route.label}
                 to={route.href}
-                className="relative text-base font-normal text-[#3B3533] dark:text-white
+                className="relative text-sm font-normal text-[#3B3533] dark:text-white
         hover:text-[#16A34A] dark:hover:text-[#16A34A]
         after:absolute after:-bottom-0.5 after:left-0 after:w-0 after:h-[0.5px] after:bg-[#16A34A] after:transition-all hover:after:w-full opacity-95"
               >
