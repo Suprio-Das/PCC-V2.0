@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 
-export const About: React.FC = () => {
+export const About = () => {
   const navigate = useNavigate();
 
   const cards = [

@@ -23,18 +23,7 @@ p {
   font-family: "Poppins", sans-serif;
 }
 
-.button-color {
-  color: #fff;
-  background-color: #16A34A;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
-}
 
-.button-color:hover {
-  background-color: #15803d;
-}
-
-/* HeroCards background shadow */
 .shadow {
   position: absolute;
   background: hsl(var(--home-shadow));
