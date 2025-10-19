@@ -8,6 +8,7 @@ export enum RoutePaths {
   CONTACT = '/contact',
   JOIN = '/join',
   ADVISOR = '/advisor',
+  EXECUTIVE = '/executive',
   SIGN_IN = '/signin',
   MEMBER_LIST = '/member-list',
   DEV = '/dev',
