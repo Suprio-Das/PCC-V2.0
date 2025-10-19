@@ -1,6 +1,7 @@
 import { Card, CardContent, CardTitle } from '../../components/ui/card';
 import Chairman from '../../assets/manoara.png';
 import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 
 interface People {
   name: string;
@@ -53,7 +54,7 @@ const AdvisorPanelList: People[] = [
 
 export const AdvisorPage = () => {
   return (
-    <div>
+    <>
       <Navbar></Navbar>
       <section id="advisor" className="container py-16 px-6 md:px-12 flex flex-col gap-10 items-center text-center">
         <div className="max-w-2xl">
@@ -112,6 +113,7 @@ export const AdvisorPage = () => {
           </div>
         </div>
       </section>
-    </div>
+      <Footer></Footer>
+    </>
   );
 };
