@@ -77,33 +77,43 @@ export const Advisor = () => {
             <Card
               key={idx}
               className="
-                group relative flex flex-col justify-between overflow-hidden
-                border-none rounded-2xl dark:bg-gray-900 bg-white
-                shadow-sm hover:shadow-xl transition-all duration-300
-                hover:-translate-y-1 hover:bg-green-50
-                p-6
-              "
+group relative flex flex-col justify-between overflow-hidden
+rounded-2xl border border-gray-200 dark:border-gray-700
+bg-gradient-to-br from-white via-green-50 to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-green-950
+shadow-md hover:shadow-xl transition-all duration-500 ease-out
+hover:-translate-y-2 hover:scale-[1.01]
+p-6
+before:absolute before:inset-0 before:bg-gradient-to-t before:from-green-100/20 before:to-transparent dark:before:from-green-400/5 before:opacity-0 group-hover:before:opacity-100 before:transition-all
+"
             >
+              {/* Softer decorative glow */}
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-green-400/20 to-emerald-500/20 opacity-0 group-hover:opacity-30 blur-xl transition-all duration-700"></div>
+
               {/* Image Section */}
               <div className="relative flex items-center justify-center mb-4">
-                <img
-                  src={person.photo.src}
-                  alt={person.photo.alt}
-                  className="w-48 object-cover  group-hover:scale-105 transition-transform duration-300"
-                />
+                <div className="relative w-48 h-48 overflow-hidden rounded-xl shadow-sm">
+                  <img
+                    src={person.photo.src}
+                    alt={person.photo.alt}
+                    className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-500"></div>
+                </div>
               </div>
 
               {/* Text Section */}
-              <CardContent className="text-center space-y-1">
-                <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white font-garamond">
+              <CardContent className="text-center space-y-1 relative z-10">
+                <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white font-garamond tracking-wide">
                   {person.name}
                 </CardTitle>
-                <p className="text-sm text-green-700 dark:text-green-400 font-medium">{person.designation}</p>
+                <p className="text-sm text-green-700 dark:text-green-400 font-semibold uppercase tracking-wide">
+                  {person.designation}
+                </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 italic">{person.contact}</p>
               </CardContent>
 
-              {/* Subtle hover accent line */}
-              <div className="absolute bottom-0 left-0 w-0 h-1 bg-green-400 transition-all duration-300 group-hover:w-full" />
+              {/* Subtle accent line */}
+              <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-green-400/70 to-emerald-500/70 transition-all duration-500 group-hover:w-full" />
             </Card>
           ))}
         </div>
