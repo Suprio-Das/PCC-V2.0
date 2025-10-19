@@ -57,7 +57,7 @@ export const AdvisorPage = () => {
       <Navbar></Navbar>
       <section id="advisor" className="container py-16 px-6 md:px-12 flex flex-col gap-10 items-center text-center">
         <div className="max-w-2xl">
-          <h2 className="text-3xl md:text-5xl font-bold font-garamond text-green-800 dark:text-green-300 mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold font-garamond text-green-600 dark:text-green-300 mb-4">
             Meet Our Honorable Advisors
           </h2>
           <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed mb-8">
