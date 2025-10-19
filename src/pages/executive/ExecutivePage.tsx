@@ -59,8 +59,8 @@ const PeopleList23_24: People[] = [
 ];
 
 export const ExecutivePage = () => {
-  const [activeTab, setActiveTab] = useState<'24-25' | '23-24'>('24-25');
-  const peopleToShow = activeTab === '24-25' ? PeopleList24_25 : PeopleList23_24;
+  const [activeTab, setActiveTab] = useState<'Session 24-25' | 'Session 23-24'>('Session 24-25');
+  const peopleToShow = activeTab === 'Session 24-25' ? PeopleList24_25 : PeopleList23_24;
 
   return (
     <>
@@ -77,17 +77,17 @@ export const ExecutivePage = () => {
 
           {/* Tabs */}
           <div className="flex justify-center gap-4 mb-10">
-            {['24-25', '23-24'].map((year) => (
+            {['Session 24-25', 'Session 23-24'].map((session) => (
               <button
-                key={year}
+                key={session}
                 className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
-                  activeTab === year
+                  activeTab === session
                     ? 'bg-green-600 text-white shadow-lg scale-105'
                     : 'bg-white dark:bg-gray-800 text-green-600 border border-green-600 hover:bg-green-50'
                 }`}
-                onClick={() => setActiveTab(year as '24-25' | '23-24')}
+                onClick={() => setActiveTab(session as 'Session 24-25' | 'Session 23-24')}
               >
-                {year}
+                {session}
               </button>
             ))}
           </div>
