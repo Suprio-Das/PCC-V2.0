@@ -1,5 +1,4 @@
 import App from '@/App';
-import AboutPage from '@/pages/about/about.page';
 import ContactPage from '@/pages/contact/contact.page';
 import { Developers } from '@/pages/developers/developers.page';
 import { JoinPage } from '@/pages/join/join.page';
@@ -16,6 +15,7 @@ import { ProtectedRoutes } from './private.route';
 import BlogPage from '@/pages/blog/blog.page';
 import { AdvisorPage } from '@/pages/advisor/AdvisorPage';
 import { ExecutivePage } from '@/pages/executive/ExecutivePage';
+import { AboutPage } from '@/pages/about/AboutPage';
 
 const appRouter = createBrowserRouter([
   {
@@ -25,7 +25,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.ABOUT,
-    element: <AboutPage />,
+    element: <AboutPage></AboutPage>,
     errorElement: <NotFound />,
   },
   {
