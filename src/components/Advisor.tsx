@@ -55,11 +55,11 @@ export const Advisor = () => {
   const navigate = useNavigate();
 
   return (
-    <section id="advisor" className="py-16 px-6 md:px-12 flex flex-col gap-10 items-center">
+    <section id="advisor" className="container py-16 px-6 md:px-12 flex flex-col gap-10 items-center">
       {/* Section Header */}
       <header className="flex flex-col gap-2 text-center">
         <p className="text-green-500 text-sm md:text-lg font-garamond">People in Charge</p>
-        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+        <h2 className="text-3xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
           Who tirelessly contributes to the <br />
           <span className="text-green-600">community</span>
         </h2>
@@ -91,11 +91,11 @@ before:absolute before:inset-0 before:bg-gradient-to-t before:from-green-100/20 
 
               {/* Image Section */}
               <div className="relative flex items-center justify-center mb-4">
-                <div className="relative w-48 h-48 overflow-hidden rounded-xl shadow-sm">
+                <div className="relative w-48 overflow-hidden rounded-xl shadow-sm">
                   <img
                     src={person.photo.src}
                     alt={person.photo.alt}
-                    className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500 ease-out"
+                    className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500 ease-out border "
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-500"></div>
                 </div>
@@ -109,7 +109,7 @@ before:absolute before:inset-0 before:bg-gradient-to-t before:from-green-100/20 
                 <p className="text-sm text-green-700 dark:text-green-400 font-semibold uppercase tracking-wide">
                   {person.designation}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 italic">{person.contact}</p>
+                {/* <p className="text-xs text-gray-500 dark:text-gray-400 italic">{person.contact}</p> */}
               </CardContent>
 
               {/* Subtle accent line */}
