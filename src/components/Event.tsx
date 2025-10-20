@@ -40,10 +40,13 @@ export const Event = () => {
       <div className="bg-gradient-to-b bg-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
         <section className="container mx-auto pt-8 pb-28 px-6 md:px-12 text-center">
           {/* Small heading */}
-          <p className="text-green-600 text-sm md:text-lg font-garamond mb-4 tracking-wide uppercase">Events</p>
+          <p className="text-green-600 text-sm md:text-xl font-garamond mb-4 tracking-wide">Events</p>
 
           {/* Main heading */}
-          <h1 className="text-3xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 max-w-3xl mx-auto leading-tight">
+          <h1
+            className="text-3xl md:text-6xl font-bold text-gray-900 dark:text-white mb-8 max-w-3xl mx-auto leading-tight duration-300 
+    transform transition-transform hover:scale-105"
+          >
             Latest Campaign by the PCIU Computer Club
           </h1>
 
