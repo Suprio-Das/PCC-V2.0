@@ -6,7 +6,7 @@ import PCCLogo from '@/assets/pcc-logo.png';
 import { buttonVariants } from './ui/button';
 
 import { RoutePaths } from '@/types/route.type';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ThemeToggle from './customized/ThemeToggle/ThemeToggle';
 import { Menu } from 'lucide-react';
 
@@ -25,6 +25,7 @@ const routeList: RouteProps[] = [
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const location = useLocation();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b-[1px] bg-white dark:border-b-slate-700 dark:bg-background">
@@ -49,16 +50,19 @@ export const Navbar = () => {
                   <SheetTitle className="text-xl font-bold">PCC</SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col justify-center items-center gap-2 mt-4">
-                  {routeList.map(({ href, label }: RouteProps) => (
-                    <Link
-                      key={label}
-                      to={href}
-                      onClick={() => setIsOpen(false)}
-                      className={buttonVariants({ variant: 'ghost' })}
-                    >
-                      {label}
-                    </Link>
-                  ))}
+                  {routeList.map(({ href, label }: RouteProps) => {
+                    const isActive = location.pathname === href;
+                    return (
+                      <Link
+                        key={label}
+                        to={href}
+                        onClick={() => setIsOpen(false)}
+                        className={`${buttonVariants({ variant: 'ghost' })} ${isActive ? 'text-[#16A34A]' : ''}`}
+                      >
+                        {label}
+                      </Link>
+                    );
+                  })}
                   <div className="mt-3 flex flex-col gap-2 items-center">
                     <ThemeToggle />
                     <Link
@@ -76,17 +80,22 @@ export const Navbar = () => {
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex items-center gap-8 font-poppins">
-            {routeList.map((route: RouteProps) => (
-              <Link
-                key={route.label}
-                to={route.href}
-                className="relative text-sm font-normal text-[#3B3533] dark:text-white
-        hover:text-[#16A34A] dark:hover:text-[#16A34A]
-        after:absolute after:-bottom-0.5 after:left-0 after:w-0 after:h-[0.5px] after:bg-[#16A34A] after:transition-all hover:after:w-full opacity-95"
-              >
-                {route.label}
-              </Link>
-            ))}
+            {routeList.map((route: RouteProps) => {
+              const isActive = location.pathname === route.href;
+              return (
+                <Link
+                  key={route.label}
+                  to={route.href}
+                  className={`relative text-sm font-normal
+                    ${isActive ? 'text-[#16A34A]' : 'text-[#3B3533] dark:text-white'}
+                    hover:text-[#16A34A] dark:hover:text-[#16A34A]
+                    after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[0.5px] after:bg-[#16A34A] after:transition-all hover:after:w-full opacity-95
+                  `}
+                >
+                  {route.label}
+                </Link>
+              );
+            })}
             {/* Desktop Login button */}
             <Link
               to={RoutePaths.SIGN_IN}

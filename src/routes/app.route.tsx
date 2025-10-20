@@ -1,5 +1,4 @@
 import App from '@/App';
-import ContactPage from '@/pages/contact/contact.page';
 import { Developers } from '@/pages/developers/developers.page';
 import { JoinPage } from '@/pages/join/join.page';
 import { LeadershipPage } from '@/pages/leaderShip/leadership.page';
@@ -12,10 +11,11 @@ import { UnderMaintenance } from '@/pages/UnderMaintenance/UnderMaintenance.page
 import { RoutePaths } from '@/types/route.type';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { ProtectedRoutes } from './private.route';
-import BlogPage from '@/pages/blog/blog.page';
 import { AdvisorPage } from '@/pages/advisor/AdvisorPage';
 import { ExecutivePage } from '@/pages/executive/ExecutivePage';
 import { AboutPage } from '@/pages/about/AboutPage';
+import { BlogPage } from '@/pages/blog/BlogPage';
+import ContactPage from '@/pages/contact/ContactPage';
 
 const appRouter = createBrowserRouter([
   {
@@ -40,7 +40,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.BLOG,
-    element: <BlogPage />,
+    element: <BlogPage></BlogPage>,
     errorElement: <NotFound />,
   },
   {
@@ -60,7 +60,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.CONTACT,
-    element: <ContactPage />,
+    element: <ContactPage></ContactPage>,
     errorElement: <NotFound />,
   },
   {
