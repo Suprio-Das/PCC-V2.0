@@ -16,6 +16,7 @@ import { ExecutivePage } from '@/pages/executive/ExecutivePage';
 import { AboutPage } from '@/pages/about/AboutPage';
 import { BlogPage } from '@/pages/blog/BlogPage';
 import ContactPage from '@/pages/contact/ContactPage';
+import { EventPage } from '@/pages/event/EventPage';
 
 const appRouter = createBrowserRouter([
   {
@@ -45,7 +46,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.EVENTS,
-    element: <UnderMaintenance />,
+    element: <EventPage></EventPage>,
     errorElement: <NotFound />,
   },
   {

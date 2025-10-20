@@ -26,7 +26,7 @@ export const staticBlogs: Blog[] = [
     date: 'October 12, 2025',
     description:
       'From smart homes to AI-driven healthcare, artificial intelligence is reshaping our daily lives. Let’s explore the ethical and social implications...',
-    thumbnail: 'https://images.unsplash.com/photo-1581091012184-1e0d6b1b5dfc?auto=format&fit=crop&w=800&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 3,

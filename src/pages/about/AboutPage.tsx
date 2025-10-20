@@ -54,7 +54,7 @@ export const AboutPage = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-green-50 dark:bg-gray-900">
+      <div className="">
         {/* Hero Section */}
         <section className="relative flex flex-col items-center justify-center text-center pt-24 px-6 overflow-hidden dark:from-gray-900 dark:to-gray-950">
           <motion.div
@@ -63,10 +63,10 @@ export const AboutPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            <h1 className="text-5xl md:text-6xl   drop-shadow-md bg-gradient-to-r from-primary to-black dark:to-white text-transparent bg-clip-text">
-              About Us
+            <h1 className="text-lg md:text-xl   drop-shadow-md bg-gradient-to-r from-primary to-black dark:to-white text-transparent bg-clip-text uppercase">
+              — About us —
             </h1>
-            <p className="mt-6 text-gray-700 dark:text-gray-200 text-lg max-w-2xl mx-auto leading-relaxed font-poppins">
+            <p className="mt-6 text-gray-700 dark:text-gray-200 md:text-base text-sm max-w-2xl mx-auto leading-relaxed font-poppins">
               We are a community of innovators, creators, and dreamers united by our love for technology. Our goal is to
               empower students with knowledge, skills, and real-world opportunities to shine in the digital era.
             </p>
@@ -74,7 +74,7 @@ export const AboutPage = () => {
         </section>
 
         {/* Horizontal Tabs Section */}
-        <section className="container mx-auto px-6 md:px-12 py-20 grid md:grid-cols-2 gap-16 items-start">
+        <section className="container mx-auto px-6 md:px-12 py-20 grid md:grid-cols-2 gap-16 items-start bg-green-50 dark:bg-gray-900 rounded-xl mt-10">
           {/* Tabs */}
           <div className="flex flex-col">
             <div className="mb-8 text-start">
@@ -126,7 +126,7 @@ export const AboutPage = () => {
         </section>
 
         {/* Values Section */}
-        <section className="container mx-auto px-6 md:px-12 py-20 text-center">
+        <section className="container mx-auto px-6 md:px-12 py-20 text-center ">
           <motion.div
             className="mb-12"
             initial={{ opacity: 0, y: 20 }}
@@ -134,22 +134,19 @@ export const AboutPage = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-5xl font-bold text-green-700 dark:text-green-400 font-garamond mb-6">
-              Our Values
-            </h2>
+            <h2 className="text-2xl md:text-4xl font-bold text-black dark:text-white mb-6">Our Values</h2>
           </motion.div>
-
           <div className="grid md:grid-cols-3 gap-8">
             {values.map((val, idx) => (
               <motion.div
                 key={idx}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform"
+                className="bg-green-50 dark:bg-gray-800 rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.2, duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                <div className="bg-green-100 dark:bg-green-100 p-4 rounded-full mb-4">{val.icon}</div>
+                <div className="bg-green-200 dark:bg-green-100 p-4 rounded-full mb-4">{val.icon}</div>
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">{val.title}</h3>
                 <p className="text-gray-600 dark:text-gray-300">{val.desc}</p>
               </motion.div>
