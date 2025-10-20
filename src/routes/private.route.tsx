@@ -1,4 +1,4 @@
-import { SignInPage } from '@/pages/signin/signin.page';
+import { SignInPage } from '@/pages/signin/SignInPage';
 import { useAuth } from '@/providers/authProvider/authProvider';
 import { Outlet } from 'react-router-dom';
 
