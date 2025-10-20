@@ -4,7 +4,7 @@ import { JoinPage } from '@/pages/join/join.page';
 import { LeadershipPage } from '@/pages/leaderShip/leadership.page';
 import { NotFound } from '@/pages/notFound/notFound.page';
 import { MemberListPage } from '@/pages/private/memberList/memberList.page';
-import { SignInPage } from '@/pages/signin/signin.page';
+import { SignInPage } from '@/pages/signin/SignInPage';
 import MERNResourcePage from '@/pages/software-dev/resources/resources.page';
 import { TimelinePage } from '@/pages/timeline/timeline.page';
 import { UnderMaintenance } from '@/pages/UnderMaintenance/UnderMaintenance.page';
