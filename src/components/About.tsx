@@ -20,9 +20,12 @@ export const About = () => {
   return (
     <section className="container mx-auto -mt-52 py-8 px-6 md:px-12">
       {/* Small heading */}
-      <p className="text-green-500 text-sm md:text-lg font-garamond text-center mb-4">About Us</p>
+      <p className="text-green-500 text-sm md:text-xl font-garamond text-center mb-4">About Us</p>
       {/* Main heading */}
-      <h1 className="text-3xl md:text-6xl font-bold text-center text-gray-900 dark:text-white mb-6">
+      <h1
+        className="text-3xl md:text-6xl font-bold text-center text-gray-900 dark:text-white mb-6 duration-300 
+    transform transition-transform hover:scale-105"
+      >
         About PCIU Computer Club
       </h1>
       {/* Description */}

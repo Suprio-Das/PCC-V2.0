@@ -3,7 +3,7 @@ import { HoverEffect } from './HoverEffect';
 
 export function CardHoverEffectDemo() {
   return (
-    <div className=" mx-auto px-8 ">
+    <div className="font-garamond mx-auto px-8 ">
       <HoverEffect items={projects} />
     </div>
   );

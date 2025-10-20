@@ -58,8 +58,11 @@ export const Advisor = () => {
     <section id="advisor" className="container py-16 px-6 md:px-12 flex flex-col gap-10 items-center">
       {/* Section Header */}
       <header className="flex flex-col gap-2 text-center">
-        <p className="text-green-500 text-sm md:text-lg font-garamond">People in Charge</p>
-        <h2 className="text-3xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
+        <p className="text-green-500 text-sm md:text-xl font-garamond">People in Charge</p>
+        <h2
+          className="text-3xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight duration-300 
+    transform transition-transform hover:scale-105"
+        >
           Who tirelessly contributes to the <br />
           <span className="text-green-600">community</span>
         </h2>

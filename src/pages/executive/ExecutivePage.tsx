@@ -71,8 +71,8 @@ export const ExecutivePage = () => {
             Meet Our Executive Committee
           </h2>
           <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed mb-8">
-            The backbone of our organization — these dedicated individuals lead, inspire, and coordinate every
-            initiative to help our community grow stronger.
+            The backbone of our organization, these dedicated individuals lead, inspire, and coordinate every initiative
+            to help our community grow stronger.
           </p>
 
           {/* Tabs */}
