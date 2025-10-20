@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
-import { CardContent, CardTitle } from '../../components/ui/card';
+import { Card, CardContent, CardTitle } from '../../components/ui/card';
 import { ImageContainer } from '@/types/assets.type';
 import { Footer } from '@/components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaTwitter, FaLinkedin, FaDribbble } from 'react-icons/fa';
 
 interface People {
   name: string;
@@ -66,14 +67,11 @@ export const ExecutivePage = () => {
     <>
       <Navbar />
       <section className="container py-16 px-6 md:px-12 flex flex-col gap-10 items-center text-center">
+        {/* Title */}
         <div className="max-w-2xl">
-          <h2 className="text-3xl md:text-5xl font-bold font-garamond text-green-600 dark:text-green-300 mb-6">
-            Meet Our Executive Committee
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed mb-8">
-            The backbone of our organization, these dedicated individuals lead, inspire, and coordinate every initiative
-            to help our community grow stronger.
-          </p>
+          <div className="bg-green-100 border border-green-400 rounded px-6 py-3 mb-10">
+            <h3 className="font-semibold text-lg text-green-800 md:text-2xl">Committee Members</h3>
+          </div>
 
           {/* Tabs */}
           <div className="flex justify-center gap-4 mb-10">
@@ -82,7 +80,7 @@ export const ExecutivePage = () => {
                 key={session}
                 className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
                   activeTab === session
-                    ? 'bg-green-600 text-white shadow-lg scale-105'
+                    ? 'bg-green-200 text-green-700 shadow-lg scale-105'
                     : 'bg-white dark:bg-gray-800 text-green-600 border border-green-600 hover:bg-green-50'
                 }`}
                 onClick={() => setActiveTab(session as 'Session 24-25' | 'Session 23-24')}
@@ -94,44 +92,48 @@ export const ExecutivePage = () => {
         </div>
 
         {/* Cards with animation */}
-        <div className="w-full flex flex-col items-center gap-8">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-            >
-              {peopleToShow.map((person, idx) => (
-                <motion.div
-                  key={idx}
-                  whileHover={{ scale: 1.03 }}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white via-green-50 to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-green-950 shadow-md p-6"
-                >
-                  <div className="relative flex items-center justify-center mb-4">
-                    <div className="relative w-48 overflow-hidden rounded-xl shadow-sm">
-                      <img
-                        src={person.photo.src}
-                        alt={person.photo.alt}
-                        className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500 ease-out border"
-                      />
-                    </div>
-                  </div>
-                  <CardContent className="text-center space-y-1">
-                    <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white font-garamond tracking-wide">
-                      {person.name}
-                    </CardTitle>
-                    <p className="text-sm text-green-700 dark:text-green-400 font-semibold uppercase tracking-wide">
-                      {person.designation}
-                    </p>
-                  </CardContent>
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 justify-items-center"
+          >
+            {peopleToShow.map((person, idx) => (
+              <Card
+                key={idx}
+                className="w-full max-w-[260px] bg-white dark:bg-gray-800 
+                  flex flex-col items-center text-center p-6 transition-all hover:shadow-lg 
+                  hover:-translate-y-1 hover:bg-green-50 border border-gray-200 rounded-2xl"
+              >
+                <img
+                  src={person.photo.src}
+                  alt={person.photo.alt}
+                  className="w-24 h-24 rounded-full object-cover border border-green-700 mb-4"
+                />
+                <CardContent className="space-y-1">
+                  <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">{person.name}</CardTitle>
+                  <p className="text-green-600 dark:text-green-400 text-sm font-medium">{person.designation}</p>
+                </CardContent>
+
+                {/* Social Icons */}
+                <div className="flex items-center justify-center gap-4 text-green-600 dark:text-green-400 mt-4">
+                  <a href="#" className="hover:text-green-800">
+                    <FaTwitter />
+                  </a>
+                  <a href="#" className="hover:text-green-800">
+                    <FaLinkedin />
+                  </a>
+                  <a href="#" className="hover:text-green-800">
+                    <FaDribbble />
+                  </a>
+                </div>
+              </Card>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </section>
       <Footer />
     </>

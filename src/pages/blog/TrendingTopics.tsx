@@ -7,11 +7,11 @@ interface Topic {
 }
 
 const topics: Topic[] = [
-  { name: 'Tech', count: 12, icon: <FaLaptopCode className="text-2xl text-green-600" /> },
-  { name: 'Programming', count: 8, icon: <FaCogs className="text-2xl text-green-600" /> },
-  { name: 'AI', count: 5, icon: <FaBrain className="text-2xl text-green-600" /> },
-  { name: 'Design', count: 7, icon: <FaPalette className="text-2xl text-green-600" /> },
-  { name: 'Startup', count: 3, icon: <FaRocket className="text-2xl text-green-600" /> },
+  { name: 'Tech', count: 12, icon: <FaLaptopCode className="text-2xl text-green-700" /> },
+  { name: 'Programming', count: 8, icon: <FaCogs className="text-2xl text-green-700" /> },
+  { name: 'AI', count: 5, icon: <FaBrain className="text-2xl text-green-700" /> },
+  { name: 'Design', count: 7, icon: <FaPalette className="text-2xl text-green-700" /> },
+  { name: 'Startup', count: 3, icon: <FaRocket className="text-2xl text-green-700" /> },
 ];
 
 export const TrendingTopics = () => {
@@ -29,7 +29,7 @@ export const TrendingTopics = () => {
             <a key={topic.name} href="#" className="text-center flex flex-col items-center transition hover:scale-105">
               <div className="relative w-16 h-16 border-2 border-gray-300 rounded-full flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-green-100 transition">
                 {topic.icon}
-                <div className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                <div className="absolute -top-1 -right-1 bg-green-700 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
                   {topic.count}
                 </div>
               </div>
