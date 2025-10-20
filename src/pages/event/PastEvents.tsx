@@ -55,18 +55,17 @@ export const PastEvents = () => {
   return (
     <section id="past-events" className="w-[95%] mx-auto mb-24">
       <div className="text-center mt-24 mb-12">
-        <p className="text-green-500 font-semibold mb-2 tracking-wider uppercase">— Past Events —</p>
-        <h2 className="text-3xl md:text-5xl font-extrabold text-gray-800 dark:text-white mb-3">
-          <span className="bg-gradient-to-r from-green-500 to-green-300 bg-clip-text text-transparent">Highlights</span>{' '}
-          from Previous Events
+        <p className="text-green-500 mb-2 tracking-wider uppercase">— Past Events —</p>
+        <h2 className="text-2xl md:text-4xl font-extrabold text-gray-800 dark:text-white mb-3">
+          Highlights from Previous Events
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-2xl mx-auto text-lg">
+        <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-2xl mx-auto">
           Take a look back at our most memorable moments and successful events — a celebration of creativity, tech, and
           community.
         </p>
       </div>
 
-      <div className="bg-gray-100 dark:bg-gray-800 py-12 rounded-xl">
+      <div className="bg-green-50 dark:bg-gray-800 py-12 rounded-xl">
         <div className="w-[90%] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {pastEvents.map((event) => (
             <div

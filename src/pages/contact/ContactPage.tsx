@@ -31,8 +31,8 @@ const ContactPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            <h3 className="text-5xl md:text-6xl drop-shadow-md bg-gradient-to-r from-primary to-black dark:to-white text-transparent bg-clip-text mb-4">
-              Contact Us
+            <h3 className="text-5xl md:text-xl drop-shadow-md bg-gradient-to-r from-primary to-black dark:to-white text-transparent bg-clip-text mb-4 uppercase">
+              — Contact Us —
             </h3>
             <p className="mt-6 text-gray-700 dark:text-gray-200 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Have questions or need assistance? We are here to help!

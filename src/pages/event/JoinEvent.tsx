@@ -37,9 +37,9 @@ const JoinEvent = () => {
   ];
 
   return (
-    <section className="my-32 py-16">
+    <section className="my-32 py-16 bg-green-50 dark:bg-gray-800">
       <div className="text-center mb-12">
-        <p className="text-green-500 font-semibold mb-2">— Why Join the Event? —</p>
+        <p className="uppercase text-green-500  mb-2">— Why Join the Event? —</p>
         <h2 className="text-2xl md:text-4xl font-bold text-gray-800 dark:text-white">Why You Should Join the Event</h2>
         <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-lg mx-auto">
           Discover inspiration, meet new people, and experience innovation like never before!
