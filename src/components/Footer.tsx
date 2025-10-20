@@ -37,7 +37,7 @@ const FooterAnchorList: AnchorCollection[] = [
 
 export const Footer = () => {
   return (
-    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 mt-16 shadow-sm">
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-6 text-gray-700 dark:text-gray-300">
         {/* Grid Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start text-center md:text-left relative">
