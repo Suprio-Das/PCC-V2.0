@@ -77,14 +77,14 @@ export const Advisor = () => {
             <Card
               key={idx}
               className="
-group relative flex flex-col justify-between overflow-hidden
-rounded-2xl border border-gray-200 dark:border-gray-700
-bg-gradient-to-br from-white via-green-50 to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-green-950
-shadow-md hover:shadow-xl transition-all duration-500 ease-out
-hover:-translate-y-2 hover:scale-[1.01]
-p-6
-before:absolute before:inset-0 before:bg-gradient-to-t before:from-green-100/20 before:to-transparent dark:before:from-green-400/5 before:opacity-0 group-hover:before:opacity-100 before:transition-all
-"
+              group relative flex flex-col justify-between overflow-hidden
+              rounded-2xl border border-gray-200 dark:border-gray-700
+              bg-gradient-to-br from-white via-green-50 to-green-100 dark:from-gray-900 dark:via-gray-800 dark:to-green-950
+              shadow-md hover:shadow-xl transition-all duration-500 ease-out
+              hover:-translate-y-2 hover:scale-[1.01]
+              p-6
+              before:absolute before:inset-0 before:bg-gradient-to-t before:from-green-100/20 before:to-transparent dark:before:from-green-400/5 before:opacity-0 group-hover:before:opacity-100 before:transition-all
+              "
             >
               {/* Softer decorative glow */}
               <div className="absolute -inset-[1px] bg-gradient-to-r from-green-400/20 to-emerald-500/20 opacity-0 group-hover:opacity-30 blur-xl transition-all duration-700"></div>
