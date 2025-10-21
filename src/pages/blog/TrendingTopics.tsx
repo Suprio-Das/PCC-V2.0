@@ -16,7 +16,7 @@ const topics: Topic[] = [
 
 export const TrendingTopics = () => {
   return (
-    <section className="mt-6 bg-green-50 w-11/12 mx-auto rounded-xl py-10">
+    <section className="mt-6 bg-green-50 w-11/12 mx-auto rounded-xl py-10 dark:bg-gray-800">
       {/* Advisor Panel Heading */}
       <div className="max-w-xs mx-auto bg-green-100 border border-green-400 rounded px-6 py-3 mb-14 flex justify-center items-center">
         <h3 className="font-semibold text-lg text-green-800 md:text-xl">Trending Topics</h3>

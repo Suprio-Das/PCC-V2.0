@@ -6,7 +6,6 @@ import { NotFound } from '@/pages/notFound/notFound.page';
 import { MemberListPage } from '@/pages/private/memberList/memberList.page';
 import { SignInPage } from '@/pages/signin/SignInPage';
 import MERNResourcePage from '@/pages/software-dev/resources/resources.page';
-import { TimelinePage } from '@/pages/timeline/timeline.page';
 import { UnderMaintenance } from '@/pages/UnderMaintenance/UnderMaintenance.page';
 import { RoutePaths } from '@/types/route.type';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
@@ -17,6 +16,7 @@ import { AboutPage } from '@/pages/about/AboutPage';
 import { BlogPage } from '@/pages/blog/BlogPage';
 import ContactPage from '@/pages/contact/ContactPage';
 import { EventPage } from '@/pages/event/EventPage';
+import TimelinePage from '@/pages/timeline/TimelinePage';
 
 const appRouter = createBrowserRouter([
   {
@@ -51,7 +51,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.TIMELINE,
-    element: <TimelinePage />,
+    element: <TimelinePage></TimelinePage>,
     errorElement: <NotFound />,
   },
   {
