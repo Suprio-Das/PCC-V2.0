@@ -17,6 +17,7 @@ import { BlogPage } from '@/pages/blog/BlogPage';
 import ContactPage from '@/pages/contact/ContactPage';
 import { EventPage } from '@/pages/event/EventPage';
 import TimelinePage from '@/pages/timeline/TimelinePage';
+import { UserDashboard } from '@/pages/userDashboard/UserDashboard';
 
 const appRouter = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const appRouter = createBrowserRouter([
     path: RoutePaths.JOIN,
     element: <JoinPage />,
     errorElement: <NotFound />,
+  },
+  {
+    path: RoutePaths.USER_DASHBOARD,
+    element: <UserDashboard></UserDashboard>,
   },
   {
     path: RoutePaths.SW_DEV_WING,
