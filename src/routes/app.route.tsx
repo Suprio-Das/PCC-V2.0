@@ -18,6 +18,13 @@ import ContactPage from '@/pages/contact/ContactPage';
 import { EventPage } from '@/pages/event/EventPage';
 import TimelinePage from '@/pages/timeline/TimelinePage';
 import { UserDashboard } from '@/pages/userDashboard/UserDashboard';
+import Profile from '@/pages/userDashboard/Profile';
+import UserBlog from '@/pages/userDashboard/UserBlog';
+import WriteBlog from '@/pages/userDashboard/WriteBlog';
+import UpdateBlog from '@/pages/userDashboard/UpdateBlog';
+import RegisteredEvents from '@/pages/userDashboard/RegisteredEvents';
+import Dues from '@/pages/userDashboard/Dues';
+import Settings from '@/pages/userDashboard/Settings';
 
 const appRouter = createBrowserRouter([
   {
@@ -27,32 +34,32 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.ABOUT,
-    element: <AboutPage></AboutPage>,
+    element: <AboutPage />,
     errorElement: <NotFound />,
   },
   {
     path: RoutePaths.ADVISOR,
-    element: <AdvisorPage></AdvisorPage>,
+    element: <AdvisorPage />,
     errorElement: <NotFound />,
   },
   {
     path: RoutePaths.EXECUTIVE,
-    element: <ExecutivePage></ExecutivePage>,
+    element: <ExecutivePage />,
     errorElement: <NotFound />,
   },
   {
     path: RoutePaths.BLOG,
-    element: <BlogPage></BlogPage>,
+    element: <BlogPage />,
     errorElement: <NotFound />,
   },
   {
     path: RoutePaths.EVENTS,
-    element: <EventPage></EventPage>,
+    element: <EventPage />,
     errorElement: <NotFound />,
   },
   {
     path: RoutePaths.TIMELINE,
-    element: <TimelinePage></TimelinePage>,
+    element: <TimelinePage />,
     errorElement: <NotFound />,
   },
   {
@@ -62,7 +69,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.CONTACT,
-    element: <ContactPage></ContactPage>,
+    element: <ContactPage />,
     errorElement: <NotFound />,
   },
   {
@@ -72,8 +79,44 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.USER_DASHBOARD,
-    element: <UserDashboard></UserDashboard>,
+    element: <UserDashboard />,
+    errorElement: <NotFound />,
+    children: [
+      {
+        index: true,
+        element: <Profile />,
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
+      },
+      {
+        path: 'registered-events',
+        element: <RegisteredEvents></RegisteredEvents>,
+      },
+      {
+        path: 'your-blog',
+        element: <UserBlog></UserBlog>,
+      },
+      {
+        path: 'write-blog',
+        element: <WriteBlog></WriteBlog>,
+      },
+      {
+        path: 'update-blog',
+        element: <UpdateBlog></UpdateBlog>,
+      },
+      {
+        path: 'dues',
+        element: <Dues></Dues>,
+      },
+      {
+        path: 'settings',
+        element: <Settings></Settings>,
+      },
+    ],
   },
+
   {
     path: RoutePaths.SW_DEV_WING,
     element: <Outlet />,

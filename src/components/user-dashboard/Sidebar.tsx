@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { ChartBar, UserRound, MessageSquare, PencilLine } from 'lucide-react';
-import { FaHeart } from 'react-icons/fa';
+import { ChartBar, UserRound, PencilLine } from 'lucide-react';
+import { BsCalendar2Event } from 'react-icons/bs';
+import { MdOutlinePayment } from 'react-icons/md';
+import { IoSettingsOutline } from 'react-icons/io5';
 import { NavLink } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -9,29 +11,34 @@ const Sidebar = () => {
 
   const menuItems = [
     {
-      path: '/dashboard/profile',
+      path: '/user-dashboard/profile',
       label: 'Profile',
       icon: <UserRound size={22} />,
     },
     {
-      path: '/dashboard/your-blog',
+      path: '/user-dashboard/registered-events',
+      label: 'Events',
+      icon: <BsCalendar2Event size={20} />,
+    },
+    {
+      path: '/user-dashboard/your-blog',
       label: 'Your Blogs',
       icon: <ChartBar size={22} />,
     },
     {
-      path: '/dashboard/likes',
-      label: 'Likes',
-      icon: <FaHeart size={20} className="text-red-600" />,
-    },
-    {
-      path: '/dashboard/comments',
-      label: 'Comments',
-      icon: <MessageSquare size={22} />,
-    },
-    {
-      path: '/dashboard/write-blog',
+      path: '/user-dashboard/write-blog',
       label: 'Write Blog',
       icon: <PencilLine size={22} />,
+    },
+    {
+      path: '/user-dashboard/dues',
+      label: 'Dues',
+      icon: <MdOutlinePayment size={22} />,
+    },
+    {
+      path: '/user-dashboard/settings',
+      label: 'Settings',
+      icon: <IoSettingsOutline size={22} />,
     },
   ];
 
@@ -49,7 +56,7 @@ const Sidebar = () => {
       </button>
 
       {/* Menu */}
-      <nav className="flex flex-col gap-2 mt-20 px-4">
+      <nav className="flex flex-col gap-2 mt-20 px-4 font-garamond">
         {menuItems.map(({ path, label, icon }) => (
           <NavLink
             key={path}
