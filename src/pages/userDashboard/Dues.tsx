@@ -7,13 +7,12 @@ import { Button } from '@/components/ui/button';
 // Type for monthly club dues
 type Due = {
   _id: string;
-  month: string; // New field
+  month: string;
   amount: number;
   status: 'Pending' | 'Paid';
 };
 
 const Dues = () => {
-  // Static/dummy monthly dues
   const [dues, setDues] = useState<Due[]>([
     { _id: '1', month: 'October 2025', amount: 40, status: 'Paid' },
     { _id: '2', month: 'November 2025', amount: 40, status: 'Pending' },

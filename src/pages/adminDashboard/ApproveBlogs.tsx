@@ -1,4 +1,3 @@
-// src/pages/Admin/ApproveBlogs.tsx
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -11,7 +10,7 @@ import {
 import { CheckCircle, XCircle, Eye } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 type Blog = {
   _id: string;
@@ -20,12 +19,11 @@ type Blog = {
   category: string;
   date: string;
   status: 'Pending' | 'Approved' | 'Rejected';
+  description: string;
+  thumbnail?: string;
 };
 
 const ApproveBlogs = () => {
-  const navigate = useNavigate();
-
-  // Static blog data (for demo)
   const [blogs, setBlogs] = useState<Blog[]>([
     {
       _id: '1',
@@ -34,6 +32,9 @@ const ApproveBlogs = () => {
       category: 'Web Development',
       date: '2025-10-21T10:00:00.000Z',
       status: 'Pending',
+      description:
+        '<p>React Hooks allow you to use state and lifecycle methods in functional components. Hooks simplify complex class-based logic.</p>',
+      thumbnail: 'https://images.unsplash.com/photo-1581276879432-15a19d654956?w=800',
     },
     {
       _id: '2',
@@ -42,6 +43,9 @@ const ApproveBlogs = () => {
       category: 'Machine Learning',
       date: '2025-10-18T12:30:00.000Z',
       status: 'Approved',
+      description:
+        '<p>Data Science involves data cleaning, visualization, and predictive modeling using Python libraries like Pandas and Scikit-learn.</p>',
+      thumbnail: 'https://images.unsplash.com/photo-1556767576-cfba0b3b7f2e?w=800',
     },
     {
       _id: '3',
@@ -50,8 +54,14 @@ const ApproveBlogs = () => {
       category: 'Artificial Intelligence',
       date: '2025-10-16T09:15:00.000Z',
       status: 'Rejected',
+      description:
+        '<p>Artificial Intelligence is transforming the education sector through personalized learning and automated assessments.</p>',
+      thumbnail: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800',
     },
   ]);
+
+  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -69,6 +79,11 @@ const ApproveBlogs = () => {
   const handleReject = (id: string) => {
     setBlogs((prev) => prev.map((b) => (b._id === id ? { ...b, status: 'Rejected' } : b)));
     toast.error('Blog rejected (static mode)');
+  };
+
+  const handleView = (blog: Blog) => {
+    setSelectedBlog(blog);
+    setIsModalOpen(true);
   };
 
   return (
@@ -121,7 +136,7 @@ const ApproveBlogs = () => {
                             <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
                           </DropdownMenuTrigger>
                           <DropdownMenuContent className="w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
-                            <DropdownMenuItem onClick={() => navigate(`/blogs/${blog._id}`)} className="font-grotesk">
+                            <DropdownMenuItem onClick={() => handleView(blog)} className="font-grotesk">
                               <Eye className="mr-2" /> View
                             </DropdownMenuItem>
 
@@ -153,6 +168,35 @@ const ApproveBlogs = () => {
           )}
         </Card>
       </div>
+
+      {/* Blog View Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto dark:bg-gray-800">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold dark:text-white">{selectedBlog?.title}</DialogTitle>
+            <DialogDescription>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">
+                By <span className="font-semibold">{selectedBlog?.author}</span> •{' '}
+                {selectedBlog && formatDate(selectedBlog.date)}
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedBlog?.thumbnail && (
+            <img src={selectedBlog.thumbnail} alt="Thumbnail" className="w-full h-64 object-cover rounded-lg mt-4" />
+          )}
+
+          <div className="mt-5 space-y-2">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Category: <span className="font-medium">{selectedBlog?.category}</span>
+            </p>
+            <div
+              className="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-200 mt-3"
+              dangerouslySetInnerHTML={{ __html: selectedBlog?.description || '' }}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

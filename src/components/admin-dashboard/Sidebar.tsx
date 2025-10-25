@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { ChartBar, UserRound, PencilLine } from 'lucide-react';
+import { ChartBar, PencilLine } from 'lucide-react';
 import { BsCalendar2Event } from 'react-icons/bs';
 // import { MdOutlinePayment } from 'react-icons/md';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { NavLink } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { LuLayoutDashboard } from 'react-icons/lu';
+import { FiUsers } from 'react-icons/fi';
+import { GoGitPullRequest } from 'react-icons/go';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -13,7 +16,7 @@ const Sidebar = () => {
     {
       path: '/admin-dashboard/dashboard',
       label: 'Dashboard',
-      icon: <UserRound size={22} />,
+      icon: <LuLayoutDashboard size={22} />,
     },
     {
       path: '/admin-dashboard/events',
@@ -23,7 +26,7 @@ const Sidebar = () => {
     {
       path: '/admin-dashboard/create-events',
       label: 'Create Events',
-      icon: <BsCalendar2Event size={20} />,
+      icon: <PencilLine size={20} />,
     },
     {
       path: '/admin-dashboard/approve-blogs',
@@ -33,12 +36,12 @@ const Sidebar = () => {
     {
       path: '/admin-dashboard/members',
       label: 'Members',
-      icon: <PencilLine size={22} />,
+      icon: <FiUsers size={22} />,
     },
     {
       path: '/admin-dashboard/approve-members',
       label: 'Members Request',
-      icon: <PencilLine size={22} />,
+      icon: <GoGitPullRequest size={22} />,
     },
     {
       path: '/admin-dashboard/settings',
