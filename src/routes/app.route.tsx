@@ -32,6 +32,7 @@ import CreateEvents from '@/pages/adminDashboard/CreateEvents';
 import ApproveBlogs from '@/pages/adminDashboard/ApproveBlogs';
 import Members from '@/pages/adminDashboard/Members';
 import ApproveMembers from '@/pages/adminDashboard/ApproveMembers';
+import UpdateEvent from '@/pages/adminDashboard/UpdateEvent';
 
 const appRouter = createBrowserRouter([
   {
@@ -104,6 +105,10 @@ const appRouter = createBrowserRouter([
       {
         path: 'create-events',
         element: <CreateEvents></CreateEvents>,
+      },
+      {
+        path: 'update-events',
+        element: <UpdateEvent></UpdateEvent>,
       },
       {
         path: 'approve-blogs',

@@ -1,108 +1,121 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { ArrowLeft } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-type EventItem = {
+// Dummy event type
+type Event = {
   _id: string;
   title: string;
   category: string;
-  date: string;
-  location: string;
-  description: string;
 };
 
 const CreateEvents = () => {
-  const { id } = useParams<{ id: string }>();
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [events, setEvents] = useState<Event[]>([]); // Local event state for static mode
   const navigate = useNavigate();
-  const [event, setEvent] = useState<EventItem | null>(null);
 
-  const dummyEvents: EventItem[] = [
-    {
-      _id: '1',
-      title: 'Web Development Workshop',
-      category: 'Web Development',
-      date: '2025-11-05T14:00:00Z',
-      location: 'CSE Seminar Hall',
-      description:
-        '<p>Join us for an exciting <b>web development</b> session where you will learn about modern React practices!</p>',
-    },
-    {
-      _id: '2',
-      title: 'Photography Basics',
-      category: 'Photography',
-      date: '2025-12-10T10:00:00Z',
-      location: 'Auditorium 2',
-      description:
-        '<p>This session covers the <i>fundamentals</i> of photography, lighting, and editing workflows.</p>',
-    },
-  ];
+  const getSelectedCategory = (value: string) => setCategory(value);
 
-  useEffect(() => {
-    const found = dummyEvents.find((e) => e._id === id);
-    setEvent(found || null);
-  }, [id]);
+  const createEventHandler = async () => {
+    if (!title || !category) {
+      toast.error('Please fill all fields');
+      return;
+    }
 
-  if (!event) {
-    return (
-      <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900 flex justify-center items-center">
-        <p className="text-gray-600 dark:text-gray-300">Event not found</p>
-      </div>
-    );
-  }
+    try {
+      setLoading(true);
+
+      const newEvent: Event = {
+        _id: Date.now().toString(),
+        title,
+        category,
+      };
+
+      setEvents([...events, newEvent]);
+
+      navigate(`/user-dashboard/create-event/${newEvent._id}`);
+      toast.success('Event created successfully (static mode)');
+
+      // Reset form
+      setTitle('');
+      setCategory('');
+    } catch (error) {
+      toast.error('Something went wrong!');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-      <div className="max-w-4xl mx-auto mt-8 font-grotesk">
-        <Button variant="ghost" className="mb-4 flex items-center gap-2" onClick={() => navigate(-1)}>
-          <ArrowLeft size={18} /> Back
-        </Button>
+    <div className="p-4 md:pr-20 h-screen md:pl-[320px] pt-40 bg-gray-50 dark:bg-gray-900 font-grotesk">
+      <Card className="max-w-3xl mx-auto p-8 space-y-6 shadow-lg dark:bg-gray-800 rounded-xl">
+        <div className="space-y-2">
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100 text-center font-grotesk">
+            Create a New Event
+          </h2>
+          <p className="text-center text-gray-600 dark:text-gray-300 text-sm">
+            Add your club or departmental event details here.
+          </p>
+        </div>
 
-        <Card className="w-full p-6 space-y-4 dark:bg-gray-800 shadow-lg rounded-2xl">
+        <div className="space-y-5">
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{event.title}</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Category: <span className="font-medium">{event.category}</span>
-            </p>
+            <Label className="text-gray-700 dark:text-gray-300">Event Title</Label>
+            <Input
+              type="text"
+              placeholder="Enter event title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-gray-500 focus:border-gray-500"
+            />
           </div>
 
-          <Separator />
-
-          <div className="space-y-2 text-gray-700 dark:text-gray-300">
-            <p>
-              <b>Date:</b>{' '}
-              {new Date(event.date).toLocaleString('en-GB', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </p>
-            <p>
-              <b>Location:</b> {event.location}
-            </p>
+          <div className="space-y-2">
+            <Label className="text-gray-700 dark:text-gray-300">Category</Label>
+            <Select onValueChange={getSelectedCategory}>
+              <SelectTrigger className="w-full md:w-72 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-gray-500 focus:border-gray-500">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Categories</SelectLabel>
+                  <SelectItem value="Workshop">Workshop</SelectItem>
+                  <SelectItem value="Seminar">Seminar</SelectItem>
+                  <SelectItem value="Competition">Competition</SelectItem>
+                  <SelectItem value="Cultural">Cultural</SelectItem>
+                  <SelectItem value="Sports">Sports</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
-
-          <Separator />
-
-          <div
-            className="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-200"
-            dangerouslySetInnerHTML={{ __html: event.description }}
-          />
 
           <div className="flex justify-end">
             <Button
-              className="bg-green-600 hover:bg-green-700 text-white"
-              onClick={() => alert('Registration Coming Soon!')}
+              className="flex items-center gap-2 rounded-full btn btn-outline border-[0.5px] border-green-600 bg-[#edf6ee] shadow-none text-black hover:text-white px-6 py-2 hover:opacity-90 transition dark:hover:text-black"
+              disabled={loading}
+              onClick={createEventHandler}
             >
-              Register Now
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Event'}
             </Button>
           </div>
-        </Card>
-      </div>
+        </div>
+      </Card>
     </div>
   );
 };
