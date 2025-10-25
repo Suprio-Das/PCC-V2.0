@@ -25,6 +25,13 @@ import UpdateBlog from '@/pages/userDashboard/UpdateBlog';
 import RegisteredEvents from '@/pages/userDashboard/RegisteredEvents';
 import Dues from '@/pages/userDashboard/Dues';
 import Settings from '@/pages/userDashboard/Settings';
+import { AdminDashboard } from '@/pages/adminDashboard/AdminDashboard';
+import Dashboard from '@/pages/adminDashboard/Dashboard';
+import Events from '@/pages/adminDashboard/Events';
+import CreateEvents from '@/pages/adminDashboard/CreateEvents';
+import ApproveBlogs from '@/pages/adminDashboard/ApproveBlogs';
+import Members from '@/pages/adminDashboard/Members';
+import ApproveMembers from '@/pages/adminDashboard/ApproveMembers';
 
 const appRouter = createBrowserRouter([
   {
@@ -76,6 +83,45 @@ const appRouter = createBrowserRouter([
     path: RoutePaths.JOIN,
     element: <JoinPage />,
     errorElement: <NotFound />,
+  },
+  {
+    path: RoutePaths.ADMIN_DASHBOARD,
+    element: <AdminDashboard></AdminDashboard>,
+    errorElement: <NotFound />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard></Dashboard>,
+      },
+      {
+        path: 'dashboard',
+        element: <Dashboard></Dashboard>,
+      },
+      {
+        path: 'events',
+        element: <Events></Events>,
+      },
+      {
+        path: 'create-events',
+        element: <CreateEvents></CreateEvents>,
+      },
+      {
+        path: 'approve-blogs',
+        element: <ApproveBlogs></ApproveBlogs>,
+      },
+      {
+        path: 'members',
+        element: <Members></Members>,
+      },
+      {
+        path: 'approve-members',
+        element: <ApproveMembers></ApproveMembers>,
+      },
+      {
+        path: 'settings',
+        element: <Settings></Settings>,
+      },
+    ],
   },
   {
     path: RoutePaths.USER_DASHBOARD,
