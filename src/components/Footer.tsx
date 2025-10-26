@@ -1,7 +1,7 @@
 import { ImageContainer } from '@/types/assets.type';
 import { RoutePaths } from '@/types/route.type';
-import { MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
 interface Anchor {
   title: string;
@@ -17,31 +17,16 @@ const FooterAnchorList: AnchorCollection[] = [
   {
     title: 'Sitemap',
     anchors: [
-      {
-        title: 'About',
-        link: RoutePaths.ABOUT,
-      },
-      {
-        title: 'Events',
-        link: RoutePaths.EVENTS,
-      },
-      {
-        title: 'Timeline',
-        link: RoutePaths.TIMELINE,
-      },
-      {
-        title: 'Contact',
-        link: RoutePaths.CONTACT,
-      },
+      { title: 'About', link: RoutePaths.ABOUT },
+      { title: 'Events', link: RoutePaths.EVENTS },
+      { title: 'Timeline', link: RoutePaths.TIMELINE },
+      { title: 'Contact', link: RoutePaths.CONTACT },
     ],
   },
   {
     title: 'Important Links',
     anchors: [
-      {
-        link: 'https://portcity.edu.bd',
-        title: 'PCIU Website',
-      },
+      { link: 'https://portcity.edu.bd', title: 'PCIU Website' },
       {
         link: 'https://www.portcity.edu.bd/HomePage/ListPrimary/9/T/view-teacher-list',
         title: 'CSE Faculty Info',
@@ -52,56 +37,91 @@ const FooterAnchorList: AnchorCollection[] = [
 
 export const Footer = () => {
   return (
-    <footer id="footer" className="">
-      <hr className="w-full mx-auto mt-2" />
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-12 pb-6 text-gray-700 dark:text-gray-300">
+        {/* Grid Section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start text-center md:text-left relative">
+          {/* Logo + Address */}
+          <div className="flex flex-col items-center md:items-start gap-3">
+            <Link to={RoutePaths.ROOT} className="flex flex-col items-center md:items-start gap-2 group">
+              <img
+                src={ImageContainer.PCCLogo.src}
+                alt={ImageContainer.PCCLogo.alt}
+                className="h-20 w-auto transition-transform duration-500 group-hover:scale-105"
+              />
+              <span className="text-lg font-semibold text-gray-900 dark:text-white tracking-wide font-garamond">
+                PCIU Computer Club
+              </span>
+            </Link>
 
-      <section className="container mx-0 py-20 flex flex-wrap justify-between gap-x-12 gap-y-8">
-        <div className="flex flex-col gap-3 flex-1">
-          <Link rel="noreferrer noopener" to={RoutePaths.ROOT} className="font-bold text-xl flex w-fit">
-            <img
-              src={ImageContainer.PCCLogo.src}
-              alt={ImageContainer.PCCLogo.alt}
-              className="h-20 aspect-square object-fit"
-            />
-          </Link>
-          <h3 className="text-lg font-semibold tracking-wide">PCIU Computer Club</h3>
-          <div className="flex gap-2 items-center">
-            <MapPin className="h-8 w-auto aspect-square text-primary" />
-            <span className="text-sm min-w-48">
+            <div className="text-sm leading-6 font-garamond">
               <p>Nikunja Housing Society, South Khulshi</p>
               <p>Chattogram, Bangladesh</p>
-            </span>
+            </div>
+          </div>
+
+          {/* Sitemap */}
+          <div>
+            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 font-garamond">Sitemap</h4>
+            <ul className="space-y-2 text-sm">
+              {FooterAnchorList[0].anchors.map(({ title, link }, idx) => (
+                <li key={idx}>
+                  <Link to={link} className="hover:text-green-600 transition-colors duration-300 font-garamond">
+                    {title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Important Links */}
+          <div>
+            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 font-garamond">
+              Important Links
+            </h4>
+            <ul className="space-y-2 text-sm">
+              {FooterAnchorList[1].anchors.map(({ title, link }, idx) => (
+                <li key={idx}>
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-green-600 transition-colors duration-300 font-garamond"
+                  >
+                    {title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Follow Us */}
+          <div>
+            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 font-garamond">Follow Us</h4>
+            <div className="flex justify-center md:justify-start space-x-5">
+              {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map((Icon, idx) => (
+                <a
+                  key={idx}
+                  href="#"
+                  className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-400 hover:text-green-600 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"
+                >
+                  <Icon size={16} />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-x-16 md:gap-x-20 gap-y-8 justify-center md:justify-start">
-          {FooterAnchorList.map(({ title, anchors }, index) => (
-            <div className="flex flex-col gap-2 items-start" key={index}>
-              <h3 className=" font-semibold text-lg tracking-wide">{title}</h3>
-              <ul className="flex flex-col gap-y-1 opacity-90 text-left">
-                {anchors.map(({ title, link }, idx) => (
-                  <Link to={link} target={'_blank'} className="group" key={idx}>
-                    <li className="group-hover:underline">{title}</li>
-                  </Link>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-0 pt-2 pb-3 flex  justify-between bg-secondary">
-        <div className="container flex flex-wrap gap-y-4 gap-x-4 justify-center">
-          <span className="min-w-fit">&copy; 2025 PCIU Computer Club</span>
-          <span className={`hidden md:block`}>|</span>
-          <span className="">
-            PCC V2.0 Developed with ♡ by&nbsp;
-            <Link to={RoutePaths.DEV} className="font-bold text-primary hover:underline hover:underline-offset-2">
+        {/* Divider */}
+        <div className="border-t border-gray-200 dark:border-gray-700 mt-12 pt-6 text-center text-sm font-poppins">
+          <p>
+            &copy; 2025 PCIU Computer Club — Developed with ♡ by{' '}
+            <Link to={RoutePaths.DEV} className="font-semibold text-green-600 hover:underline">
               PCC Executive Committee 2024-25
             </Link>
-          </span>
+          </p>
         </div>
-      </section>
+      </div>
     </footer>
   );
 };

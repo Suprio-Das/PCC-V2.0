@@ -1,21 +1,22 @@
 import App from '@/App';
-import AboutPage from '@/pages/about/about.page';
-import ContactPage from '@/pages/contact/contact.page';
 import { Developers } from '@/pages/developers/developers.page';
 import { JoinPage } from '@/pages/join/join.page';
 import { LeadershipPage } from '@/pages/leaderShip/leadership.page';
 import { NotFound } from '@/pages/notFound/notFound.page';
 import { MemberListPage } from '@/pages/private/memberList/memberList.page';
-import { SignInPage } from '@/pages/signin/signin.page';
+import { SignInPage } from '@/pages/signin/SignInPage';
 import MERNResourcePage from '@/pages/software-dev/resources/resources.page';
 import { TimelinePage } from '@/pages/timeline/timeline.page';
 import { UnderMaintenance } from '@/pages/UnderMaintenance/UnderMaintenance.page';
 import { RoutePaths } from '@/types/route.type';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { ProtectedRoutes } from './private.route';
-import BlogPage from '@/pages/blog/blog.page';
 import { AdvisorPage } from '@/pages/advisor/AdvisorPage';
 import { ExecutivePage } from '@/pages/executive/ExecutivePage';
+import { AboutPage } from '@/pages/about/AboutPage';
+import { BlogPage } from '@/pages/blog/BlogPage';
+import ContactPage from '@/pages/contact/ContactPage';
+import { EventPage } from '@/pages/event/EventPage';
 
 const appRouter = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.ABOUT,
-    element: <AboutPage />,
+    element: <AboutPage></AboutPage>,
     errorElement: <NotFound />,
   },
   {
@@ -40,12 +41,12 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.BLOG,
-    element: <BlogPage />,
+    element: <BlogPage></BlogPage>,
     errorElement: <NotFound />,
   },
   {
     path: RoutePaths.EVENTS,
-    element: <UnderMaintenance />,
+    element: <EventPage></EventPage>,
     errorElement: <NotFound />,
   },
   {
@@ -60,7 +61,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: RoutePaths.CONTACT,
-    element: <ContactPage />,
+    element: <ContactPage></ContactPage>,
     errorElement: <NotFound />,
   },
   {

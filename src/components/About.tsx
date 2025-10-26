@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import JoinPccBtn from './customized/JoinPccBtn/JoinPccBtn';
 import { Card, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 
 export const About = () => {
@@ -19,38 +18,49 @@ export const About = () => {
   ];
 
   return (
-    <section className="container mx-auto py-12 md:py-16 md:-mt-48 -mt-48">
+    <section className="container mx-auto -mt-52 py-8 px-6 md:px-12">
       {/* Small heading */}
-      <p className="text-green-500 text-sm md:text-[18px] font-garamond text-center mb-6">About Us</p>
-
+      <p className="text-green-500 text-sm md:text-xl font-garamond text-center mb-4">About Us</p>
       {/* Main heading */}
-      <h2 className="text-3xl md:text-6xl font-bold text-center mt-2">About PCIU Computer Club</h2>
-
+      <h1
+        className="text-3xl md:text-6xl font-bold text-center text-gray-900 dark:text-white mb-6 duration-300 
+    transform transition-transform hover:scale-105"
+      >
+        About PCIU Computer Club
+      </h1>
       {/* Description */}
-      <p className="max-w-3xl text-sm md:text-base mx-auto text-center text-gray-600 dark:text-gray-300 mt-6">
+      <p className="max-w-3xl text-sm md:text-base mx-auto text-center text-gray-700 dark:text-gray-300 mb-12">
         At PCIU Computer Club, we are passionate about building a community of innovators, creators, and tech
         enthusiasts. Our mission is to empower students with the skills and resources they need to succeed in the
         digital age.
       </p>
-
-      {/* Info Cards */}
-      <div className="grid md:grid-cols-2 gap-8 mt-10 w-full max-w-5xl mx-auto">
-        {cards.map((card, index) => (
+      {/* Cards Section */}
+      <div className="grid md:grid-cols-2 gap-10 mb-12 max-w-5xl mx-auto">
+        {cards.map((card, idx) => (
           <Card
-            key={index}
-            className="p-6 shadow hover:shadow-lg transition-shadow duration-300 flex flex-col bg-white dark:bg-gray-800"
+            key={idx}
+            className="p-14 relative overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 bg-white dark:bg-gray-800 rounded-xl flex flex-col"
           >
             <CardHeader>
-              <CardTitle>{card.title}</CardTitle>
-              <CardDescription>{card.description}</CardDescription>
+              <CardTitle className="text-3xl md:text-4xl text-green-600 font-bold text-center  dark:text-white md:mb-6 mb-3 font-garamond">
+                {card.title}
+              </CardTitle>
+              <p className="border-b border-gray-100 mb-4 md:w-52 w-32 mx-auto"></p>
+              <CardDescription className="p-6 text-center text-gray-500 dark:text-gray-300 text-sm md:text-base font-poppins">
+                {card.description}
+              </CardDescription>
             </CardHeader>
           </Card>
         ))}
       </div>
-
-      {/* Join Button */}
-      <div className="mt-10 flex justify-center">
-        <JoinPccBtn onClick={() => navigate('/join')} />
+      {/* Button */}
+      <div className="flex justify-center mt-6">
+        <button
+          className="join-pcc-btn font-garamond flex items-center gap-2 text-green-700 transition hover:text-white btn"
+          onClick={() => navigate('/about')}
+        >
+          See More
+        </button>
       </div>
     </section>
   );
