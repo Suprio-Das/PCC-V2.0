@@ -18,7 +18,6 @@ import { toast } from 'sonner';
 
 interface EventData {
   title: string;
-  subtitle: string;
   date: string;
   location: string;
   category: string;
@@ -46,7 +45,6 @@ const UpdateEvent = () => {
 
   const [eventData, setEventData] = useState<EventData>({
     title: staticEvent.title,
-    subtitle: staticEvent.subtitle,
     date: staticEvent.date,
     location: staticEvent.location,
     category: staticEvent.category,
@@ -143,18 +141,6 @@ const UpdateEvent = () => {
                 value={eventData.title}
                 onChange={handleChange}
                 placeholder="Enter event title"
-                className="dark:border-gray-400 focus:ring-2 focus:ring-green-400 mt-2"
-              />
-            </div>
-
-            <div>
-              <Label>Subtitle</Label>
-              <Input
-                type="text"
-                name="subtitle"
-                value={eventData.subtitle}
-                onChange={handleChange}
-                placeholder="Enter subtitle"
                 className="dark:border-gray-400 focus:ring-2 focus:ring-green-400 mt-2"
               />
             </div>
