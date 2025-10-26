@@ -3,14 +3,11 @@ import storage from 'redux-persist/lib/storage';
 import AuthSlice from './AuthSlice';
 import { persistReducer, persistStore } from 'redux-persist';
 
-// Persist Configuration
 const persistConfig = {
   key: 'root',
   storage,
-  // whitelist: ['Auth']
 };
 
-// Persist Reducer
 const persistedReducer = persistReducer(persistConfig, AuthSlice);
 
 export const store = configureStore({
@@ -20,3 +17,6 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
