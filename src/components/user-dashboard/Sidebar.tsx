@@ -5,6 +5,7 @@ import { MdOutlinePayment } from 'react-icons/md';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { NavLink } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { RiHistoryLine } from 'react-icons/ri';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -32,8 +33,13 @@ const Sidebar = () => {
     },
     {
       path: '/user-dashboard/dues',
-      label: 'Dues',
+      label: 'Make Payment',
       icon: <MdOutlinePayment size={22} />,
+    },
+    {
+      path: '/user-dashboard/payment-history',
+      label: 'Payment History',
+      icon: <RiHistoryLine size={22} />,
     },
     {
       path: '/user-dashboard/settings',
@@ -64,7 +70,7 @@ const Sidebar = () => {
             className={({ isActive }) =>
               `flex items-center group gap-3 px-4 py-2 rounded-lg mx-2 transition-all duration-300 ${
                 isCollapsed ? 'justify-center' : 'gap-3'
-              } px-4 py-3 rounded-xl font-medium transition-all duration-200
+              } px-5 py-3 rounded-xl font-medium transition-all duration-200
                ${
                  isActive
                    ? 'bg-[#bfeac4] text-black dark:bg-[#d8f0db]'

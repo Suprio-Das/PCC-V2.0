@@ -23,7 +23,6 @@ import UserBlog from '@/pages/userDashboard/UserBlog';
 import WriteBlog from '@/pages/userDashboard/WriteBlog';
 import UpdateBlog from '@/pages/userDashboard/UpdateBlog';
 import RegisteredEvents from '@/pages/userDashboard/RegisteredEvents';
-import Dues from '@/pages/userDashboard/Dues';
 import Settings from '@/pages/userDashboard/Settings';
 import { AdminDashboard } from '@/pages/adminDashboard/AdminDashboard';
 import Dashboard from '@/pages/adminDashboard/Dashboard';
@@ -33,6 +32,8 @@ import ApproveBlogs from '@/pages/adminDashboard/ApproveBlogs';
 import Members from '@/pages/adminDashboard/Members';
 import ApproveMembers from '@/pages/adminDashboard/ApproveMembers';
 import UpdateEvent from '@/pages/adminDashboard/UpdateEvent';
+import MakePayment from '@/pages/userDashboard/MakePayment';
+import PaymentHistory from '@/pages/userDashboard/PaymentHistory';
 
 const appRouter = createBrowserRouter([
   {
@@ -159,7 +160,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: 'dues',
-        element: <Dues></Dues>,
+        element: <MakePayment></MakePayment>,
+      },
+      {
+        path: 'payment-history',
+        element: <PaymentHistory></PaymentHistory>,
       },
       {
         path: 'settings',
