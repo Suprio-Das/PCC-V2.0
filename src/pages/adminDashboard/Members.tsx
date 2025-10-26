@@ -61,39 +61,69 @@ const Members = () => {
             </SelectContent>
           </Select>
 
-          {/* Members Table */}
+          {/* Members Section */}
           {selectedBatch && membersData[selectedBatch] ? (
-            <div className="overflow-x-auto rounded-lg mt-6">
-              <Table>
-                <TableCaption>List of members in {selectedBatch}</TableCaption>
-                <TableHeader>
-                  <TableRow className="bg-gray-100 dark:bg-gray-700">
-                    <TableHead>ID</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Mobile</TableHead>
-                    <TableHead className="text-center">Total Dues (৳)</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {membersData[selectedBatch].map((m) => (
-                    <TableRow key={m.id}>
-                      <TableCell>{m.id}</TableCell>
-                      <TableCell>{m.name}</TableCell>
-                      <TableCell>{m.email}</TableCell>
-                      <TableCell>{m.mobile}</TableCell>
-                      <TableCell className="text-center font-semibold">
-                        {m.due > 0 ? (
-                          <span className="text-red-500">৳{m.due}</span>
-                        ) : (
-                          <span className="text-green-500">No Due</span>
-                        )}
-                      </TableCell>
+            <>
+              {/* ✅ Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto rounded-lg mt-6">
+                <Table>
+                  <TableCaption>List of members in {selectedBatch}</TableCaption>
+                  <TableHeader>
+                    <TableRow className="bg-gray-100 dark:bg-gray-700">
+                      <TableHead>ID</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Mobile</TableHead>
+                      <TableHead className="text-center">Total Dues (৳)</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {membersData[selectedBatch].map((m) => (
+                      <TableRow key={m.id}>
+                        <TableCell>{m.id}</TableCell>
+                        <TableCell>{m.name}</TableCell>
+                        <TableCell>{m.email}</TableCell>
+                        <TableCell>{m.mobile}</TableCell>
+                        <TableCell className="text-center font-semibold">
+                          {m.due > 0 ? (
+                            <span className="text-red-500">৳{m.due}</span>
+                          ) : (
+                            <span className="text-green-500">No Due</span>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* ✅ Mobile Card View */}
+              <div className="grid grid-cols-1 gap-4 mt-6 md:hidden">
+                {membersData[selectedBatch].map((m) => (
+                  <div
+                    key={m.id}
+                    className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-800 shadow-sm"
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <h2 className="font-semibold text-gray-800 dark:text-gray-100">{m.name}</h2>
+                      <span className={`text-sm font-medium ${m.due > 0 ? 'text-red-500' : 'text-green-500'}`}>
+                        {m.due > 0 ? `৳${m.due}` : 'No Due'}
+                      </span>
+                    </div>
+
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <span className="font-medium">ID:</span> {m.id}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <span className="font-medium">Email:</span> {m.email}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <span className="font-medium">Mobile:</span> {m.mobile}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : (
             <p className="text-center text-gray-500 mt-6">Select a batch to view members.</p>
           )}

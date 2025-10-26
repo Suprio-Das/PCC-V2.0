@@ -68,46 +68,89 @@ const ApproveMembers = () => {
           {requests.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-center py-10">No new member requests.</p>
           ) : (
-            <div className="overflow-x-auto rounded-lg mt-6">
-              <Table>
-                <TableCaption>Pending member approval requests</TableCaption>
-                <TableHeader>
-                  <TableRow className="bg-gray-100 dark:bg-gray-700">
-                    <TableHead>ID</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Mobile</TableHead>
-                    <TableHead>Batch</TableHead>
-                    <TableHead>Department</TableHead>
-                    <TableHead className="text-center">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {requests.map((req) => (
-                    <TableRow key={req.id}>
-                      <TableCell>{req.id}</TableCell>
-                      <TableCell>{req.name}</TableCell>
-                      <TableCell>{req.email}</TableCell>
-                      <TableCell>{req.mobile}</TableCell>
-                      <TableCell>{req.batch}</TableCell>
-                      <TableCell>{req.department}</TableCell>
-                      <TableCell className="text-center space-x-2">
-                        <Button
-                          size="sm"
-                          className="bg-green-600 hover:bg-green-700 text-white"
-                          onClick={() => handleApprove(req.id)}
-                        >
-                          Approve
-                        </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleReject(req.id)}>
-                          Reject
-                        </Button>
-                      </TableCell>
+            <>
+              {/* ✅ Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto rounded-lg mt-6">
+                <Table>
+                  <TableCaption>Pending member approval requests</TableCaption>
+                  <TableHeader>
+                    <TableRow className="bg-gray-100 dark:bg-gray-700">
+                      <TableHead>ID</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Mobile</TableHead>
+                      <TableHead>Batch</TableHead>
+                      <TableHead>Department</TableHead>
+                      <TableHead className="text-center">Action</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {requests.map((req) => (
+                      <TableRow key={req.id}>
+                        <TableCell>{req.id}</TableCell>
+                        <TableCell>{req.name}</TableCell>
+                        <TableCell>{req.email}</TableCell>
+                        <TableCell>{req.mobile}</TableCell>
+                        <TableCell>{req.batch}</TableCell>
+                        <TableCell>{req.department}</TableCell>
+                        <TableCell className="text-center space-x-2">
+                          <Button
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                            onClick={() => handleApprove(req.id)}
+                          >
+                            Approve
+                          </Button>
+                          <Button size="sm" variant="destructive" onClick={() => handleReject(req.id)}>
+                            Reject
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* ✅ Mobile Card View */}
+              <div className="grid grid-cols-1 gap-4 mt-6 md:hidden">
+                {requests.map((req) => (
+                  <div
+                    key={req.id}
+                    className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-800 shadow-sm"
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <h2 className="font-semibold text-gray-800 dark:text-gray-100">{req.name}</h2>
+                      <span className="text-sm text-gray-500">{req.batch}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <span className="font-medium">ID:</span> {req.id}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <span className="font-medium">Email:</span> {req.email}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <span className="font-medium">Mobile:</span> {req.mobile}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                      <span className="font-medium">Department:</span> {req.department}
+                    </p>
+
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                        onClick={() => handleApprove(req.id)}
+                      >
+                        Approve
+                      </Button>
+                      <Button size="sm" variant="destructive" onClick={() => handleReject(req.id)}>
+                        Reject
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </Card>
       </div>
