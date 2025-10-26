@@ -3,7 +3,6 @@ import { BlogCard, staticBlogs } from '../../pages/blog/BlogCard';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Footer } from '@/components/Footer';
-import { TrendingTopics } from './TrendingTopics';
 
 const tags = ['Blogging', 'Web Development', 'Programming', 'AI', 'Photography', 'Sports'];
 const suggestedBlogs = [
@@ -36,13 +35,10 @@ export const BlogPage = () => {
             </p>
           </motion.div>
         </section>
-
-        <TrendingTopics></TrendingTopics>
-
         {/* Blog Section */}
-        <h3 className="font-semibold text-3xl text-black md:text-4xl text-center my-14">Latest Blogs</h3>
+        <h3 className="font-semibold text-3xl text-black md:text-4xl text-center my-5 dark:text-white">Latest Blogs</h3>
         <section className="">
-          <div className="w-11/12 mx-auto bg-green-50 md:px-16 px-5 md:pt-16 pt-5 md:pb-24 pb-5 mb-5 rounded-xl">
+          <div className="w-11/12 mx-auto md:px-16 px-5 md:pt-16 pt-5 md:pb-24 pb-5 mb-5 rounded-xl dark:bg-gray-800">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Side - Blog Cards */}
               <div className="lg:col-span-2 space-y-6">

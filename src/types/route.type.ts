@@ -10,6 +10,8 @@ export enum RoutePaths {
   ADVISOR = '/advisor',
   EXECUTIVE = '/executive',
   SIGN_IN = '/signin',
+  ADMIN_DASHBOARD = '/admin-dashboard',
+  USER_DASHBOARD = '/user-dashboard',
   MEMBER_LIST = '/member-list',
   DEV = '/dev',
   SW_DEV_WING = '/sw-dev',
