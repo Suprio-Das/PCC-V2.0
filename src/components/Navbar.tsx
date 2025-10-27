@@ -50,6 +50,32 @@ const routeList: RouteProps[] = [
   { href: RoutePaths.CONTACT, label: 'Contact Us' },
 ];
 
+// Role-based menu generator
+const getMenuItems = (role: string) => {
+  if (role === 'admin') {
+    return [
+      { path: '/admin-dashboard/dashboard', label: 'Dashboard', icon: <ChartBar size={20} /> },
+      { path: '/admin-dashboard/events', label: 'Events', icon: <BsCalendar2Event size={18} /> },
+      { path: '/admin-dashboard/create-events', label: 'Create Events', icon: <PencilLine size={20} /> },
+      { path: '/admin-dashboard/approve-blogs', label: 'Approve Blogs', icon: <ChartBar size={20} /> },
+      { path: '/admin-dashboard/members', label: 'Members', icon: <UserRound size={20} /> },
+      { path: '/admin-dashboard/approve-members', label: 'Approve Members', icon: <UserRound size={20} /> },
+      { path: '/admin-dashboard/settings', label: 'Settings', icon: <IoSettingsOutline size={20} /> },
+    ];
+  } else if (role === 'student') {
+    return [
+      { path: '/user-dashboard/profile', label: 'Profile', icon: <UserRound size={20} /> },
+      { path: '/user-dashboard/registered-events', label: 'Events', icon: <BsCalendar2Event size={18} /> },
+      { path: '/user-dashboard/your-blog', label: 'Your Blogs', icon: <ChartBar size={20} /> },
+      { path: '/user-dashboard/write-blog', label: 'Write Blog', icon: <PencilLine size={20} /> },
+      { path: '/user-dashboard/dues', label: 'Make Payment', icon: <MdOutlinePayment size={20} /> },
+      { path: '/user-dashboard/payment-history', label: 'Payment History', icon: <RiHistoryLine size={20} /> },
+      { path: '/user-dashboard/settings', label: 'Settings', icon: <IoSettingsOutline size={20} /> },
+    ];
+  }
+  return [];
+};
+
 export const Navbar = () => {
   const [openNav, setOpenNav] = useState<boolean>(false);
   const location = useLocation();
@@ -87,31 +113,15 @@ export const Navbar = () => {
                     {user.name || 'My Account'}
                   </DropdownMenuLabel>
                   <DropdownMenuGroup className="mt-2 flex flex-col gap-1">
-                    {[
-                      { path: '/user-dashboard/profile', label: 'Profile', icon: <UserRound size={20} /> },
-                      {
-                        path: '/user-dashboard/registered-events',
-                        label: 'Events',
-                        icon: <BsCalendar2Event size={18} />,
-                      },
-                      { path: '/user-dashboard/your-blog', label: 'Your Blogs', icon: <ChartBar size={20} /> },
-                      { path: '/user-dashboard/write-blog', label: 'Write Blog', icon: <PencilLine size={20} /> },
-                      { path: '/user-dashboard/dues', label: 'Make Payment', icon: <MdOutlinePayment size={20} /> },
-                      {
-                        path: '/user-dashboard/payment-history',
-                        label: 'Payment History',
-                        icon: <RiHistoryLine size={20} />,
-                      },
-                      { path: '/user-dashboard/settings', label: 'Settings', icon: <IoSettingsOutline size={20} /> },
-                    ].map((item) => (
+                    {getMenuItems(user.role).map((item) => (
                       <DropdownMenuItem
                         key={item.path}
                         onClick={() => navigate(item.path)}
                         className="flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-700 dark:text-gray-300
-                       hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                         hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
                       >
                         {item.icon}
-                        <span>{item.label}</span>
+                        {item.label}
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuGroup>
@@ -200,28 +210,18 @@ export const Navbar = () => {
                   <DropdownMenuLabel className="text-center font-semibold text-lg border-b pb-2">
                     {user.name || 'My Account'}
                   </DropdownMenuLabel>
-                  <DropdownMenuGroup className="mt-2">
-                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/profile')}>
-                      <UserRound className="w-4 h-4 mr-2" /> Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/registered-events')}>
-                      <BsCalendar2Event className="w-4 h-4 mr-2" /> Events
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/your-blog')}>
-                      <ChartBar className="w-4 h-4 mr-2" /> Your Blogs
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/write-blog')}>
-                      <PencilLine className="w-4 h-4 mr-2" /> Write Blogs
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/dues')}>
-                      <MdOutlinePayment className="w-4 h-4 mr-2" /> Make Payment
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/payment-history')}>
-                      <RiHistoryLine className="w-4 h-4 mr-2" /> Payment History
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/settings')}>
-                      <IoSettingsOutline className="w-4 h-4 mr-2" /> Settings
-                    </DropdownMenuItem>
+                  <DropdownMenuGroup className="mt-2 flex flex-col gap-1">
+                    {getMenuItems(user.role).map((item) => (
+                      <DropdownMenuItem
+                        key={item.path}
+                        onClick={() => navigate(item.path)}
+                        className="flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-700 dark:text-gray-300
+                         hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                      >
+                        {item.icon}
+                        {item.label}
+                      </DropdownMenuItem>
+                    ))}
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator className="my-2" />
                   <DropdownMenuItem onClick={logoutHandler} className="text-red-600">
