@@ -1,6 +1,6 @@
 import App from '@/App';
 import { Developers } from '@/pages/developers/developers.page';
-import { JoinPage } from '@/pages/join/join.page';
+import { JoinPage } from '@/pages/join/JoinPage';
 import { LeadershipPage } from '@/pages/leaderShip/leadership.page';
 import { NotFound } from '@/pages/notFound/notFound.page';
 import { MemberListPage } from '@/pages/private/memberList/memberList.page';
