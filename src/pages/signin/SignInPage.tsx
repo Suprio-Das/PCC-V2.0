@@ -1,16 +1,15 @@
+import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
 import logo from '@/assets/pcc-logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '@/Redux/Store';
 import api from '@/Services/api';
 import { SetUser, Logout } from '@/Redux/AuthSlice';
-import { useState } from 'react';
 
 export function SignInPage() {
   const navigate = useNavigate();
@@ -19,8 +18,10 @@ export function SignInPage() {
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
 
-  //  Typed handleLogin
+  // Handle Login
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -36,8 +37,14 @@ export function SignInPage() {
       return;
     }
 
+    if (password.length < 8) {
+      setPasswordError('Password must be at least 8 characters long');
+      return;
+    }
+
     setLoading(true);
     setErrorMsg('');
+    setPasswordError('');
 
     try {
       const response = await api.post('/api/auth/login', { email, password });
@@ -45,17 +52,17 @@ export function SignInPage() {
       if (response.status === 200) {
         const data = response.data;
 
-        // 🔒 Prevent login if user is not active
+        // Prevent inactive user login
         if (data.user?.status !== 'active') {
           setErrorMsg('Your account is pending approval. Please wait for admin verification.');
           return;
         }
 
+        // Save user and redirect based on role
+        dispatch(SetUser(data.user));
         if (data.user?.role === 'admin') {
-          dispatch(SetUser(data.user));
           navigate('/admin-dashboard');
         } else if (data.user?.role === 'student') {
-          dispatch(SetUser(data.user));
           navigate('/user-dashboard');
         } else {
           setErrorMsg('Unauthorized access. Invalid role.');
@@ -112,20 +119,38 @@ export function SignInPage() {
                   <Input
                     name="email"
                     placeholder="Email"
+                    type="email"
                     className="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-full text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-300 focus:ring-2 focus:ring-green-400 font-poppins"
                   />
                 </div>
 
-                <div>
+                <div className="relative">
                   <Input
                     name="password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
-                    className="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-full text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-300 focus:ring-2 focus:ring-green-400 font-poppins"
+                    className="bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-full text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-300 focus:ring-2 focus:ring-green-400 font-poppins pr-12"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value.length < 8) {
+                        setPasswordError('Password must be at least 8 characters long');
+                      } else {
+                        setPasswordError('');
+                      }
+                    }}
                   />
+                  <button
+                    type="button"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-300"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
                 </div>
 
-                {errorMsg && <p className="text-red-500 text-sm text-center font-medium">{errorMsg}</p>}
+                {/* Error Messages */}
+                {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
+                {errorMsg && <p className="text-red-500 text-sm text-center mt-1">{errorMsg}</p>}
 
                 <div className="text-sm text-right text-green-700 dark:text-green-400">
                   <Link to="#" className="hover:text-green-900 dark:hover:text-green-200 font-poppins">
@@ -148,27 +173,6 @@ export function SignInPage() {
           )}
         </div>
       </section>
-
-      {/* Social Login */}
-      <section className="w-full bg-white dark:bg-gray-900 py-8">
-        <div className="max-w-md mx-auto">
-          <div className="flex items-center mb-6">
-            <span className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></span>
-            <span className="px-4 text-gray-500 dark:text-gray-400 text-sm font-poppins">Or continue with</span>
-            <span className="flex-grow h-px bg-gray-300 dark:bg-gray-600"></span>
-          </div>
-
-          <div className="flex justify-center gap-6">
-            <button className="p-3 border border-gray-300 dark:border-gray-600 rounded-full hover:bg-green-50 dark:hover:bg-gray-700 transition">
-              <FaFacebook className="text-blue-600 dark:text-blue-400 text-2xl" />
-            </button>
-            <button className="p-3 border border-gray-300 dark:border-gray-600 rounded-full hover:bg-green-50 dark:hover:bg-gray-700 transition">
-              <FcGoogle className="text-2xl" />
-            </button>
-          </div>
-        </div>
-      </section>
-
       <Footer />
     </>
   );

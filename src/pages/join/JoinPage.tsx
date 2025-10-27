@@ -3,15 +3,6 @@ import { Navbar } from '@/components/Navbar';
 import { NotRecruiting } from '@/components/shared/notRecruiting';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-// import {
-//   Dialog,
-//   DialogClose,
-//   DialogContent,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -44,6 +35,15 @@ const formSchema = z.object({
       .regex(/^\s*(\d\s*){11}\s*$/, { message: 'Please enter an 11-digit mobile number' }),
   }),
   universityID: z.string().min(1, { message: 'This field is required' }),
+
+  password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+  batch: z.string().min(1, { message: 'Batch is required' }),
+  section: z
+    .string()
+    .min(1, { message: 'Section is required' })
+    .max(1, { message: 'Section must be 1 character only' }),
+  shift: z.enum(['D', 'E'], { message: 'Shift must be D or E' }),
+
   payment: z.object({
     method: z.enum(['Bkash', 'Nagad', 'Handcash'], { message: 'Unsupported Payment Method' }),
     transaction_id: z.string().optional(),
@@ -56,6 +56,7 @@ export const JoinPage = () => {
   DocumentTitle('Join PCC');
   const [loading, setLoading] = useState(false);
   const [joinSuccess, setJoinSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,6 +65,10 @@ export const JoinPage = () => {
       email: '',
       phone: { countryCode: '+88', number: '' },
       universityID: '',
+      password: '',
+      batch: '',
+      section: '',
+      shift: 'D',
       payment: { method: 'Handcash', transaction_id: '' },
       expectation: '',
       agreeTerms: false,
@@ -76,7 +81,6 @@ export const JoinPage = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
 
-    // format phone & universityID
     values.phone.number = values.phone.number.replace(/\s+/g, '');
     values.universityID = values.universityID.toUpperCase().replace(/\s+/g, '');
 
@@ -158,7 +162,82 @@ export const JoinPage = () => {
                         <FormItem>
                           <FormLabel>University ID *</FormLabel>
                           <FormControl>
-                            <Input placeholder="CSE 123 45678" {...field} />
+                            <Input placeholder="CSE 12345678" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="batch"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Batch *</FormLabel>
+                          <FormControl>
+                            <Input maxLength={2} placeholder="e.g. 28" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="section"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Section *</FormLabel>
+                          <FormControl>
+                            <Input maxLength={1} placeholder="A" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="shift"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Shift *</FormLabel>
+                          <FormControl>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select Shift" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="D">Day</SelectItem>
+                                <SelectItem value="E">Evening</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password *</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Enter password"
+                                {...field}
+                              />
+                              <Icon
+                                icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                                className="absolute right-3 top-2.5 cursor-pointer text-gray-500"
+                                onClick={() => setShowPassword(!showPassword)}
+                              />
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -186,13 +265,20 @@ export const JoinPage = () => {
                         <FormItem>
                           <FormLabel>Phone Number *</FormLabel>
                           <FormControl>
-                            <Input placeholder="01XXXXXXXXX" {...field} />
+                            <Input
+                              type="text"
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              placeholder="01XXXXXXXXX"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
 
+                    {/* Payment Section */}
                     <FormField
                       control={form.control}
                       name="payment.method"
