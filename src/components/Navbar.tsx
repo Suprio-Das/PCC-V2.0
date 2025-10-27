@@ -1,18 +1,45 @@
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
-
 import PCCLogo from '@/assets/pcc-logo.png';
 import { buttonVariants } from './ui/button';
-
 import { RoutePaths } from '@/types/route.type';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './customized/ThemeToggle/ThemeToggle';
-import { Menu } from 'lucide-react';
+import { LogOut, ChartBar, PencilLine, UserRound } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState, AppDispatch } from '@/Redux/Store';
+import { Logout } from '@/Redux/AuthSlice';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from './ui/dropdown-menu';
+import userLogo from '@/assets/user.jpg';
+import { HiMenuAlt1, HiMenuAlt3 } from 'react-icons/hi';
+import { IoSettingsOutline } from 'react-icons/io5';
+import { RiHistoryLine } from 'react-icons/ri';
+import { MdOutlinePayment } from 'react-icons/md';
+import { BsCalendar2Event } from 'react-icons/bs';
 
 interface RouteProps {
   href: string;
   label: string;
+}
+
+interface UserType {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  photoUrl?: string;
+  location?: string;
 }
 
 const routeList: RouteProps[] = [
@@ -24,8 +51,15 @@ const routeList: RouteProps[] = [
 ];
 
 export const Navbar = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [openNav, setOpenNav] = useState<boolean>(false);
   const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
+
+  const logoutHandler = () => {
+    dispatch(Logout());
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b-[1px] bg-white dark:border-b-slate-700 dark:bg-background">
@@ -38,13 +72,69 @@ export const Navbar = () => {
             </Link>
           </NavigationMenuItem>
 
-          {/* Mobile Menu */}
-          <span className="flex md:hidden font-poppins">
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger className="px-2">
-                <Menu className="h-8 w-8" onClick={() => setIsOpen(true)} />
-              </SheetTrigger>
+          {/* Mobile Menu + Avatar */}
+          <div className="flex md:hidden items-center gap-4">
+            {user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer border-2 border-green-600">
+                    <AvatarImage src={user.photoUrl || userLogo} />
+                    <AvatarFallback>User</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-60 dark:bg-gray-900 bg-white shadow-xl rounded-2xl p-2" align="end">
+                  <DropdownMenuLabel className="text-center font-semibold text-lg border-b pb-2">
+                    {user.name || 'My Account'}
+                  </DropdownMenuLabel>
+                  <DropdownMenuGroup className="mt-2 flex flex-col gap-1">
+                    {[
+                      { path: '/user-dashboard/profile', label: 'Profile', icon: <UserRound size={20} /> },
+                      {
+                        path: '/user-dashboard/registered-events',
+                        label: 'Events',
+                        icon: <BsCalendar2Event size={18} />,
+                      },
+                      { path: '/user-dashboard/your-blog', label: 'Your Blogs', icon: <ChartBar size={20} /> },
+                      { path: '/user-dashboard/write-blog', label: 'Write Blog', icon: <PencilLine size={20} /> },
+                      { path: '/user-dashboard/dues', label: 'Make Payment', icon: <MdOutlinePayment size={20} /> },
+                      {
+                        path: '/user-dashboard/payment-history',
+                        label: 'Payment History',
+                        icon: <RiHistoryLine size={20} />,
+                      },
+                      { path: '/user-dashboard/settings', label: 'Settings', icon: <IoSettingsOutline size={20} /> },
+                    ].map((item) => (
+                      <DropdownMenuItem
+                        key={item.path}
+                        onClick={() => navigate(item.path)}
+                        className="flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-700 dark:text-gray-300
+                       hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                      >
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator className="my-2" />
+                  <DropdownMenuItem
+                    onClick={logoutHandler}
+                    className="flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-red-600 hover:bg-red-100 dark:hover:bg-red-800 transition-all duration-200"
+                  >
+                    <LogOut size={20} /> Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
 
+            {/* Hamburger Menu */}
+            <Sheet open={openNav} onOpenChange={setOpenNav}>
+              <SheetTrigger asChild>
+                {openNav ? (
+                  <HiMenuAlt3 className="w-7 h-7 cursor-pointer" />
+                ) : (
+                  <HiMenuAlt1 className="w-7 h-7 cursor-pointer" />
+                )}
+              </SheetTrigger>
               <SheetContent side="left">
                 <SheetHeader>
                   <SheetTitle className="text-xl font-bold">PCC</SheetTitle>
@@ -56,27 +146,27 @@ export const Navbar = () => {
                       <Link
                         key={label}
                         to={href}
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => setOpenNav(false)}
                         className={`${buttonVariants({ variant: 'ghost' })} ${isActive ? 'text-[#16A34A]' : ''}`}
                       >
                         {label}
                       </Link>
                     );
                   })}
-                  <div className="mt-3 flex flex-col gap-2 items-center">
-                    <ThemeToggle />
+                  {!user && (
                     <Link
                       to={RoutePaths.SIGN_IN}
-                      className="px-4 py-2 rounded-full text-white bg-[#16A34A] hover:bg-green-700 transition-colors font-medium"
-                      onClick={() => setIsOpen(false)}
+                      className="px-4 py-2 rounded-full text-white bg-[#16A34A] hover:bg-green-700 transition-colors font-medium mt-3"
+                      onClick={() => setOpenNav(false)}
                     >
                       Login
                     </Link>
-                  </div>
+                  )}
+                  <ThemeToggle />
                 </nav>
               </SheetContent>
             </Sheet>
-          </span>
+          </div>
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex items-center gap-8 font-poppins">
@@ -96,15 +186,58 @@ export const Navbar = () => {
                 </Link>
               );
             })}
-            {/* Desktop Login button */}
-            <Link
-              to={RoutePaths.SIGN_IN}
-              className="px-6 py-2 rounded-full text-white bg-[#16A34A] hover:bg-green-700 transition-colors text-sm ml-2"
-            >
-              Login
-            </Link>
 
-            {/* ThemeToggle */}
+            {/* Desktop Login/User */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer border-2 border-green-600">
+                    <AvatarImage src={user.photoUrl || userLogo} />
+                    <AvatarFallback>User</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-60 dark:bg-gray-900 bg-white shadow-xl rounded-2xl p-2" align="end">
+                  <DropdownMenuLabel className="text-center font-semibold text-lg border-b pb-2">
+                    {user.name || 'My Account'}
+                  </DropdownMenuLabel>
+                  <DropdownMenuGroup className="mt-2">
+                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/profile')}>
+                      <UserRound className="w-4 h-4 mr-2" /> Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/registered-events')}>
+                      <BsCalendar2Event className="w-4 h-4 mr-2" /> Events
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/your-blog')}>
+                      <ChartBar className="w-4 h-4 mr-2" /> Your Blogs
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/write-blog')}>
+                      <PencilLine className="w-4 h-4 mr-2" /> Write Blogs
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/dues')}>
+                      <MdOutlinePayment className="w-4 h-4 mr-2" /> Make Payment
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/payment-history')}>
+                      <RiHistoryLine className="w-4 h-4 mr-2" /> Payment History
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/user-dashboard/settings')}>
+                      <IoSettingsOutline className="w-4 h-4 mr-2" /> Settings
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator className="my-2" />
+                  <DropdownMenuItem onClick={logoutHandler} className="text-red-600">
+                    <LogOut className="w-4 h-4 mr-2" /> Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link
+                to={RoutePaths.SIGN_IN}
+                className="px-6 py-2 rounded-full text-white bg-[#16A34A] hover:bg-green-700 transition-colors text-sm ml-2"
+              >
+                Login
+              </Link>
+            )}
+
             <ThemeToggle />
           </nav>
         </NavigationMenuList>
