@@ -26,6 +26,7 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import { RiHistoryLine } from 'react-icons/ri';
 import { MdOutlinePayment } from 'react-icons/md';
 import { BsCalendar2Event } from 'react-icons/bs';
+import api from '@/Services/api';
 
 interface RouteProps {
   href: string;
@@ -83,8 +84,12 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
 
-  const logoutHandler = () => {
-    dispatch(Logout());
+  const logoutHandler = async () => {
+    const res = await api.post('/api/auth/logout');
+    if (res) {
+      dispatch(Logout());
+      navigate('/');
+    }
   };
 
   return (

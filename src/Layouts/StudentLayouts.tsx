@@ -19,7 +19,7 @@ const StudentLayouts: React.FC = () => {
 
   return (
     <>
-      <Outlet></Outlet>
+      <Outlet />
     </>
   );
 };
