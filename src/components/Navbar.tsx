@@ -26,6 +26,9 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import { RiHistoryLine } from 'react-icons/ri';
 import { MdOutlinePayment } from 'react-icons/md';
 import { BsCalendar2Event } from 'react-icons/bs';
+import { LuLayoutDashboard } from 'react-icons/lu';
+import { FiUsers } from 'react-icons/fi';
+import { GoGitPullRequest } from 'react-icons/go';
 
 interface RouteProps {
   href: string;
@@ -54,12 +57,12 @@ const routeList: RouteProps[] = [
 const getMenuItems = (role: string) => {
   if (role === 'admin') {
     return [
-      { path: '/admin-dashboard/dashboard', label: 'Dashboard', icon: <ChartBar size={20} /> },
+      { path: '/admin-dashboard/dashboard', label: 'Dashboard', icon: <LuLayoutDashboard size={20} /> },
       { path: '/admin-dashboard/events', label: 'Events', icon: <BsCalendar2Event size={18} /> },
       { path: '/admin-dashboard/create-events', label: 'Create Events', icon: <PencilLine size={20} /> },
       { path: '/admin-dashboard/approve-blogs', label: 'Approve Blogs', icon: <ChartBar size={20} /> },
-      { path: '/admin-dashboard/members', label: 'Members', icon: <UserRound size={20} /> },
-      { path: '/admin-dashboard/approve-members', label: 'Approve Members', icon: <UserRound size={20} /> },
+      { path: '/admin-dashboard/members', label: 'Members', icon: <FiUsers size={20} /> },
+      { path: '/admin-dashboard/approve-members', label: 'Approve Members', icon: <GoGitPullRequest size={20} /> },
       { path: '/admin-dashboard/settings', label: 'Settings', icon: <IoSettingsOutline size={20} /> },
     ];
   } else if (role === 'student') {
