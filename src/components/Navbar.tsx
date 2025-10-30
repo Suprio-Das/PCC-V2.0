@@ -29,6 +29,7 @@ import { BsCalendar2Event } from 'react-icons/bs';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { FiUsers } from 'react-icons/fi';
 import { GoGitPullRequest } from 'react-icons/go';
+import api from '@/Services/api';
 
 interface RouteProps {
   href: string;
@@ -86,8 +87,12 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
 
-  const logoutHandler = () => {
-    dispatch(Logout());
+  const logoutHandler = async () => {
+    const res = await api.post('/api/auth/logout');
+    if (res) {
+      dispatch(Logout());
+      navigate('/');
+    }
   };
 
   return (

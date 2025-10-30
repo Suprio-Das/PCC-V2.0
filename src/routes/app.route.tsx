@@ -8,7 +8,7 @@ import { SignInPage } from '@/pages/signin/SignInPage';
 import MERNResourcePage from '@/pages/software-dev/resources/resources.page';
 import { UnderMaintenance } from '@/pages/UnderMaintenance/UnderMaintenance.page';
 import { RoutePaths } from '@/types/route.type';
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ProtectedRoutes } from './private.route';
 import { AdvisorPage } from '@/pages/advisor/AdvisorPage';
 import { ExecutivePage } from '@/pages/executive/ExecutivePage';
@@ -17,14 +17,12 @@ import { BlogPage } from '@/pages/blog/BlogPage';
 import ContactPage from '@/pages/contact/ContactPage';
 import { EventPage } from '@/pages/event/EventPage';
 import TimelinePage from '@/pages/timeline/TimelinePage';
-import { UserDashboard } from '@/pages/userDashboard/UserDashboard';
 import Profile from '@/pages/userDashboard/Profile';
 import UserBlog from '@/pages/userDashboard/UserBlog';
 import WriteBlog from '@/pages/userDashboard/WriteBlog';
 import UpdateBlog from '@/pages/userDashboard/UpdateBlog';
 import RegisteredEvents from '@/pages/userDashboard/RegisteredEvents';
 import Settings from '@/pages/userDashboard/Settings';
-import { AdminDashboard } from '@/pages/adminDashboard/AdminDashboard';
 import Dashboard from '@/pages/adminDashboard/Dashboard';
 import Events from '@/pages/adminDashboard/Events';
 import CreateEvents from '@/pages/adminDashboard/CreateEvents';
@@ -34,194 +32,80 @@ import ApproveMembers from '@/pages/adminDashboard/ApproveMembers';
 import UpdateEvent from '@/pages/adminDashboard/UpdateEvent';
 import MakePayment from '@/pages/userDashboard/MakePayment';
 import PaymentHistory from '@/pages/userDashboard/PaymentHistory';
+import AdminLayouts from '@/Layouts/AdminLayouts';
+import StudentLayouts from '@/Layouts/StudentLayouts';
+import { UserDashboard } from '@/pages/userDashboard/UserDashboard';
+import { AdminDashboard } from '@/pages/adminDashboard/AdminDashboard';
 
-const appRouter = createBrowserRouter([
-  {
-    path: RoutePaths.ROOT,
-    element: <App />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.ABOUT,
-    element: <AboutPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.ADVISOR,
-    element: <AdvisorPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.EXECUTIVE,
-    element: <ExecutivePage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.BLOG,
-    element: <BlogPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.EVENTS,
-    element: <EventPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.TIMELINE,
-    element: <TimelinePage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.PEOPLE,
-    element: <LeadershipPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.CONTACT,
-    element: <ContactPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.JOIN,
-    element: <JoinPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.ADMIN_DASHBOARD,
-    element: <AdminDashboard></AdminDashboard>,
-    errorElement: <NotFound />,
-    children: [
-      {
-        index: true,
-        element: <Dashboard></Dashboard>,
-      },
-      {
-        path: 'dashboard',
-        element: <Dashboard></Dashboard>,
-      },
-      {
-        path: 'events',
-        element: <Events></Events>,
-      },
-      {
-        path: 'create-events',
-        element: <CreateEvents></CreateEvents>,
-      },
-      {
-        path: 'update-events',
-        element: <UpdateEvent></UpdateEvent>,
-      },
-      {
-        path: 'approve-blogs',
-        element: <ApproveBlogs></ApproveBlogs>,
-      },
-      {
-        path: 'members',
-        element: <Members></Members>,
-      },
-      {
-        path: 'approve-members',
-        element: <ApproveMembers></ApproveMembers>,
-      },
-      {
-        path: 'settings',
-        element: <Settings></Settings>,
-      },
-    ],
-  },
-  {
-    path: RoutePaths.USER_DASHBOARD,
-    element: <UserDashboard />,
-    errorElement: <NotFound />,
-    children: [
-      {
-        index: true,
-        element: <Profile />,
-      },
-      {
-        path: 'profile',
-        element: <Profile />,
-      },
-      {
-        path: 'registered-events',
-        element: <RegisteredEvents></RegisteredEvents>,
-      },
-      {
-        path: 'your-blog',
-        element: <UserBlog></UserBlog>,
-      },
-      {
-        path: 'write-blog',
-        element: <WriteBlog></WriteBlog>,
-      },
-      {
-        path: 'update-blog',
-        element: <UpdateBlog></UpdateBlog>,
-      },
-      {
-        path: 'dues',
-        element: <MakePayment></MakePayment>,
-      },
-      {
-        path: 'payment-history',
-        element: <PaymentHistory></PaymentHistory>,
-      },
-      {
-        path: 'settings',
-        element: <Settings></Settings>,
-      },
-    ],
-  },
+function AppRouter() {
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path={RoutePaths.ROOT} element={<App />} />
+          <Route path={RoutePaths.ABOUT} element={<AboutPage />} />
+          <Route path={RoutePaths.ADVISOR} element={<AdvisorPage />} />
+          <Route path={RoutePaths.EXECUTIVE} element={<ExecutivePage />} />
+          <Route path={RoutePaths.BLOG} element={<BlogPage />} />
+          <Route path={RoutePaths.EVENTS} element={<EventPage />} />
+          <Route path={RoutePaths.TIMELINE} element={<TimelinePage />} />
+          <Route path={RoutePaths.PEOPLE} element={<LeadershipPage />} />
+          <Route path={RoutePaths.CONTACT} element={<ContactPage />} />
+          <Route path={RoutePaths.JOIN} element={<JoinPage />} />
+          <Route path={RoutePaths.SIGN_IN} element={<SignInPage />} />
+          <Route path={RoutePaths.DEV} element={<Developers />} />
 
-  {
-    path: RoutePaths.SW_DEV_WING,
-    element: <Outlet />,
-    errorElement: <NotFound />,
-    children: [
-      {
-        path: '',
-        element: <UnderMaintenance />,
-        errorElement: <NotFound />,
-      },
-      {
-        path: 'resources',
-        element: <Outlet />,
-        errorElement: <NotFound />,
-        children: [
-          {
-            path: '',
-            element: <UnderMaintenance />,
-            errorElement: <NotFound />,
-          },
-          {
-            path: 'software-dev-mern-seminar-resource',
-            element: <MERNResourcePage />,
-            errorElement: <NotFound />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: RoutePaths.DEV,
-    element: <Developers />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: RoutePaths.SIGN_IN,
-    element: <SignInPage />,
-    errorElement: <NotFound />,
-  },
-  {
-    element: <ProtectedRoutes />,
-    errorElement: <NotFound />,
-    children: [
-      {
-        path: RoutePaths.MEMBER_LIST,
-        element: <MemberListPage />,
-      },
-    ],
-  },
-]);
+          {/* Admin Dashboard */}
+          <Route path={RoutePaths.ADMIN_DASHBOARD} element={<AdminLayouts />}>
+            <Route path={RoutePaths.ADMIN_DASHBOARD} element={<AdminDashboard />}>
+              <Route index element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="events" element={<Events />} />
+              <Route path="create-events" element={<CreateEvents />} />
+              <Route path="update-events" element={<UpdateEvent />} />
+              <Route path="approve-blogs" element={<ApproveBlogs />} />
+              <Route path="members" element={<Members />} />
+              <Route path="approve-members" element={<ApproveMembers />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+          </Route>
 
-export default appRouter;
+          {/* User Dashboard */}
+          <Route path={RoutePaths.USER_DASHBOARD} element={<StudentLayouts />}>
+            <Route path={RoutePaths.USER_DASHBOARD} element={<UserDashboard />}>
+              <Route index element={<Profile />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="registered-events" element={<RegisteredEvents />} />
+              <Route path="your-blog" element={<UserBlog />} />
+              <Route path="write-blog" element={<WriteBlog />} />
+              <Route path="update-blog" element={<UpdateBlog />} />
+              <Route path="dues" element={<MakePayment />} />
+              <Route path="payment-history" element={<PaymentHistory />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+          </Route>
+
+          {/* Software Dev Wing */}
+          <Route path={RoutePaths.SW_DEV_WING}>
+            <Route index element={<UnderMaintenance />} />
+            <Route path="resources">
+              <Route index element={<UnderMaintenance />} />
+              <Route path="software-dev-mern-seminar-resource" element={<MERNResourcePage />} />
+            </Route>
+          </Route>
+
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoutes />}>
+            <Route path={RoutePaths.MEMBER_LIST} element={<MemberListPage />} />
+          </Route>
+
+          {/* Not Found */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
+}
+
+export default AppRouter;

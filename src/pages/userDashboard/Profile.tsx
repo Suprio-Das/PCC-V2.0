@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaLinkedin, FaGithub, FaInstagram } from 'react-icons/fa';
+import { FaLinkedin, FaGithub } from 'react-icons/fa';
 import {
   Dialog,
   DialogContent,
@@ -15,21 +16,50 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import userLogo from '../../assets/user.jpg';
+import api from '@/Services/api';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/Redux/Store';
 
 const Profile = () => {
   const [open, setOpen] = useState(false);
+  const user = useSelector((state: RootState) => state.Auth.user);
+  const [studentInfo, setStudentInfo] = useState<any>({});
 
-  // Static user info
-  const user = {
-    firstName: 'Jarin',
-    lastName: 'Anika',
-    bio: 'Undergraduate student and passionate researcher exploring AI, linguistics, and computational models.',
-    email: 'jarin.anika@example.com',
-    facebook: 'https://facebook.com/',
-    linkedin: 'https://linkedin.com/',
-    github: 'https://github.com/',
-    instagram: 'https://instagram.com/',
-    photoUrl: userLogo,
+  useEffect(() => {
+    const fetchStudentInfo = async () => {
+      const info = await api.get(`/api/student/studentdetails/${user?.userId}`);
+      if (info?.data?.success === true) {
+        setStudentInfo(info.data.student);
+      }
+    };
+    fetchStudentInfo();
+  }, [user]);
+
+  const handleUpdateStudentDetails = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append('name', studentInfo.name || '');
+      formData.append('linkedin', studentInfo.linkedinprofile || '');
+      formData.append('github', studentInfo.githubprofile || '');
+      formData.append('bio', studentInfo.bio || '');
+      if (studentInfo.profile instanceof File) {
+        formData.append('profile', studentInfo.profile);
+      }
+
+      const response = await api.put(`/api/student/updatestudentdetails/${user?.userId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      if (response.data.success) {
+        alert('Profile updated successfully!');
+        setOpen(false);
+      } else {
+        alert('Failed to update profile');
+      }
+    } catch (error) {
+      alert('Something went wrong while updating your profile.');
+    }
   };
 
   return (
@@ -38,7 +68,7 @@ const Profile = () => {
         {/* Avatar */}
         <div className="relative group w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 mb-5">
           <Avatar className="w-full h-full border-2 border-green-400 shadow-md rounded-full overflow-hidden transition-transform duration-300 group-hover:scale-105">
-            <AvatarImage src={user.photoUrl} />
+            <AvatarImage src={studentInfo?.profile || userLogo} />
           </Avatar>
           <span className="absolute inset-0 rounded-full bg-gradient-to-tr from-green-500 to-green-600 opacity-5 group-hover:opacity-20 transition-opacity" />
         </div>
@@ -46,19 +76,19 @@ const Profile = () => {
         {/* Profile Info */}
         <div className="text-center max-w-full">
           <h2 className="font-bold text-3xl sm:text-4xl mb-2 text-gray-800 dark:text-gray-100 truncate">
-            {user.firstName}
+            {studentInfo?.name}
           </h2>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed font-alegreya text-sm sm:text-base break-words">
-            {user.bio}
+            {studentInfo?.bio}
           </p>
           <p className="text-gray-600 dark:text-gray-300 mb-2 font-alegreya text-sm sm:text-base truncate">
-            {user.email}
+            {studentInfo?.email}
           </p>
 
           {/* Social Links */}
           <div className="flex gap-4 mt-5 justify-center flex-wrap">
-            {[user.facebook, user.linkedin, user.github, user.instagram].map((link, idx) => {
-              const icons = [FaFacebook, FaLinkedin, FaGithub, FaInstagram];
+            {[studentInfo?.linkedinprofile, studentInfo?.githubprofile].map((link, idx) => {
+              const icons = [FaLinkedin, FaGithub];
               const IconComp = icons[idx];
               return (
                 <Link key={idx} to={link || '#'} target="_blank">
@@ -84,53 +114,58 @@ const Profile = () => {
                   <DialogDescription className="text-center text-gray-500">profile form</DialogDescription>
                 </DialogHeader>
 
-                <form className="grid gap-4 py-4">
+                <form className="grid gap-4 py-4" onSubmit={handleUpdateStudentDetails}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <Label>First Name</Label>
-                      <Input value={user.firstName} readOnly className="text-gray-600 mt-2" />
-                    </div>
-                    <div>
-                      <Label>Last Name</Label>
-                      <Input value={user.lastName} readOnly className="text-gray-600 mt-2" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <Label>Facebook</Label>
-                      <Input value={user.facebook} readOnly className="text-gray-600 mt-2 truncate" />
-                    </div>
-                    <div>
-                      <Label>Instagram</Label>
-                      <Input value={user.instagram} readOnly className="text-gray-600 mt-2 truncate" />
+                    <div className="col-span-2">
+                      <Label>Full Name</Label>
+                      <Input
+                        value={studentInfo?.name || ''}
+                        onChange={(e) => setStudentInfo({ ...studentInfo, name: e.target.value })}
+                        className="text-gray-600 mt-2"
+                      />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <Label>LinkedIn</Label>
-                      <Input value={user.linkedin} readOnly className="text-gray-600 mt-2 truncate" />
+                      <Input
+                        value={studentInfo?.linkedinprofile || ''}
+                        onChange={(e) => setStudentInfo({ ...studentInfo, linkedinprofile: e.target.value })}
+                        className="text-gray-600 mt-2"
+                      />
                     </div>
                     <div>
                       <Label>GitHub</Label>
-                      <Input value={user.github} readOnly className="text-gray-600 mt-2 truncate" />
+                      <Input
+                        value={studentInfo?.githubprofile || ''}
+                        onChange={(e) => setStudentInfo({ ...studentInfo, githubprofile: e.target.value })}
+                        className="text-gray-600 mt-2"
+                      />
                     </div>
                   </div>
 
                   <div>
                     <Label>Description</Label>
-                    <Textarea value={user.bio} readOnly className="text-gray-600 mt-2" />
+                    <Textarea
+                      value={studentInfo?.bio || ''}
+                      onChange={(e) => setStudentInfo({ ...studentInfo, bio: e.target.value })}
+                      className="text-gray-600 mt-2"
+                    />
                   </div>
 
                   <div>
                     <Label>Profile Picture</Label>
-                    <Input type="file" disabled className="w-full mt-2" />
+                    <Input
+                      type="file"
+                      onChange={(e) => setStudentInfo({ ...studentInfo, profile: e.target.files?.[0] })}
+                      className="w-full mt-2"
+                    />
                   </div>
 
                   <DialogFooter>
-                    <Button disabled className="w-full bg-gray-200 text-gray-600">
-                      Update (Disabled)
+                    <Button type="submit" className="w-full bg-green-600 text-white hover:bg-green-700">
+                      Update
                     </Button>
                   </DialogFooter>
                 </form>

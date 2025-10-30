@@ -66,25 +66,6 @@ export const BlogPage = () => {
                   </div>
                 </div>
 
-                {/* Subscribe Newsletter */}
-                <div>
-                  <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
-                    Subscribe to Newsletter
-                  </h2>
-                  <form onSubmit={(e) => e.preventDefault()} className="flex gap-2 flex-col sm:flex-row">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="border border-gray-400 rounded-lg px-3 py-2 outline-none focus:border-[#1b9c85] flex-1 
-                             bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                      required
-                    />
-                    <button type="submit" className="join-pcc-btn">
-                      Subscribe
-                    </button>
-                  </form>
-                </div>
-
                 {/* Suggested Blogs */}
                 <div>
                   <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Suggested Blogs</h2>

@@ -7,7 +7,7 @@ import JoinEvent from './JoinEvent';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
 export const EventPage = () => {
-  const targetDate = new Date('2025-10-25T18:00:00').getTime();
+  const targetDate = new Date('2025-11-02T10:00:00').getTime();
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -55,7 +55,9 @@ export const EventPage = () => {
               <FaMapMarkerAlt className="text-green-400" />
               PCIU Campus, Chattogram
             </p>
-            <h1 className="text-white font-bold text-3xl md:text-5xl mb-4">PCIU Computer Club First E-Voting</h1>
+            <h1 className="text-white font-bold text-3xl md:text-5xl mb-4">
+              3rd Executitive Committee Auth Taking Ceremony
+            </h1>
             <p className="text-white/80 max-w-lg mx-auto mb-6">
               Celebrate innovation, culture, and technology in one grand event — featuring speakers, music, and
               interactive sessions!
