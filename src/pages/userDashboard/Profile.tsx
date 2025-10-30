@@ -101,17 +101,14 @@ const Profile = () => {
           {/* Edit Profile Button */}
           <div className="mt-6 w-full sm:w-auto">
             <Dialog open={open} onOpenChange={setOpen}>
-              <Button
-                onClick={() => setOpen(true)}
-                className="rounded-full border-[0.5px] border-green-600 bg-[#edf6ee] shadow-none text-black hover:text-white px-4 sm:px-6 py-2 hover:opacity-90 transition font-alegreya w-full sm:w-auto"
-              >
+              <Button onClick={() => setOpen(true)} className="font-alegreya w-full sm:w-auto join-pcc-btn">
                 Edit Profile
               </Button>
 
               <DialogContent className="w-full sm:w-[400px] md:w-[450px] rounded-2xl font-grotesk max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle className="text-center text-2xl font-semibold">Update Profile</DialogTitle>
-                  <DialogDescription className="text-center text-gray-500">profile form</DialogDescription>
+                  <DialogTitle className="text-center text-2xl font-semibold font-alegreya">Update Profile</DialogTitle>
+                  <DialogDescription className="text-center text-gray-500">Update your profile</DialogDescription>
                 </DialogHeader>
 
                 <form className="grid gap-4 py-4" onSubmit={handleUpdateStudentDetails}>
@@ -164,7 +161,7 @@ const Profile = () => {
                   </div>
 
                   <DialogFooter>
-                    <Button type="submit" className="w-full bg-green-600 text-white hover:bg-green-700">
+                    <Button type="submit" className="w-full join-pcc-btn">
                       Update
                     </Button>
                   </DialogFooter>
