@@ -1,4 +1,9 @@
 import App from '@/App';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { SetUser, Logout } from '@/Redux/AuthSlice';
+import api from '@/Services/api';
+import { AppDispatch } from '@/Redux/Store';
 import { Developers } from '@/pages/developers/developers.page';
 import { JoinPage } from '@/pages/join/JoinPage';
 import { LeadershipPage } from '@/pages/leaderShip/leadership.page';
@@ -38,6 +43,24 @@ import { UserDashboard } from '@/pages/userDashboard/UserDashboard';
 import { AdminDashboard } from '@/pages/adminDashboard/AdminDashboard';
 
 function AppRouter() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        const res = await api.get('/check', { withCredentials: true });
+        if (res.data.success && res.data.user) {
+          dispatch(SetUser(res.data.user));
+        } else {
+          dispatch(Logout());
+        }
+      } catch {
+        dispatch(Logout());
+      }
+    };
+
+    verifyUser();
+  }, [dispatch]);
   return (
     <>
       <BrowserRouter>
