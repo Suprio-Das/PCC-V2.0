@@ -63,7 +63,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="pt-24 md:pt-40 md:pr-20 md:pl-[320px] min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-950 dark:to-black transition-colors">
+    <div className="pt-24 md:pt-32 md:pr-20 md:pl-[320px] min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-950 dark:to-black transition-colors">
       <div className="flex flex-col items-center px-4 sm:px-6 md:w-[320px] mx-auto">
         {/* Avatar */}
         <div className="relative group w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 mb-5">
@@ -78,12 +78,10 @@ const Profile = () => {
           <h2 className="font-bold text-3xl sm:text-4xl mb-2 text-gray-800 dark:text-gray-100 truncate">
             {studentInfo?.name}
           </h2>
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed font-alegreya text-sm sm:text-base break-words">
+          <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm sm:text-base break-words">
             {studentInfo?.bio}
           </p>
-          <p className="text-gray-600 dark:text-gray-300 mb-2 font-alegreya text-sm sm:text-base truncate">
-            {studentInfo?.email}
-          </p>
+          <p className="text-gray-600 dark:text-gray-300 mb-2 text-sm sm:text-base truncate">{studentInfo?.email}</p>
 
           {/* Social Links */}
           <div className="flex gap-4 mt-5 justify-center flex-wrap">
@@ -101,17 +99,19 @@ const Profile = () => {
           {/* Edit Profile Button */}
           <div className="mt-6 w-full sm:w-auto">
             <Dialog open={open} onOpenChange={setOpen}>
-              <Button onClick={() => setOpen(true)} className="font-alegreya w-full sm:w-auto join-pcc-btn">
+              <Button onClick={() => setOpen(true)} className="w-full sm:w-auto join-pcc-btn">
                 Edit Profile
               </Button>
 
               <DialogContent className="w-full sm:w-[400px] md:w-[450px] rounded-2xl font-grotesk max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle className="text-center text-2xl font-semibold font-alegreya">Update Profile</DialogTitle>
-                  <DialogDescription className="text-center text-gray-500">Update your profile</DialogDescription>
+                  <DialogTitle className="text-center text-2xl font-semibold font-garamond">Update Profile</DialogTitle>
+                  <DialogDescription className="text-center text-gray-500 font-poppins">
+                    Update your info to stay connected
+                  </DialogDescription>
                 </DialogHeader>
 
-                <form className="grid gap-4 py-4" onSubmit={handleUpdateStudentDetails}>
+                <form className="grid gap-4 py-4 font-garamond" onSubmit={handleUpdateStudentDetails}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="col-span-2">
                       <Label>Full Name</Label>
