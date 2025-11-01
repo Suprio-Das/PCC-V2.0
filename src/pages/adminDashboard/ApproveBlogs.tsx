@@ -94,7 +94,7 @@ const ApproveBlogs = () => {
             <p className="text-center text-gray-500 dark:text-gray-400 py-10">No blogs found.</p>
           ) : (
             <>
-              {/* ✅ Desktop Table View */}
+              {/* Desktop Table */}
               <div className="hidden md:block overflow-x-auto rounded-lg">
                 <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <TableCaption className="text-gray-500 dark:text-gray-400">
@@ -166,7 +166,7 @@ const ApproveBlogs = () => {
                 </Table>
               </div>
 
-              {/* ✅ Mobile Card View */}
+              {/*  Mobile Card */}
               <div className="grid grid-cols-1 gap-4 mt-6 md:hidden">
                 {blogs.map((blog) => (
                   <div
@@ -225,7 +225,7 @@ const ApproveBlogs = () => {
         </Card>
       </div>
 
-      {/* ✅ Blog View Modal */}
+      {/* Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto dark:bg-gray-800">
           <DialogHeader>

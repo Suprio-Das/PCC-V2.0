@@ -19,6 +19,7 @@ import { toast } from 'sonner';
 interface EventData {
   title: string;
   date: string;
+  time: string;
   location: string;
   category: string;
   thumbnail: string | File | null;
@@ -37,6 +38,7 @@ const UpdateEvent = () => {
     subtitle: 'A celebration of innovation and creativity',
     description: '<p>Join us for workshops, hackathons, and fun competitions!</p>',
     date: '2025-11-05',
+    time: '10:00 AM',
     location: 'University Main Hall',
     category: 'Competition',
     thumbnail: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=800',
@@ -46,6 +48,7 @@ const UpdateEvent = () => {
   const [eventData, setEventData] = useState<EventData>({
     title: staticEvent.title,
     date: staticEvent.date,
+    time: staticEvent.time,
     location: staticEvent.location,
     category: staticEvent.category,
     thumbnail: staticEvent.thumbnail,
@@ -144,6 +147,24 @@ const UpdateEvent = () => {
                 className="dark:border-gray-400 focus:ring-2 focus:ring-green-400 mt-2"
               />
             </div>
+            <div>
+              <Label>Category</Label>
+              <Select onValueChange={selectCategory}>
+                <SelectTrigger className="w-full mt-2">
+                  <SelectValue placeholder={eventData.category || 'Select category'} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Category</SelectLabel>
+                    <SelectItem value="Workshop">Workshop</SelectItem>
+                    <SelectItem value="Seminar">Seminar</SelectItem>
+                    <SelectItem value="Competition">Competition</SelectItem>
+                    <SelectItem value="Cultural">Cultural</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -169,6 +190,35 @@ const UpdateEvent = () => {
                 />
               </div>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label>Time</Label>
+                <Input
+                  type="time"
+                  name="time"
+                  value={eventData.time}
+                  onChange={handleChange}
+                  className="dark:border-gray-400 focus:ring-2 focus:ring-green-400 mt-2"
+                />
+              </div>
+
+              <div>
+                <Label>Thumbnail</Label>
+                <Input
+                  type="file"
+                  onChange={selectThumbnail}
+                  accept="image/*"
+                  className="w-fit dark:border-gray-400 mt-2"
+                />
+                {previewThumbnail && (
+                  <img
+                    src={previewThumbnail}
+                    alt="Thumbnail Preview"
+                    className="w-64 h-40 object-cover rounded-lg mt-2"
+                  />
+                )}
+              </div>
+            </div>
 
             <div>
               <Label>Event Description</Label>
@@ -179,42 +229,6 @@ const UpdateEvent = () => {
                 config={{ height: 400 }}
                 className="rounded-lg border dark:border-gray-400 mt-2 dark:text-black"
               />
-            </div>
-
-            <div>
-              <Label>Category</Label>
-              <Select onValueChange={selectCategory}>
-                <SelectTrigger className="w-full md:w-64 mt-2">
-                  <SelectValue placeholder={eventData.category || 'Select category'} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Category</SelectLabel>
-                    <SelectItem value="Workshop">Workshop</SelectItem>
-                    <SelectItem value="Seminar">Seminar</SelectItem>
-                    <SelectItem value="Competition">Competition</SelectItem>
-                    <SelectItem value="Cultural">Cultural</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label>Thumbnail</Label>
-              <Input
-                type="file"
-                onChange={selectThumbnail}
-                accept="image/*"
-                className="w-fit dark:border-gray-400 mt-2"
-              />
-              {previewThumbnail && (
-                <img
-                  src={previewThumbnail}
-                  alt="Thumbnail Preview"
-                  className="w-64 h-40 object-cover rounded-lg mt-2"
-                />
-              )}
             </div>
           </div>
 
