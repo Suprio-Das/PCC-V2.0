@@ -1,6 +1,6 @@
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PCCLogo from '@/assets/pcc-logo.png';
 import { buttonVariants } from './ui/button';
 import { RoutePaths } from '@/types/route.type';
@@ -44,6 +44,7 @@ interface UserType {
   status: string;
   photoUrl?: string;
   location?: string;
+  userId?: string;
 }
 
 const routeList: RouteProps[] = [
@@ -87,6 +88,20 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
 
+  const [studentInfo, setStudentInfo] = useState<any>({});
+
+  useEffect(() => {
+    const fetchStudentInfo = async () => {
+      if (user?.userId) {
+        const info = await api.get(`/api/student/studentdetails/${user.userId}`);
+        if (info?.data?.success === true) {
+          setStudentInfo(info.data.student);
+        }
+      }
+    };
+    fetchStudentInfo();
+  }, [user]);
+
   const logoutHandler = async () => {
     const res = await api.post('/api/auth/logout');
     if (res) {
@@ -112,7 +127,7 @@ export const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="cursor-pointer border-2 border-green-600">
-                    <AvatarImage src={user.photoUrl || userLogo} />
+                    <AvatarImage src={studentInfo?.profile || userLogo} />
                     <AvatarFallback>User</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -210,7 +225,7 @@ export const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="cursor-pointer border-2 border-green-600">
-                    <AvatarImage src={user.photoUrl || userLogo} />
+                    <AvatarImage src={studentInfo?.profile || userLogo} />
                     <AvatarFallback>User</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
