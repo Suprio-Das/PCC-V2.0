@@ -38,7 +38,7 @@ interface RouteProps {
 
 interface UserType {
   _id: string;
-  userId?: string;
+  userId: string;
   email: string;
   pasword: string;
   role: string;
