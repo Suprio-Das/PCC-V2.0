@@ -38,7 +38,9 @@ interface RouteProps {
 
 interface UserType {
   _id: string;
+  userId?: string;
   email: string;
+  pasword: string;
   role: string;
   status: string;
   location?: string;
@@ -90,8 +92,14 @@ export const Navbar = () => {
 
   useEffect(() => {
     const fetchStudentInfo = async () => {
-      if (user?.userId) {
+      if (user?.userId && user?.role === 'student') {
         const info = await api.get(`/api/student/studentdetails/${user.userId}`);
+        if (info?.data?.success === true) {
+          setStudentInfo(info.data.student);
+        }
+      }
+      if (user?.userId && user?.role === 'admin') {
+        const info = await api.get(`api/admin/admindetails/${user.userId}`);
         if (info?.data?.success === true) {
           setStudentInfo(info.data.student);
         }
@@ -131,7 +139,7 @@ export const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-60 dark:bg-gray-900 bg-white shadow-xl rounded-2xl p-2" align="end">
                   <DropdownMenuLabel className="text-center font-semibold text-lg border-b pb-2">
-                    {'My Account'}
+                    {studentInfo?.name || 'My Account'}
                   </DropdownMenuLabel>
                   <DropdownMenuGroup className="mt-2 flex flex-col gap-1">
                     {getMenuItems(user.role).map((item) => (
@@ -229,7 +237,7 @@ export const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-60 dark:bg-gray-900 bg-white shadow-xl rounded-2xl p-2" align="end">
                   <DropdownMenuLabel className="text-center font-semibold text-lg border-b pb-2">
-                    {'My Account'}
+                    {studentInfo?.name || 'My Account'}
                   </DropdownMenuLabel>
                   <DropdownMenuGroup className="mt-2 flex flex-col gap-1">
                     {getMenuItems(user.role).map((item) => (
