@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,12 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import JoditEditor from 'jodit-react';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
+import api from '@/Services/api';
+import Editor from '@/components/customized/Editor';
 
 const CreateEvents = () => {
-  const editor = useRef(null);
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
@@ -61,17 +61,13 @@ const CreateEvents = () => {
       formData.append('description', description);
       formData.append('banner', banner);
 
-      const response = await fetch('http://localhost:5000/api/admin/createevent', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
+      const response = await api.post('/api/admin/createevent', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (response?.data?.success === true) {
         toast.success('Event created successfully!');
-        navigate(`/user-dashboard/publish-event/${data.data._id}`, {
+        navigate(`/user-dashboard/publish-event/${response.data.data._id}`, {
           state: { title, category, date, time, locationName, description },
         });
 
@@ -85,7 +81,7 @@ const CreateEvents = () => {
         setBanner(null);
         setBannerPreview(null);
       } else {
-        toast.error(data.message || 'Failed to create event');
+        toast.error(response.data.message || 'Failed to create event');
       }
     } catch (err) {
       toast.error('Something went wrong!');
@@ -154,11 +150,16 @@ const CreateEvents = () => {
 
           <div className="space-y-2">
             <Label>Description</Label>
-            <JoditEditor ref={editor} value={description} onChange={setDescription} config={{ height: 300 }} />
+            <Editor description={description} setDescription={setDescription} />
           </div>
 
           <div className="flex justify-end">
-            <Button onClick={createEventHandler} disabled={loading} className="flex items-center gap-2 join-pcc-btn">
+            <Button
+              type="button"
+              onClick={createEventHandler}
+              disabled={loading}
+              className="flex items-center gap-2 join-pcc-btn"
+            >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Event'}
             </Button>
           </div>

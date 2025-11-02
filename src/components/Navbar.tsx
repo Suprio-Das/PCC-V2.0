@@ -44,7 +44,6 @@ interface UserType {
   role: string;
   status: string;
   location?: string;
-  userId?: string;
 }
 
 const routeList: RouteProps[] = [
