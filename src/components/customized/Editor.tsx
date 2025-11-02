@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import JoditEditor from 'jodit-react';
 
 interface EditorProps {
@@ -7,7 +7,7 @@ interface EditorProps {
 }
 
 const Editor: React.FC<EditorProps> = ({ description, setDescription }) => {
-  const editor = useRef<any>(null);
+  const [editorInstance, setEditorInstance] = useState<any>(null);
 
   const config = {
     height: 300,
@@ -18,13 +18,19 @@ const Editor: React.FC<EditorProps> = ({ description, setDescription }) => {
   };
 
   useEffect(() => {
-    if (editor.current && description !== editor.current.value) {
-      editor.current.value = description;
+    if (editorInstance && editorInstance.value !== description) {
+      editorInstance.value = description;
     }
-  }, [description]);
+  }, [description, editorInstance]);
 
   return (
-    <JoditEditor ref={editor} value={description} config={config} onBlur={(newContent) => setDescription(newContent)} />
+    <JoditEditor
+      value={description}
+      config={config}
+      // @ts-expect-error: getInstance is missing from types
+      getInstance={setEditorInstance}
+      onBlur={(newContent) => setDescription(newContent)}
+    />
   );
 };
 
