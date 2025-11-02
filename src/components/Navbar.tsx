@@ -38,11 +38,9 @@ interface RouteProps {
 
 interface UserType {
   _id: string;
-  name: string;
   email: string;
   role: string;
   status: string;
-  photoUrl?: string;
   location?: string;
   userId?: string;
 }
@@ -133,7 +131,7 @@ export const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-60 dark:bg-gray-900 bg-white shadow-xl rounded-2xl p-2" align="end">
                   <DropdownMenuLabel className="text-center font-semibold text-lg border-b pb-2">
-                    {user.name || 'My Account'}
+                    {'My Account'}
                   </DropdownMenuLabel>
                   <DropdownMenuGroup className="mt-2 flex flex-col gap-1">
                     {getMenuItems(user.role).map((item) => (
@@ -231,7 +229,7 @@ export const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-60 dark:bg-gray-900 bg-white shadow-xl rounded-2xl p-2" align="end">
                   <DropdownMenuLabel className="text-center font-semibold text-lg border-b pb-2">
-                    {user.name || 'My Account'}
+                    {'My Account'}
                   </DropdownMenuLabel>
                   <DropdownMenuGroup className="mt-2 flex flex-col gap-1">
                     {getMenuItems(user.role).map((item) => (
