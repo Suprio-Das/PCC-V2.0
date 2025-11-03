@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -11,245 +13,185 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
 import JoditEditor from 'jodit-react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
-
-interface EventData {
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  category: string;
-  thumbnail: string | File | null;
-}
+import { Loader2 } from 'lucide-react';
 
 const UpdateEvent = () => {
   const editor = useRef(null);
   const navigate = useNavigate();
-  const params = useParams();
-  const id = params.eventId;
+  const { id } = useParams();
 
-  // Static demo data (for now)
-  const staticEvent = {
-    _id: '1',
-    title: 'Tech Fiesta 2025',
-    subtitle: 'A celebration of innovation and creativity',
-    description: '<p>Join us for workshops, hackathons, and fun competitions!</p>',
-    date: '2025-11-05',
-    time: '10:00 AM',
-    location: 'University Main Hall',
-    category: 'Competition',
-    thumbnail: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=800',
-    isPublished: true,
-  };
-
-  const [eventData, setEventData] = useState<EventData>({
-    title: staticEvent.title,
-    date: staticEvent.date,
-    time: staticEvent.time,
-    location: staticEvent.location,
-    category: staticEvent.category,
-    thumbnail: staticEvent.thumbnail,
-  });
-
-  const [content, setContent] = useState(staticEvent.description);
-  const [previewThumbnail, setPreviewThumbnail] = useState<string>(staticEvent.thumbnail);
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [locationName, setLocationName] = useState('');
+  const [banner, setBanner] = useState<File | null>(null);
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
 
+  // Fetch existing event data
   useEffect(() => {
-    // TODO: fetch event details by id (future)
+    const fetchEvent = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/admin/event/${id}`, {
+          credentials: 'include',
+        });
+        const data = await res.json();
+        if (data.success) {
+          const event = data.event;
+          setTitle(event.title);
+          setCategory(event.category);
+          setDate(event.date);
+          setTime(event.time);
+          setLocationName(event.location);
+          setDescription(event.description);
+          setBannerPreview(event.bannerUrl || null); // assuming backend returns banner URL
+        } else {
+          toast.error(data.message || 'Failed to fetch event');
+        }
+      } catch (err) {
+        toast.error('Something went wrong while fetching!');
+      } finally {
+        setFetching(false);
+      }
+    };
+
+    fetchEvent();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEventData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleBanner = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setBanner(file);
 
-  const selectCategory = (value: string) => {
-    setEventData((prev) => ({ ...prev, category: value }));
-  };
-
-  const selectThumbnail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setEventData((prev) => ({ ...prev, thumbnail: file }));
       const reader = new FileReader();
-      reader.onloadend = () => setPreviewThumbnail(reader.result as string);
+      reader.onloadend = () => {
+        setBannerPreview(reader.result as string);
+      };
       reader.readAsDataURL(file);
     }
   };
 
   const updateEventHandler = async () => {
+    if (!title || !category || !date || !time || !locationName || !description) {
+      toast.error('Please fill all fields');
+      return;
+    }
+
     try {
       setLoading(true);
-      // Simulate success (replace with API PUT /events/:id later)
-      setTimeout(() => {
-        toast.success('Event updated successfully (demo)');
-        setLoading(false);
-      }, 1200);
-    } catch (error) {
-      toast.error('Event update failed!');
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('category', category);
+      formData.append('date', date);
+      formData.append('time', time);
+      formData.append('location', locationName);
+      formData.append('description', description);
+      if (banner) formData.append('banner', banner);
+
+      const response = await fetch(`http://localhost:5000/api/admin/updateevent/${id}`, {
+        method: 'PUT',
+        body: formData,
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Event updated successfully!');
+        navigate(`/user-dashboard/publish-event/${id}`);
+      } else {
+        toast.error(data.message || 'Failed to update event');
+      }
+    } catch (err) {
+      toast.error('Something went wrong!');
+    } finally {
       setLoading(false);
     }
   };
 
-  const togglePublishUnpublish = (action: boolean) => {
-    toast.success(`Event ${action ? 'published' : 'unpublished'} (demo)`);
-  };
-
-  const deleteEvent = () => {
-    toast.success('Event deleted (demo)');
-    navigate('/admin-dashboard/all-events');
-  };
+  if (fetching) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
-    <div className="pb-10 px-3 pt-20 md:pr-20 md:pl-[320px] bg-gray-50 dark:bg-gray-900 min-h-screen font-grotesk">
-      <div className="max-w-4xl mx-auto mt-8">
-        <Card className="w-full bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg space-y-6">
-          {/* Header */}
-          <div className="space-y-1 text-center">
-            <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100">Update Event</h2>
-            <p className="text-gray-500 dark:text-gray-400 text-sm pt-2">
-              Make changes to your event and click save or publish.
-            </p>
+    <div className="p-4 md:pr-20 md:pl-[320px] pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen font-grotesk">
+      <Card className="max-w-4xl mx-auto p-8 space-y-10 shadow-lg dark:bg-gray-800 rounded-xl">
+        <div className="space-y-1 text-center">
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100">Update Event</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm pt-2">Modify event details below.</p>
+        </div>
+
+        <div className="space-y-4 font-garamond">
+          <div className="space-y-2">
+            <Label>Title</Label>
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-wrap gap-3 justify-center">
-            <Button
-              className="rounded-full border-[0.5px] border-green-600 bg-[#edf6ee] shadow-none text-black hover:text-white px-6 py-2 hover:opacity-90 transition dark:hover:text-black"
-              onClick={() => togglePublishUnpublish(!staticEvent.isPublished)}
-            >
-              {staticEvent.isPublished ? 'Unpublish' : 'Publish'}
-            </Button>
-
-            <Button
-              variant="destructive"
-              className="rounded-full border-[0.5px] border-red-600 bg-[#f2d9d9] shadow-none text-black hover:text-white px-6 py-2 hover:opacity-90 transition"
-              onClick={deleteEvent}
-            >
-              Delete Event
-            </Button>
+          <div className="space-y-2">
+            <Label>Category</Label>
+            <Select onValueChange={(val) => setCategory(val)} value={category}>
+              <SelectTrigger className="w-full mt-2">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Category</SelectLabel>
+                  <SelectItem value="Workshop">Workshop</SelectItem>
+                  <SelectItem value="Seminar">Seminar</SelectItem>
+                  <SelectItem value="Competition">Competition</SelectItem>
+                  <SelectItem value="Cultural">Cultural</SelectItem>
+                  <SelectItem value="Sports">Sports</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
 
-          {/* Form Fields */}
-          <div className="space-y-4">
-            <div>
-              <Label>Event Title</Label>
-              <Input
-                type="text"
-                name="title"
-                value={eventData.title}
-                onChange={handleChange}
-                placeholder="Enter event title"
-                className="dark:border-gray-400 focus:ring-2 focus:ring-green-400 mt-2"
-              />
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Date</Label>
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
-            <div>
-              <Label>Category</Label>
-              <Select onValueChange={selectCategory}>
-                <SelectTrigger className="w-full mt-2">
-                  <SelectValue placeholder={eventData.category || 'Select category'} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Category</SelectLabel>
-                    <SelectItem value="Workshop">Workshop</SelectItem>
-                    <SelectItem value="Seminar">Seminar</SelectItem>
-                    <SelectItem value="Competition">Competition</SelectItem>
-                    <SelectItem value="Cultural">Cultural</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label>Date</Label>
-                <Input
-                  type="date"
-                  name="date"
-                  value={eventData.date}
-                  onChange={handleChange}
-                  className="dark:border-gray-400 focus:ring-2 focus:ring-green-400 mt-2"
-                />
-              </div>
-
-              <div>
-                <Label>Location</Label>
-                <Input
-                  type="text"
-                  name="location"
-                  value={eventData.location}
-                  onChange={handleChange}
-                  placeholder="Enter location"
-                  className="dark:border-gray-400 focus:ring-2 focus:ring-green-400 mt-2"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label>Time</Label>
-                <Input
-                  type="time"
-                  name="time"
-                  value={eventData.time}
-                  onChange={handleChange}
-                  className="dark:border-gray-400 focus:ring-2 focus:ring-green-400 mt-2"
-                />
-              </div>
-
-              <div>
-                <Label>Thumbnail</Label>
-                <Input
-                  type="file"
-                  onChange={selectThumbnail}
-                  accept="image/*"
-                  className="w-fit dark:border-gray-400 mt-2"
-                />
-                {previewThumbnail && (
-                  <img
-                    src={previewThumbnail}
-                    alt="Thumbnail Preview"
-                    className="w-64 h-40 object-cover rounded-lg mt-2"
-                  />
-                )}
-              </div>
-            </div>
-
-            <div>
-              <Label>Event Description</Label>
-              <JoditEditor
-                ref={editor}
-                value={content}
-                onChange={(newContent) => setContent(newContent)}
-                config={{ height: 400 }}
-                className="rounded-lg border dark:border-gray-400 mt-2 dark:text-black"
-              />
+            <div className="space-y-2">
+              <Label>Time</Label>
+              <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
             </div>
           </div>
 
-          {/* Bottom Buttons */}
-          <div className="flex gap-3 mt-4">
-            <Button
-              variant="outline"
-              onClick={() => navigate(-1)}
-              className="rounded-full border-[0.5px] border-black shadow-none text-black hover:text-black dark:text-white px-6 py-2 hover:opacity-90 transition"
-            >
-              Back
-            </Button>
-            <Button
-              onClick={updateEventHandler}
-              className="rounded-full border-[0.5px] border-green-600 bg-[#edf6ee] shadow-none text-black hover:text-white dark:hover:text-black px-6 py-2 hover:opacity-90 transition"
-            >
-              {loading ? 'Please Wait...' : 'Save Changes'}
+          <div className="space-y-2">
+            <Label>Location</Label>
+            <Input value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Location" />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Banner</Label>
+            <Input type="file" accept="image/*" onChange={handleBanner} />
+            {bannerPreview && (
+              <img src={bannerPreview} alt="Banner Preview" className="mt-2 max-h-40 object-cover rounded" />
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label>Description</Label>
+            <JoditEditor ref={editor} value={description} onChange={setDescription} config={{ height: 300 }} />
+          </div>
+
+          <div className="flex justify-end">
+            <Button onClick={updateEventHandler} disabled={loading} className="flex items-center gap-2 join-pcc-btn">
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Update Event'}
             </Button>
           </div>
-        </Card>
-      </div>
+        </div>
+      </Card>
     </div>
   );
 };

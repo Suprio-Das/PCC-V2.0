@@ -67,7 +67,7 @@ const CreateEvents = () => {
 
       if (response?.data?.success === true) {
         toast.success('Event created successfully!');
-        navigate(`/user-dashboard/publish-event/${response.data.data._id}`, {
+        navigate('/admin-dashboard/events', {
           state: { title, category, date, time, locationName, description },
         });
 
@@ -150,7 +150,9 @@ const CreateEvents = () => {
 
           <div className="space-y-2">
             <Label>Description</Label>
-            <Editor description={description} setDescription={setDescription} />
+            <div className="text-gray-900">
+              <Editor description={description} setDescription={setDescription} />
+            </div>
           </div>
 
           <div className="flex justify-end">
