@@ -2,6 +2,8 @@ export enum RoutePaths {
   ROOT = '/',
   ABOUT = '/about',
   BLOG = '/blog',
+  FULLLEADERBOARD = '/leaderboard',
+  PROFILE = '/profile',
   EVENTS = '/events',
   TIMELINE = '/timeline',
   PEOPLE = '/committee',

@@ -41,6 +41,8 @@ import AdminLayouts from '@/Layouts/AdminLayouts';
 import StudentLayouts from '@/Layouts/StudentLayouts';
 import { UserDashboard } from '@/pages/userDashboard/UserDashboard';
 import { AdminDashboard } from '@/pages/adminDashboard/AdminDashboard';
+import { FullLeaderboard } from '@/pages/blog/FullLeaderboard';
+import { ProfilePage } from '@/pages/blog/ProfilePage';
 
 function AppRouter() {
   const dispatch = useDispatch<AppDispatch>();
@@ -71,6 +73,8 @@ function AppRouter() {
           <Route path={RoutePaths.ADVISOR} element={<AdvisorPage />} />
           <Route path={RoutePaths.EXECUTIVE} element={<ExecutivePage />} />
           <Route path={RoutePaths.BLOG} element={<BlogPage />} />
+          <Route path={RoutePaths.FULLLEADERBOARD} element={<FullLeaderboard />} />
+          <Route path={RoutePaths.PROFILE} element={<ProfilePage />} />
           <Route path={RoutePaths.EVENTS} element={<EventPage />} />
           <Route path={RoutePaths.TIMELINE} element={<TimelinePage />} />
           <Route path={RoutePaths.PEOPLE} element={<LeadershipPage />} />
