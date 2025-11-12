@@ -56,7 +56,7 @@ export const EventPage = () => {
               PCIU Campus, Chattogram
             </p>
             <h1 className="text-white font-bold text-3xl md:text-5xl mb-4">
-              3rd Executitive Committee Oath Taking Ceremony
+              3rd Executive Committee Oath Taking Ceremony
             </h1>
             <p className="text-white/80 max-w-lg mx-auto mb-6">
               Celebrate innovation, culture, and technology in one grand event — featuring speakers, music, and

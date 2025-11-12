@@ -40,7 +40,7 @@ const MakePayment = () => {
                 {pendingDues.length > 1 ? 'months' : 'month'} of dues.
               </p>
 
-              <div className="text-4xl font-bold text-green-600 dark:text-green-400 my-4">${totalDue}</div>
+              <div className="text-4xl font-bold text-green-600 dark:text-green-400 my-4">TK. {totalDue}</div>
 
               <Button
                 onClick={payAllDues}
