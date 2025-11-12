@@ -1,52 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
+import api from '@/Services/api';
 
 type MemberRequest = {
+  userId: string;
   id: string;
   name: string;
   email: string;
   mobile: string;
   batch: string;
-  department: string;
+  transactionId: string;
 };
 
 const ApproveMembers = () => {
-  const [requests, setRequests] = useState<MemberRequest[]>([
-    {
-      id: 'R001',
-      name: 'Anika Tasnin',
-      email: 'anika@example.com',
-      mobile: '01755555555',
-      batch: '28-A',
-      department: 'CSE',
-    },
-    {
-      id: 'R002',
-      name: 'Suprio Das',
-      email: 'suprio@example.com',
-      mobile: '01766666666',
-      batch: '28-B',
-      department: 'EEE',
-    },
-    {
-      id: 'R003',
-      name: 'Nusrat Jahan',
-      email: 'nusrat@example.com',
-      mobile: '01777777777',
-      batch: '29-A',
-      department: 'BBA',
-    },
-  ]);
+  const [requests, setRequests] = useState<MemberRequest[]>([]);
 
-  // Approve Member Handler
-  const handleApprove = (id: string) => {
-    const member = requests.find((r) => r.id === id);
-    if (member) {
-      toast.success(`${member.name} has been approved! (static mode)`);
-      setRequests((prev) => prev.filter((r) => r.id !== id));
+  useEffect(() => {
+    const fetchRequests = async () => {
+      const response = await api.get('api/admin/studentrequest');
+      if (response.data.success === true) {
+        setRequests(response.data.requests);
+      }
+    };
+    fetchRequests();
+  }, []);
+
+  const handleApprove = async (userId: string) => {
+    const member = requests.find((r) => r.userId === userId);
+    if (!member) return;
+
+    try {
+      const response = await api.post(`/api/admin/approverequest/${userId}`);
+
+      if (response.data.success === true) {
+        toast.success(`${member.name} has been approved!`);
+        setRequests((prev) => prev.filter((r) => r.userId !== userId));
+      } else {
+        toast.error(response.data.message || 'Failed to approve student');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message || 'Server error');
     }
   };
 
@@ -69,7 +66,7 @@ const ApproveMembers = () => {
             <p className="text-gray-500 dark:text-gray-400 text-center py-10">No new member requests.</p>
           ) : (
             <>
-              {/* ✅ Desktop Table View */}
+              {/* Desktop Table View */}
               <div className="hidden md:block overflow-x-auto rounded-lg mt-6">
                 <Table>
                   <TableCaption>Pending member approval requests</TableCaption>
@@ -78,26 +75,26 @@ const ApproveMembers = () => {
                       <TableHead>ID</TableHead>
                       <TableHead>Name</TableHead>
                       <TableHead>Email</TableHead>
-                      <TableHead>Mobile</TableHead>
+                      {/* <TableHead>Mobile</TableHead> */}
                       <TableHead>Batch</TableHead>
-                      <TableHead>Department</TableHead>
+                      <TableHead>TransactionID</TableHead>
                       <TableHead className="text-center">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {requests.map((req) => (
-                      <TableRow key={req.id}>
+                      <TableRow key={req.id} className="text-sm">
                         <TableCell>{req.id}</TableCell>
                         <TableCell>{req.name}</TableCell>
                         <TableCell>{req.email}</TableCell>
-                        <TableCell>{req.mobile}</TableCell>
+                        {/* <TableCell>{req.mobile}</TableCell> */}
                         <TableCell>{req.batch}</TableCell>
-                        <TableCell>{req.department}</TableCell>
+                        <TableCell>{req.transactionId}</TableCell>
                         <TableCell className="text-center space-x-2">
                           <Button
                             size="sm"
                             className="bg-green-600 hover:bg-green-700 text-white"
-                            onClick={() => handleApprove(req.id)}
+                            onClick={() => handleApprove(req.userId)}
                           >
                             Approve
                           </Button>
@@ -111,7 +108,7 @@ const ApproveMembers = () => {
                 </Table>
               </div>
 
-              {/* ✅ Mobile Card View */}
+              {/* Mobile Card View */}
               <div className="grid grid-cols-1 gap-4 mt-6 md:hidden">
                 {requests.map((req) => (
                   <div
@@ -128,11 +125,11 @@ const ApproveMembers = () => {
                     <p className="text-sm text-gray-600 dark:text-gray-300">
                       <span className="font-medium">Email:</span> {req.email}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {/* <p className="text-sm text-gray-600 dark:text-gray-300">
                       <span className="font-medium">Mobile:</span> {req.mobile}
-                    </p>
+                    </p> */}
                     <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                      <span className="font-medium">Department:</span> {req.department}
+                      <span className="font-medium">TransactionID:</span> {req.transactionId}
                     </p>
 
                     <div className="flex justify-end gap-2">
@@ -154,6 +151,7 @@ const ApproveMembers = () => {
           )}
         </Card>
       </div>
+      <Toaster richColors />
     </div>
   );
 };
