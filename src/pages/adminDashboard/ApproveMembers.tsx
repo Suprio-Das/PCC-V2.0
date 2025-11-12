@@ -47,14 +47,32 @@ const ApproveMembers = () => {
     }
   };
 
-  // Reject Member Handler
-  const handleReject = (id: string) => {
-    const member = requests.find((r) => r.id === id);
-    if (member) {
-      toast.error(`${member.name}'s request rejected! (static mode)`);
-      setRequests((prev) => prev.filter((r) => r.id !== id));
+  const handleReject = async (userId: string) => {
+    const member = requests.find((r) => r.userId === userId);
+    if (!member) return;
+
+    try {
+      const response = await api.delete(`/api/admin/rejectrequests/${userId}`);
+
+      if (response.data.success === true) {
+        toast.success(`${member.name} has been rejected!`);
+        setRequests((prev) => prev.filter((r) => r.userId !== userId));
+      } else {
+        toast.error(response.data.message || 'Failed to reject student');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message || 'Server error');
     }
   };
+
+  // Reject Member Handler
+  // const handleReject = (id: string) => {
+  //   const member = requests.find((r) => r.id === id);
+  //   if (member) {
+  //     toast.error(`${member.name}'s request rejected! (static mode)`);
+  //     setRequests((prev) => prev.filter((r) => r.id !== id));
+  //   }
+  // };
 
   return (
     <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
@@ -98,7 +116,7 @@ const ApproveMembers = () => {
                           >
                             Approve
                           </Button>
-                          <Button size="sm" variant="destructive" onClick={() => handleReject(req.id)}>
+                          <Button size="sm" variant="destructive" onClick={() => handleReject(req.userId)}>
                             Reject
                           </Button>
                         </TableCell>
@@ -136,11 +154,11 @@ const ApproveMembers = () => {
                       <Button
                         size="sm"
                         className="bg-green-600 hover:bg-green-700 text-white"
-                        onClick={() => handleApprove(req.id)}
+                        onClick={() => handleApprove(req.userId)}
                       >
                         Approve
                       </Button>
-                      <Button size="sm" variant="destructive" onClick={() => handleReject(req.id)}>
+                      <Button size="sm" variant="destructive" onClick={() => handleReject(req.userId)}>
                         Reject
                       </Button>
                     </div>
