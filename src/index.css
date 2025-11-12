@@ -122,3 +122,27 @@ p {
   /* color of the scrollbar track */
   border-radius: 4px;
 }
+
+.fade-in-out-text {
+  font-family: sans-serif;
+  background-color: white;
+  color: red;
+  padding: 5px;
+  animation: fadeInOut 3s infinite alternate ease-in-out;
+  font-weight: bold;
+  border-radius: 40px;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
