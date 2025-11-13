@@ -13,12 +13,11 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Toaster } from '@/components/ui/sonner';
-import { db } from '@/configs/firebase.config.js';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { ThreeDots } from 'react-loader-spinner';
 import { toast } from 'sonner';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Icon } from '@iconify/react';
+import api from '@/Services/api';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'This field is required' }),
@@ -32,10 +31,14 @@ const formSchema = z.object({
     number: z
       .string()
       .min(1, { message: 'This field is required' })
-      .regex(/^\s*(\d\s*){11}\s*$/, { message: 'Please enter an 11-digit mobile number' }),
+      .regex(/^\s*(\d\s*){11}\s*$/, {
+        message: 'Please enter an 11-digit mobile number',
+      }),
   }),
-  universityID: z.string().min(1, { message: 'This field is required' }),
-
+  universityID: z
+    .string()
+    .min(1, { message: 'This field is required' })
+    .regex(/^CSE\s\d+$/, { message: 'Format must be CSE XXXXXX' }),
   password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   batch: z.string().min(1, { message: 'Batch is required' }),
   section: z
@@ -43,10 +46,9 @@ const formSchema = z.object({
     .min(1, { message: 'Section is required' })
     .max(1, { message: 'Section must be 1 character only' }),
   shift: z.enum(['D', 'E'], { message: 'Shift must be D or E' }),
-
   payment: z.object({
-    method: z.enum(['Bkash', 'Nagad', 'Handcash'], { message: 'Unsupported Payment Method' }),
-    transaction_id: z.string().optional(),
+    method: z.enum(['Bkash'], { message: 'Unsupported Payment Method' }),
+    transaction_id: z.string().min(1, { message: 'Transaction ID is required' }),
   }),
   expectation: z.string().optional(),
   agreeTerms: z.boolean().refine((val) => val === true, { message: 'You must agree to the terms' }),
@@ -69,40 +71,52 @@ export const JoinPage = () => {
       batch: '',
       section: '',
       shift: 'D',
-      payment: { method: 'Handcash', transaction_id: '' },
+      payment: { method: 'Bkash', transaction_id: '' },
       expectation: '',
       agreeTerms: false,
     },
   });
 
-  const paymentMethod = form.watch('payment.method');
   const recruitmentOngoing = true;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
+    try {
+      const payload = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        studentId: values.universityID,
+        phone: `${values.phone.countryCode}${values.phone.number}`,
+        batch: values.batch,
+        section: values.section,
+        membershipPaymentMethod: values.payment.method,
+        transactionId: values.payment.transaction_id,
+        expectation: values.expectation || '',
+      };
 
-    values.phone.number = values.phone.number.replace(/\s+/g, '');
-    values.universityID = values.universityID.toUpperCase().replace(/\s+/g, '');
+      const res = await api.post('/api/auth/register', payload);
 
-    const docRef = doc(db, 'members_summer2025', values.universityID);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      toast.error('You are already registered. Contact your Section Rep.');
-    } else {
-      try {
-        await setDoc(docRef, {
-          ...values,
-          agreeTerms: true,
-          applicationProcessed: false,
-        });
+      if (res.data.success) {
+        toast.success('Student Registered Successfully!');
         setJoinSuccess(true);
-      } catch {
-        toast.error('Something went wrong.');
+        form.reset();
+      } else {
+        toast.error(res.data.message || 'Registration failed');
       }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
+
+  const handleIdFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (!e.target.value.startsWith('CSE ')) {
+      e.target.value = 'CSE ';
+      form.setValue('universityID', 'CSE ');
+    }
+  };
 
   return (
     <>
@@ -116,7 +130,7 @@ export const JoinPage = () => {
                 <Icon icon="line-md:confirm-circle" className="text-7xl text-primary" />
                 <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">You are In!</h1>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Successfully registered for PCIU Computer Club. You will be notified after verification.
+                  Successfully registered for PCIU Computer Club. Please, Wait for the Admin Approval.
                 </p>
               </div>
             ) : (
@@ -129,7 +143,12 @@ export const JoinPage = () => {
                     <AccordionContent>
                       <ul className="list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1 font-poppins text-sm">
                         <li>Fill in all required details correctly.</li>
-                        <li>Joining fee: BDT 100</li>
+                        <li>
+                          Joining fee: BDT 100{' '}
+                          <span className="font-semibold text-red-600 bg-white p-1 rounded-sm">
+                            Please Pay the Fee First
+                          </span>
+                        </li>
                         <li>Deadline: October 21, 2025</li>
                       </ul>
                     </AccordionContent>
@@ -141,6 +160,7 @@ export const JoinPage = () => {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="grid grid-cols-1 md:grid-cols-2 gap-6 font-poppins"
                   >
+                    {/* Name */}
                     <FormField
                       control={form.control}
                       name="name"
@@ -155,6 +175,7 @@ export const JoinPage = () => {
                       )}
                     />
 
+                    {/* University ID */}
                     <FormField
                       control={form.control}
                       name="universityID"
@@ -162,13 +183,25 @@ export const JoinPage = () => {
                         <FormItem>
                           <FormLabel>University ID *</FormLabel>
                           <FormControl>
-                            <Input placeholder="CSE 12345678" {...field} />
+                            <Input
+                              placeholder="CSE 123456"
+                              {...field}
+                              onFocus={handleIdFocus}
+                              onChange={(e) => {
+                                let val = e.target.value;
+                                if (!val.startsWith('CSE ')) {
+                                  val = 'CSE ' + val.replace(/^CSE\s*/, '');
+                                }
+                                field.onChange(val);
+                              }}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
 
+                    {/* Batch */}
                     <FormField
                       control={form.control}
                       name="batch"
@@ -183,6 +216,7 @@ export const JoinPage = () => {
                       )}
                     />
 
+                    {/* Section */}
                     <FormField
                       control={form.control}
                       name="section"
@@ -197,6 +231,7 @@ export const JoinPage = () => {
                       )}
                     />
 
+                    {/* Shift */}
                     <FormField
                       control={form.control}
                       name="shift"
@@ -219,6 +254,7 @@ export const JoinPage = () => {
                       )}
                     />
 
+                    {/* Password */}
                     <FormField
                       control={form.control}
                       name="password"
@@ -244,6 +280,7 @@ export const JoinPage = () => {
                       )}
                     />
 
+                    {/* Email */}
                     <FormField
                       control={form.control}
                       name="email"
@@ -258,6 +295,7 @@ export const JoinPage = () => {
                       )}
                     />
 
+                    {/* Phone */}
                     <FormField
                       control={form.control}
                       name="phone.number"
@@ -278,12 +316,12 @@ export const JoinPage = () => {
                       )}
                     />
 
-                    {/* Payment Section */}
+                    {/* Payment Method */}
                     <FormField
                       control={form.control}
                       name="payment.method"
                       render={({ field }) => (
-                        <FormItem className="md:col-span-2">
+                        <FormItem>
                           <FormLabel>Payment Method *</FormLabel>
                           <FormControl>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -291,9 +329,7 @@ export const JoinPage = () => {
                                 <SelectValue placeholder="Select Payment Method" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="Handcash">Hand Cash</SelectItem>
                                 <SelectItem value="Bkash">Bkash</SelectItem>
-                                <SelectItem value="Nagad">Nagad</SelectItem>
                               </SelectContent>
                             </Select>
                           </FormControl>
@@ -302,22 +338,22 @@ export const JoinPage = () => {
                       )}
                     />
 
-                    {paymentMethod !== 'Handcash' && (
-                      <FormField
-                        control={form.control}
-                        name="payment.transaction_id"
-                        render={({ field }) => (
-                          <FormItem className="md:col-span-2">
-                            <FormLabel>Transaction ID *</FormLabel>
-                            <FormControl>
-                              <Input placeholder={`${paymentMethod}_Transaction_ID`} {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                    {/* Transaction ID */}
+                    <FormField
+                      control={form.control}
+                      name="payment.transaction_id"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Transaction ID *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Bkash Transaction ID" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
+                    {/* Expectation */}
                     <FormField
                       control={form.control}
                       name="expectation"
@@ -331,6 +367,7 @@ export const JoinPage = () => {
                       )}
                     />
 
+                    {/* Terms */}
                     <FormField
                       control={form.control}
                       name="agreeTerms"
@@ -349,6 +386,7 @@ export const JoinPage = () => {
                       )}
                     />
 
+                    {/* Submit Button */}
                     <div className="md:col-span-2 flex justify-center">
                       <Button type="submit" disabled={loading} className="w-40 join-pcc-btn">
                         {!loading ? 'Submit' : <ThreeDots width="24px" height="8px" color="#fff" />}
