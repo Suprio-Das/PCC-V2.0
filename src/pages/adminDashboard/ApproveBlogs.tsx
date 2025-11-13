@@ -30,18 +30,14 @@ const ApproveBlogs = () => {
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      try {
-        const response = await api.get('/api/admin/blogrequest');
-        if (response.data.success) {
-          const sorted = response.data.requests.sort(
-            (a: Blog, b: Blog) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-          );
-          setBlogs(sorted);
-        } else {
-          toast.error('Failed to fetch blog requests');
-        }
-      } catch (error: any) {
-        toast.error(error.response?.data?.message || 'Server error');
+      const response = await api.get('/api/admin/blogrequest');
+      if (response.data.success) {
+        const sorted = response.data.requests.sort(
+          (a: Blog, b: Blog) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        );
+        setBlogs(sorted);
+      } else {
+        toast.error('Failed to fetch blog requests');
       }
     };
 
