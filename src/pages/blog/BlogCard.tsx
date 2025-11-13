@@ -46,6 +46,51 @@ export const staticBlogs: Blog[] = [
       'Effective digital marketing involves more than just ads. From SEO to social engagement — discover how to craft impactful strategies.',
     thumbnail: 'https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=800&q=80',
   },
+  {
+    id: 5,
+    title: 'Tips to Boost Your Digital Marketing Strategy',
+    author: 'Emily Davis',
+    date: 'September 29, 2025',
+    description:
+      'Effective digital marketing involves more than just ads. From SEO to social engagement — discover how to craft impactful strategies.',
+    thumbnail: 'https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 6,
+    title: 'Tips to Boost Your Digital Marketing Strategy',
+    author: 'Emily Davis',
+    date: 'September 29, 2025',
+    description:
+      'Effective digital marketing involves more than just ads. From SEO to social engagement — discover how to craft impactful strategies.',
+    thumbnail: 'https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 7,
+    title: 'Tips to Boost Your Digital Marketing Strategy',
+    author: 'Emily Davis',
+    date: 'September 29, 2025',
+    description:
+      'Effective digital marketing involves more than just ads. From SEO to social engagement — discover how to craft impactful strategies.',
+    thumbnail: 'https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 8,
+    title: 'Tips to Boost Your Digital Marketing Strategy',
+    author: 'Emily Davis',
+    date: 'September 29, 2025',
+    description:
+      'Effective digital marketing involves more than just ads. From SEO to social engagement — discover how to craft impactful strategies.',
+    thumbnail: 'https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 9,
+    title: 'Tips to Boost Your Digital Marketing Strategy',
+    author: 'Emily Davis',
+    date: 'September 29, 2025',
+    description:
+      'Effective digital marketing involves more than just ads. From SEO to social engagement — discover how to craft impactful strategies.',
+    thumbnail: 'https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=800&q=80',
+  },
 ];
 
 export const BlogCard = ({ blog }: { blog: Blog }) => {
