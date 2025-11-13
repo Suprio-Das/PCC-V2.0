@@ -145,7 +145,7 @@ export const JoinPage = () => {
                         <li>Fill in all required details correctly.</li>
                         <li>
                           Joining fee: BDT 100{' '}
-                          <span className="font-semibold text-red-600 bg-white p-1 rounded-sm">
+                          <span className="font-semibold text-red-600 bg-white p-1 rounded-sm fade-in-out-text ">
                             Please Pay the Fee First
                           </span>
                         </li>
