@@ -8,72 +8,83 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { CheckCircle, XCircle, Eye } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
+import api from '@/Services/api';
 
 type Blog = {
   _id: string;
   title: string;
-  author: string;
+  authorName: string;
   category: string;
-  date: string;
-  status: 'Pending' | 'Approved' | 'Rejected';
+  createdAt: string;
+  status: 'pending' | 'approved';
   description: string;
   thumbnail?: string;
 };
 
 const ApproveBlogs = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([
-    {
-      _id: '1',
-      title: 'Understanding React Hooks',
-      author: 'Jarin Tasnin',
-      category: 'Web Development',
-      date: '2025-10-21T10:00:00.000Z',
-      status: 'Pending',
-      description:
-        '<p>React Hooks allow you to use state and lifecycle methods in functional components. Hooks simplify complex class-based logic.</p>',
-      thumbnail: 'https://images.unsplash.com/photo-1581276879432-15a19d654956?w=800',
-    },
-    {
-      _id: '2',
-      title: 'Exploring Data Science with Python',
-      author: 'Suprio Das',
-      category: 'Machine Learning',
-      date: '2025-10-18T12:30:00.000Z',
-      status: 'Approved',
-      description:
-        '<p>Data Science involves data cleaning, visualization, and predictive modeling using Python libraries like Pandas and Scikit-learn.</p>',
-      thumbnail: 'https://images.unsplash.com/photo-1556767576-cfba0b3b7f2e?w=800',
-    },
-    {
-      _id: '3',
-      title: 'AI in Modern Education',
-      author: 'Anika Rahman',
-      category: 'Artificial Intelligence',
-      date: '2025-10-16T09:15:00.000Z',
-      status: 'Rejected',
-      description:
-        '<p>Artificial Intelligence is transforming the education sector through personalized learning and automated assessments.</p>',
-      thumbnail: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800',
-    },
-  ]);
-
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await api.get('/api/admin/blogrequest');
+        if (response.data.success) {
+          const sorted = response.data.requests.sort(
+            (a: Blog, b: Blog) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          );
+          setBlogs(sorted);
+        } else {
+          toast.error('Failed to fetch blog requests');
+        }
+      } catch (error: any) {
+        toast.error(error.response?.data?.message || 'Server error');
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-GB');
   };
 
-  const handleApprove = (id: string) => {
-    setBlogs((prev) => prev.map((b) => (b._id === id ? { ...b, status: 'Approved' } : b)));
-    toast.success('Blog approved successfully (static mode)');
+  const handleApprove = async (blogId: string) => {
+    const blog = blogs.find((b) => b._id === blogId);
+    if (!blog) return;
+
+    try {
+      const response = await api.put(`/api/admin/approveblog/${blogId}`);
+      if (response.data.success === true) {
+        toast.success(`${blog.title} approved successfully`);
+        setBlogs((prev) => prev.filter((b) => b._id !== blogId));
+      } else {
+        toast.error(response.data.message || 'Failed to approve blog');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
   };
 
-  const handleReject = (id: string) => {
-    setBlogs((prev) => prev.map((b) => (b._id === id ? { ...b, status: 'Rejected' } : b)));
-    toast.error('Blog rejected (static mode)');
+  const handleReject = async (blogId: string) => {
+    const blog = blogs.find((b) => b._id === blogId);
+    if (!blog) return;
+
+    try {
+      const response = await api.delete(`/api/admin/rejectrequests/${blogId}`);
+      if (response.data.success) {
+        toast.success(`${blog.title} rejected successfully`);
+        setBlogs((prev) => prev.filter((b) => b._id !== blogId));
+      } else {
+        toast.error(response.data.message || 'Failed to reject blog');
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
   };
 
   const handleView = (blog: Blog) => {
@@ -110,20 +121,16 @@ const ApproveBlogs = () => {
                     {blogs.map((blog) => (
                       <TableRow key={blog._id} className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                         <TableCell>{blog.title}</TableCell>
-                        <TableCell>{blog.author}</TableCell>
+                        <TableCell>{blog.authorName}</TableCell>
                         <TableCell>{blog.category}</TableCell>
-                        <TableCell>{formatDate(blog.date)}</TableCell>
+                        <TableCell>{formatDate(blog.createdAt)}</TableCell>
                         <TableCell>
                           <span
                             className={`font-semibold ${
-                              blog.status === 'Approved'
-                                ? 'text-green-600'
-                                : blog.status === 'Rejected'
-                                  ? 'text-red-600'
-                                  : 'text-yellow-600'
+                              blog.status === 'approved' ? 'text-green-600' : 'text-yellow-600'
                             }`}
                           >
-                            {blog.status}
+                            {blog.status.charAt(0).toUpperCase() + blog.status.slice(1)}
                           </span>
                         </TableCell>
                         <TableCell className="text-center">
@@ -135,7 +142,7 @@ const ApproveBlogs = () => {
                               <DropdownMenuItem onClick={() => handleView(blog)} className="font-grotesk">
                                 <Eye className="mr-2" /> View
                               </DropdownMenuItem>
-                              {blog.status === 'Pending' && (
+                              {blog.status === 'pending' && (
                                 <>
                                   <DropdownMenuItem
                                     onClick={() => handleApprove(blog._id)}
@@ -167,18 +174,14 @@ const ApproveBlogs = () => {
                     <div className="flex justify-between items-start">
                       <div>
                         <h2 className="font-semibold text-gray-800 dark:text-gray-100">{blog.title}</h2>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">{blog.author}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{formatDate(blog.date)}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{blog.authorName}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{formatDate(blog.createdAt)}</p>
                         <p
                           className={`text-sm font-medium ${
-                            blog.status === 'Approved'
-                              ? 'text-green-600'
-                              : blog.status === 'Rejected'
-                                ? 'text-red-600'
-                                : 'text-yellow-600'
+                            blog.status === 'approved' ? 'text-green-600' : 'text-yellow-600'
                           }`}
                         >
-                          {blog.status}
+                          {blog.status.charAt(0).toUpperCase() + blog.status.slice(1)}
                         </p>
                       </div>
 
@@ -190,7 +193,7 @@ const ApproveBlogs = () => {
                           <DropdownMenuItem onClick={() => handleView(blog)} className="font-grotesk">
                             <Eye className="mr-2" /> View
                           </DropdownMenuItem>
-                          {blog.status === 'Pending' && (
+                          {blog.status === 'pending' && (
                             <>
                               <DropdownMenuItem
                                 onClick={() => handleApprove(blog._id)}
@@ -230,7 +233,7 @@ const ApproveBlogs = () => {
 
             <h3 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-3">{selectedBlog.title}</h3>
             <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
-              By <span className="font-semibold">{selectedBlog.author}</span> • {formatDate(selectedBlog.date)}
+              By <span className="font-semibold">{selectedBlog.authorName}</span> • {formatDate(selectedBlog.createdAt)}
             </p>
 
             {selectedBlog.thumbnail && (
@@ -248,6 +251,7 @@ const ApproveBlogs = () => {
           </div>
         </div>
       )}
+      <Toaster richColors />
     </div>
   );
 };
