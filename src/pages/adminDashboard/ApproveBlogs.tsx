@@ -10,8 +10,6 @@ import {
 import { CheckCircle, XCircle, Eye } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 
 type Blog = {
   _id: string;
@@ -62,7 +60,6 @@ const ApproveBlogs = () => {
   ]);
 
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -81,7 +78,6 @@ const ApproveBlogs = () => {
 
   const handleView = (blog: Blog) => {
     setSelectedBlog(blog);
-    setIsModalOpen(true);
   };
 
   return (
@@ -95,7 +91,7 @@ const ApproveBlogs = () => {
           ) : (
             <>
               {/* Desktop Table */}
-              <div className="hidden md:block overflow-x-auto rounded-lg">
+              <div className="hidden md:block rounded-lg overflow-x-auto">
                 <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <TableCaption className="text-gray-500 dark:text-gray-400">
                     Review and approve or reject submitted blogs.
@@ -139,7 +135,6 @@ const ApproveBlogs = () => {
                               <DropdownMenuItem onClick={() => handleView(blog)} className="font-grotesk">
                                 <Eye className="mr-2" /> View
                               </DropdownMenuItem>
-
                               {blog.status === 'Pending' && (
                                 <>
                                   <DropdownMenuItem
@@ -148,7 +143,6 @@ const ApproveBlogs = () => {
                                   >
                                     <CheckCircle className="mr-2" /> Approve
                                   </DropdownMenuItem>
-
                                   <DropdownMenuItem
                                     onClick={() => handleReject(blog._id)}
                                     className="text-red-500 font-grotesk"
@@ -166,58 +160,56 @@ const ApproveBlogs = () => {
                 </Table>
               </div>
 
-              {/*  Mobile Card */}
+              {/* Mobile Cards */}
               <div className="grid grid-cols-1 gap-4 mt-6 md:hidden">
                 {blogs.map((blog) => (
-                  <div
-                    key={blog._id}
-                    className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm"
-                  >
+                  <Card key={blog._id} className="p-4 dark:bg-gray-800 shadow-sm">
                     <div className="flex justify-between items-start">
                       <div>
                         <h2 className="font-semibold text-gray-800 dark:text-gray-100">{blog.title}</h2>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                          By {blog.author} • {formatDate(blog.date)}
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{blog.author}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{formatDate(blog.date)}</p>
+                        <p
+                          className={`text-sm font-medium ${
+                            blog.status === 'Approved'
+                              ? 'text-green-600'
+                              : blog.status === 'Rejected'
+                                ? 'text-red-600'
+                                : 'text-yellow-600'
+                          }`}
+                        >
+                          {blog.status}
                         </p>
                       </div>
-                      <span
-                        className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                          blog.status === 'Approved'
-                            ? 'bg-green-100 text-green-700'
-                            : blog.status === 'Rejected'
-                              ? 'bg-red-100 text-red-700'
-                              : 'bg-yellow-100 text-yellow-700'
-                        }`}
-                      >
-                        {blog.status}
-                      </span>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
+                          <DropdownMenuItem onClick={() => handleView(blog)} className="font-grotesk">
+                            <Eye className="mr-2" /> View
+                          </DropdownMenuItem>
+                          {blog.status === 'Pending' && (
+                            <>
+                              <DropdownMenuItem
+                                onClick={() => handleApprove(blog._id)}
+                                className="text-green-600 font-grotesk"
+                              >
+                                <CheckCircle className="mr-2" /> Approve
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleReject(blog._id)}
+                                className="text-red-500 font-grotesk"
+                              >
+                                <XCircle className="mr-2" /> Reject
+                              </DropdownMenuItem>
+                            </>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
-
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                      Category: <span className="font-medium">{blog.category}</span>
-                    </p>
-
-                    <div className="flex justify-end gap-2 mt-4">
-                      <Button variant="outline" size="sm" onClick={() => handleView(blog)}>
-                        <Eye className="h-4 w-4 mr-1" /> View
-                      </Button>
-
-                      {blog.status === 'Pending' && (
-                        <>
-                          <Button
-                            size="sm"
-                            className="bg-green-600 hover:bg-green-700 text-white"
-                            onClick={() => handleApprove(blog._id)}
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" /> Approve
-                          </Button>
-                          <Button size="sm" variant="destructive" onClick={() => handleReject(blog._id)}>
-                            <XCircle className="h-4 w-4 mr-1" /> Reject
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
             </>
@@ -225,34 +217,37 @@ const ApproveBlogs = () => {
         </Card>
       </div>
 
-      {/* Modal */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto dark:bg-gray-800">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold dark:text-white">{selectedBlog?.title}</DialogTitle>
-            <DialogDescription>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">
-                By <span className="font-semibold">{selectedBlog?.author}</span> •{' '}
-                {selectedBlog && formatDate(selectedBlog.date)}
-              </p>
-            </DialogDescription>
-          </DialogHeader>
+      {/* View Modal */}
+      {selectedBlog && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 px-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg md:max-w-3xl p-6 relative overflow-y-auto max-h-[85vh]">
+            <button
+              onClick={() => setSelectedBlog(null)}
+              className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-700 dark:text-gray-300"
+            >
+              ✕
+            </button>
 
-          {selectedBlog?.thumbnail && (
-            <img src={selectedBlog.thumbnail} alt="Thumbnail" className="w-full h-64 object-cover rounded-lg mt-4" />
-          )}
-
-          <div className="mt-5 space-y-2">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Category: <span className="font-medium">{selectedBlog?.category}</span>
+            <h3 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-3">{selectedBlog.title}</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
+              By <span className="font-semibold">{selectedBlog.author}</span> • {formatDate(selectedBlog.date)}
             </p>
+
+            {selectedBlog.thumbnail && (
+              <img src={selectedBlog.thumbnail} alt="Thumbnail" className="w-full h-60 object-cover rounded-md mb-4" />
+            )}
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+              Category: <span className="font-medium">{selectedBlog.category}</span>
+            </p>
+
             <div
-              className="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-200 mt-3"
-              dangerouslySetInnerHTML={{ __html: selectedBlog?.description || '' }}
+              className="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-200 text-sm md:text-base"
+              dangerouslySetInnerHTML={{ __html: selectedBlog.description }}
             />
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      )}
     </div>
   );
 };
