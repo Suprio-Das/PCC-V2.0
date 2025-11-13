@@ -202,7 +202,7 @@ export const BlogPage = () => {
                   ))}
                 </div>
 
-                {leaderboardData.length > 6 && (
+                {leaderboardData.length > 1 && (
                   <button onClick={() => navigate('/leaderboard')} className="mt-4 w-full text-white join-pcc-btn">
                     View Full Leaderboard
                   </button>

@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, ClipboardCheck } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 type Event = {
@@ -98,13 +98,19 @@ const Events = () => {
                                 className="font-grotesk"
                                 onClick={() => navigate(`/events/${event._id}`)}
                               >
-                                <Edit className="mr-2" /> Edit
+                                <Edit className="mr-2 size-4" /> Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="font-grotesk"
+                                onClick={() => navigate(`/events/${event._id}/registered-students`)}
+                              >
+                                <ClipboardCheck className="mr-2 size-4" /> Registered
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 className="text-red-500 font-grotesk"
                                 onClick={() => deleteEvent(event._id)}
                               >
-                                <Trash2 className="mr-2" /> Delete
+                                <Trash2 className="mr-2 size-4" /> Delete
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
