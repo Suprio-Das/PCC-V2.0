@@ -9,42 +9,40 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Edit, Trash2, ClipboardCheck } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import api from '@/Services/api';
+
 type Event = {
   _id: string;
   title: string;
   date: string;
   location: string;
   category: string;
+  status: string;
 };
 
 const Events = () => {
   const navigate = useNavigate();
+  const [events, setEvents] = useState<Event[]>([]);
 
-  const [events, setEvents] = useState<Event[]>([
-    {
-      _id: '1',
-      title: 'React Workshop',
-      date: '2025-11-05T10:00:00.000Z',
-      location: 'Dhaka',
-      category: 'Web Development',
-    },
-    {
-      _id: '2',
-      title: 'Digital Marketing Seminar',
-      date: '2025-11-12T14:00:00.000Z',
-      location: 'Chittagong',
-      category: 'Marketing',
-    },
-    {
-      _id: '3',
-      title: 'Photography Meetup',
-      date: '2025-11-20T16:00:00.000Z',
-      location: 'Sylhet',
-      category: 'Photography',
-    },
-  ]);
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await api.get('/api/admin/getevents');
+        if (response.data.success) {
+          const sortedEvents = [...response.data.events].sort(
+            (a: Event, b: Event) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+          );
+          setEvents(sortedEvents);
+        }
+      } catch (error) {
+        toast.error('Failed to load events');
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -52,7 +50,7 @@ const Events = () => {
   };
 
   const deleteEvent = (id: string) => {
-    setEvents(events.filter((event) => event._id !== id));
+    setEvents((prev) => prev.filter((event) => event._id !== id));
     toast.success('Event removed (static mode)');
   };
 
@@ -78,6 +76,7 @@ const Events = () => {
                       <TableHead>Category</TableHead>
                       <TableHead>Date</TableHead>
                       <TableHead>Location</TableHead>
+                      <TableHead>Status</TableHead>
                       <TableHead className="text-center">Action</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -88,6 +87,19 @@ const Events = () => {
                         <TableCell>{event.category}</TableCell>
                         <TableCell>{formatDate(event.date)}</TableCell>
                         <TableCell>{event.location}</TableCell>
+                        <TableCell>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              event.status === 'ongoing'
+                                ? 'bg-green-100 text-green-700'
+                                : event.status === 'upcoming'
+                                  ? 'bg-blue-100 text-blue-700'
+                                  : 'bg-gray-200 text-gray-600'
+                            }`}
+                          >
+                            {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
+                          </span>
+                        </TableCell>
                         <TableCell className="text-center">
                           <DropdownMenu>
                             <DropdownMenuTrigger>
@@ -131,6 +143,17 @@ const Events = () => {
                         <p className="text-sm text-gray-600 dark:text-gray-300">{event.category}</p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{formatDate(event.date)}</p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{event.location}</p>
+                        <p
+                          className={`text-xs mt-1 ${
+                            event.status === 'ongoing'
+                              ? 'text-green-500'
+                              : event.status === 'upcoming'
+                                ? 'text-blue-500'
+                                : 'text-gray-400'
+                          }`}
+                        >
+                          {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
+                        </p>
                       </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger>
