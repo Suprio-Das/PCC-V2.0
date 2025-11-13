@@ -43,6 +43,7 @@ import { UserDashboard } from '@/pages/userDashboard/UserDashboard';
 import { AdminDashboard } from '@/pages/adminDashboard/AdminDashboard';
 import { FullLeaderboard } from '@/pages/blog/FullLeaderboard';
 import { ProfilePage } from '@/pages/blog/ProfilePage';
+import RegisteredStudents from '@/pages/adminDashboard/RegisteredStudents';
 
 function AppRouter() {
   const dispatch = useDispatch<AppDispatch>();
@@ -89,6 +90,7 @@ function AppRouter() {
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="events" element={<Events />} />
+              <Route path="registered-students" element={<RegisteredStudents />} />
               <Route path="create-events" element={<CreateEvents />} />
               <Route path="update-events" element={<UpdateEvent />} />
               <Route path="approve-blogs" element={<ApproveBlogs />} />

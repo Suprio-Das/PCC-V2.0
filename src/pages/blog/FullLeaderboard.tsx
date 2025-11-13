@@ -84,11 +84,32 @@ const leaderboardData: UserType[] = [
     totalLikes: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
+  {
+    id: 11,
+    name: 'Imran Hossain',
+    totalBlogs: 6,
+    totalLikes: 85,
+    avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
+  },
+  {
+    id: 11,
+    name: 'Imran Hossain',
+    totalBlogs: 6,
+    totalLikes: 85,
+    avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
+  },
+  {
+    id: 12,
+    name: 'Imran Hossain',
+    totalBlogs: 6,
+    totalLikes: 85,
+    avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
+  },
 ];
 
 export const FullLeaderboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 5;
+  const perPage = 7;
   const totalPages = Math.ceil(leaderboardData.length / perPage);
 
   const sortedUsers = [...leaderboardData].sort((a, b) => b.totalBlogs - a.totalBlogs);
