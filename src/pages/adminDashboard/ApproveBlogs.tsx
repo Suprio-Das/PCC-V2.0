@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { CheckCircle, XCircle, Eye } from 'lucide-react';
+import { CheckCircle, XCircle, Eye, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
@@ -27,17 +27,25 @@ type Blog = {
 const ApproveBlogs = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      const response = await api.get('/api/admin/blogrequest');
-      if (response.data.success) {
-        const sorted = response.data.requests.sort(
-          (a: Blog, b: Blog) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        );
-        setBlogs(sorted);
-      } else {
-        toast.error('Failed to fetch blog requests');
+      try {
+        const response = await api.get('/api/admin/blogrequest');
+
+        if (response.data.success) {
+          const sorted = response.data.requests.sort(
+            (a: Blog, b: Blog) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          );
+          setBlogs(sorted);
+        } else {
+          toast.error('Failed to fetch blog requests');
+        }
+      } catch (error: any) {
+        toast.error('No Blogs are found.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -55,7 +63,7 @@ const ApproveBlogs = () => {
 
     try {
       const response = await api.put(`/api/admin/approveblog/${blogId}`);
-      if (response.data.success === true) {
+      if (response.data.success) {
         toast.success(`${blog.title} approved successfully`);
         setBlogs((prev) => prev.filter((b) => b._id !== blogId));
       } else {
@@ -93,7 +101,12 @@ const ApproveBlogs = () => {
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg rounded-2xl">
           <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">Approve Blogs</h1>
 
-          {blogs.length === 0 ? (
+          {/* Loader */}
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <Loader2 className="h-10 w-10 animate-spin text-gray-600 dark:text-gray-300" />
+            </div>
+          ) : blogs.length === 0 ? (
             <p className="text-center text-gray-500 dark:text-gray-400 py-10">No blogs found.</p>
           ) : (
             <>
@@ -135,21 +148,15 @@ const ApproveBlogs = () => {
                               <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
-                              <DropdownMenuItem onClick={() => handleView(blog)} className="font-grotesk">
+                              <DropdownMenuItem onClick={() => handleView(blog)}>
                                 <Eye className="mr-2" /> View
                               </DropdownMenuItem>
                               {blog.status === 'pending' && (
                                 <>
-                                  <DropdownMenuItem
-                                    onClick={() => handleApprove(blog._id)}
-                                    className="text-green-600 font-grotesk"
-                                  >
+                                  <DropdownMenuItem onClick={() => handleApprove(blog._id)} className="text-green-600">
                                     <CheckCircle className="mr-2" /> Approve
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => handleReject(blog._id)}
-                                    className="text-red-500 font-grotesk"
-                                  >
+                                  <DropdownMenuItem onClick={() => handleReject(blog._id)} className="text-red-500">
                                     <XCircle className="mr-2" /> Reject
                                   </DropdownMenuItem>
                                 </>
@@ -180,27 +187,20 @@ const ApproveBlogs = () => {
                           {blog.status.charAt(0).toUpperCase() + blog.status.slice(1)}
                         </p>
                       </div>
-
                       <DropdownMenu>
                         <DropdownMenuTrigger>
                           <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
-                          <DropdownMenuItem onClick={() => handleView(blog)} className="font-grotesk">
+                          <DropdownMenuItem onClick={() => handleView(blog)}>
                             <Eye className="mr-2" /> View
                           </DropdownMenuItem>
                           {blog.status === 'pending' && (
                             <>
-                              <DropdownMenuItem
-                                onClick={() => handleApprove(blog._id)}
-                                className="text-green-600 font-grotesk"
-                              >
+                              <DropdownMenuItem onClick={() => handleApprove(blog._id)} className="text-green-600">
                                 <CheckCircle className="mr-2" /> Approve
                               </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleReject(blog._id)}
-                                className="text-red-500 font-grotesk"
-                              >
+                              <DropdownMenuItem onClick={() => handleReject(blog._id)} className="text-red-500">
                                 <XCircle className="mr-2" /> Reject
                               </DropdownMenuItem>
                             </>
