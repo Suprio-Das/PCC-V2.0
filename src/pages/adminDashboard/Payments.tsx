@@ -34,7 +34,7 @@ const Payments = () => {
   };
 
   return (
-    <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors font-grotesk">
+    <div className="pb-20 pt-20 min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors sm:px-6 md:px-10">
       <div className="max-w-6xl mx-auto mt-8">
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Student Payments</h1>
@@ -43,8 +43,8 @@ const Payments = () => {
             <p className="text-gray-500 dark:text-gray-400 text-center py-10">No payments recorded yet.</p>
           ) : (
             <>
-              {/* Desktop */}
-              <div className="hidden md:block overflow-x-auto rounded-lg">
+              {/* Large Device Table */}
+              <div className="hidden lg:block overflow-x-auto rounded-lg">
                 <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <TableCaption className="text-gray-500 dark:text-gray-400">
                     List of recent student payments.
@@ -75,8 +75,8 @@ const Payments = () => {
                 </Table>
               </div>
 
-              {/* Mobile */}
-              <div className="grid grid-cols-1 gap-4 md:hidden mt-6">
+              {/* Medium & Small Device Cards */}
+              <div className="grid grid-cols-1 gap-4 mt-6 lg:hidden">
                 {payments.map((p) => (
                   <Card key={p.transactionId} className="p-4 dark:bg-gray-800 shadow-sm">
                     <h2 className="font-semibold text-gray-800 dark:text-gray-100">{p.name}</h2>

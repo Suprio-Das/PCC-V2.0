@@ -1,3 +1,4 @@
+// Updated Events Component with improved responsive layout for medium devices
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useNavigate } from 'react-router-dom';
@@ -55,7 +56,7 @@ const Events = () => {
   };
 
   return (
-    <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="pb-20 pt-20 min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors sm:px-6 md:px-10">
       <div className="max-w-6xl mx-auto mt-8 font-grotesk">
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Events</h1>
@@ -65,7 +66,7 @@ const Events = () => {
           ) : (
             <>
               {/* Desktop Table */}
-              <div className="hidden md:block overflow-x-auto rounded-lg">
+              <div className="hidden lg:block overflow-x-auto rounded-lg">
                 <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                   <TableCaption className="text-gray-500 dark:text-gray-400">
                     List of your registered events.
@@ -106,22 +107,13 @@ const Events = () => {
                               <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-40 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
-                              <DropdownMenuItem
-                                className="font-grotesk"
-                                onClick={() => navigate(`/events/${event._id}`)}
-                              >
+                              <DropdownMenuItem onClick={() => navigate(`/events/${event._id}`)}>
                                 <Edit className="mr-2 size-4" /> Edit
                               </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="font-grotesk"
-                                onClick={() => navigate(`/events/${event._id}/registered-students`)}
-                              >
+                              <DropdownMenuItem onClick={() => navigate(`/events/${event._id}/registered-students`)}>
                                 <ClipboardCheck className="mr-2 size-4" /> Registered
                               </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="text-red-500 font-grotesk"
-                                onClick={() => deleteEvent(event._id)}
-                              >
+                              <DropdownMenuItem className="text-red-500" onClick={() => deleteEvent(event._id)}>
                                 <Trash2 className="mr-2 size-4" /> Delete
                               </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -131,6 +123,46 @@ const Events = () => {
                     ))}
                   </TableBody>
                 </Table>
+              </div>
+
+              {/* Medium Device */}
+              <div className="hidden md:grid lg:hidden grid-cols-1 gap-4 mt-6">
+                {events.map((event) => (
+                  <Card key={event._id} className="p-4 dark:bg-gray-800 shadow-sm">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h2 className="font-semibold text-gray-800 dark:text-gray-100 text-lg">{event.title}</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{event.category}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{formatDate(event.date)}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{event.location}</p>
+                        <p
+                          className={`text-xs mt-1 ${
+                            event.status === 'ongoing'
+                              ? 'text-green-500'
+                              : event.status === 'upcoming'
+                                ? 'text-blue-500'
+                                : 'text-gray-400'
+                          }`}
+                        >
+                          {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
+                        </p>
+                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-40 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
+                          <DropdownMenuItem onClick={() => navigate(`/events/${event._id}`)}>
+                            <Edit className="mr-2 size-4" /> Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => deleteEvent(event._id)} className="text-red-500">
+                            <Trash2 className="mr-2 size-4" /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </Card>
+                ))}
               </div>
 
               {/* Mobile Cards */}
@@ -160,13 +192,10 @@ const Events = () => {
                           <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-40 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
-                          <DropdownMenuItem className="font-grotesk" onClick={() => navigate(`/events/${event._id}`)}>
+                          <DropdownMenuItem onClick={() => navigate(`/events/${event._id}`)}>
                             <Edit className="mr-2" /> Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="text-red-500 font-grotesk"
-                            onClick={() => deleteEvent(event._id)}
-                          >
+                          <DropdownMenuItem onClick={() => deleteEvent(event._id)} className="text-red-500">
                             <Trash2 className="mr-2" /> Delete
                           </DropdownMenuItem>
                         </DropdownMenuContent>
