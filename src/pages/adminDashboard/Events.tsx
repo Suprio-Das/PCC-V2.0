@@ -114,7 +114,7 @@ const Events = () => {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 className="font-grotesk"
-                                onClick={() => navigate(`/events/${event._id}/registered-students`)}
+                                onClick={() => navigate(`/admin-dashboard/events/${event._id}/registered-students`)}
                               >
                                 <ClipboardCheck className="mr-2 size-4" /> Registered
                               </DropdownMenuItem>
