@@ -92,8 +92,7 @@ function AppRouter() {
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="events" element={<Events />} />
-              {/* <Route path="registered-students" element={<RegisteredStudents />} /> */}
-              <Route path="events/:id/registered-students" element={<RegisteredStudents />} />
+              <Route path="registered-students" element={<RegisteredStudents />} />
               <Route path="create-events" element={<CreateEvents />} />
               <Route path="update-events" element={<UpdateEvent />} />
               <Route path="approve-blogs" element={<ApproveBlogs />} />

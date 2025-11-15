@@ -13,36 +13,16 @@ const Members = () => {
 
   const membersData: Record<string, { id: string; name: string; email: string; mobile: string; due: number }[]> = {
     '28-A': [
-      {
-        id: 'M001',
-        name: 'Rahim Uddin',
-        email: 'rahim@example.com',
-        mobile: '01711111111',
-        due: 200,
-      },
-      {
-        id: 'M002',
-        name: 'Karim Ali',
-        email: 'karim@example.com',
-        mobile: '01722222222',
-        due: 0,
-      },
+      { id: 'M001', name: 'Rahim Uddin', email: 'rahim@example.com', mobile: '01711111111', due: 200 },
+      { id: 'M002', name: 'Karim Ali', email: 'karim@example.com', mobile: '01722222222', due: 0 },
     ],
-    '28-B': [
-      {
-        id: 'M010',
-        name: 'Anika Tasnin',
-        email: 'anika@example.com',
-        mobile: '01755555555',
-        due: 100,
-      },
-    ],
+    '28-B': [{ id: 'M010', name: 'Anika Tasnin', email: 'anika@example.com', mobile: '01755555555', due: 100 }],
   };
 
   const [selectedBatch, setSelectedBatch] = useState<string>('');
 
   return (
-    <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="pb-20 pt-20 min-h-screen bg-gray-50 dark:bg-gray-900 sm:px-6 md:px-10">
       <div className="max-w-6xl mx-auto mt-8 font-grotesk">
         <Card className="w-full p-6 space-y-4 dark:bg-gray-800 shadow-lg rounded-2xl">
           <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">Club Members</h1>
@@ -64,8 +44,8 @@ const Members = () => {
           {/* Members Section */}
           {selectedBatch && membersData[selectedBatch] ? (
             <>
-              {/* ✅ Desktop Table View */}
-              <div className="hidden md:block overflow-x-auto rounded-lg mt-6">
+              {/* Large Device Table */}
+              <div className="hidden lg:block overflow-x-auto rounded-lg mt-6">
                 <Table>
                   <TableCaption>List of members in {selectedBatch}</TableCaption>
                   <TableHeader>
@@ -97,10 +77,10 @@ const Members = () => {
                 </Table>
               </div>
 
-              {/* ✅ Mobile Card View */}
-              <div className="grid grid-cols-1 gap-4 mt-6 md:hidden">
+              {/* Medium & Small Device Cards */}
+              <div className="grid grid-cols-1 gap-4 mt-6 lg:hidden">
                 {membersData[selectedBatch].map((m) => (
-                  <div
+                  <Card
                     key={m.id}
                     className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-800 shadow-sm"
                   >
@@ -120,7 +100,7 @@ const Members = () => {
                     <p className="text-sm text-gray-600 dark:text-gray-300">
                       <span className="font-medium">Mobile:</span> {m.mobile}
                     </p>
-                  </div>
+                  </Card>
                 ))}
               </div>
             </>
