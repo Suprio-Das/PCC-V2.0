@@ -110,7 +110,13 @@ const Events = () => {
                               <DropdownMenuItem onClick={() => navigate(`/events/${event._id}`)}>
                                 <Edit className="mr-2 size-4" /> Edit
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => navigate(`/events/${event._id}/registered-students`)}>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  navigate(`/admin-dashboard/events/${event._id}/registered-students`, {
+                                    state: { event },
+                                  })
+                                }
+                              >
                                 <ClipboardCheck className="mr-2 size-4" /> Registered
                               </DropdownMenuItem>
                               <DropdownMenuItem className="text-red-500" onClick={() => deleteEvent(event._id)}>
