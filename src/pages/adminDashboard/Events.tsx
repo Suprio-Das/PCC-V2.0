@@ -1,4 +1,3 @@
-// Updated Events Component with improved responsive layout for medium devices
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Edit, Trash2, ClipboardCheck } from 'lucide-react';
+import { Edit, Trash2, ClipboardCheck, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import api from '@/Services/api';
@@ -26,6 +25,7 @@ type Event = {
 const Events = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -39,6 +39,8 @@ const Events = () => {
         }
       } catch (error) {
         toast.error('Failed to load events');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -61,7 +63,12 @@ const Events = () => {
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Events</h1>
 
-          {events.length === 0 ? (
+          {/* Loader */}
+          {loading ? (
+            <div className="w-full flex justify-center items-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-600 dark:text-gray-300" />
+            </div>
+          ) : events.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-center py-10">No events found.</p>
           ) : (
             <>
@@ -110,6 +117,7 @@ const Events = () => {
                               <DropdownMenuItem onClick={() => navigate(`/events/${event._id}`)}>
                                 <Edit className="mr-2 size-4" /> Edit
                               </DropdownMenuItem>
+
                               <DropdownMenuItem
                                 onClick={() =>
                                   navigate(`/admin-dashboard/events/${event._id}/registered-students`, {
@@ -119,6 +127,7 @@ const Events = () => {
                               >
                                 <ClipboardCheck className="mr-2 size-4" /> Registered
                               </DropdownMenuItem>
+
                               <DropdownMenuItem className="text-red-500" onClick={() => deleteEvent(event._id)}>
                                 <Trash2 className="mr-2 size-4" /> Delete
                               </DropdownMenuItem>
@@ -153,6 +162,7 @@ const Events = () => {
                           {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
                         </p>
                       </div>
+
                       <DropdownMenu>
                         <DropdownMenuTrigger>
                           <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
@@ -171,7 +181,7 @@ const Events = () => {
                 ))}
               </div>
 
-              {/* Mobile Cards */}
+              {/* Mobile */}
               <div className="grid grid-cols-1 gap-4 mt-6 md:hidden">
                 {events.map((event) => (
                   <Card key={event._id} className="p-4 dark:bg-gray-800 shadow-sm">
@@ -193,6 +203,7 @@ const Events = () => {
                           {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
                         </p>
                       </div>
+
                       <DropdownMenu>
                         <DropdownMenuTrigger>
                           <BsThreeDotsVertical className="cursor-pointer text-gray-600 dark:text-gray-300" />
