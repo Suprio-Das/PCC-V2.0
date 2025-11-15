@@ -13,9 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import JoditEditor from 'jodit-react';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronDownIcon } from 'lucide-react';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import JoditEditor from 'jodit-react';
 
 const UpdateEvent = () => {
   const editor = useRef(null);
@@ -32,14 +34,17 @@ const UpdateEvent = () => {
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
-  // Fetch existing event data
+  const getDateObject = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/admin/event/${id}`, {
-          credentials: 'include',
-        });
+        const res = await fetch(`http://localhost:5000/api/admin/event/${id}`, { credentials: 'include' });
         const data = await res.json();
         if (data.success) {
           const event = data.event;
@@ -49,17 +54,16 @@ const UpdateEvent = () => {
           setTime(event.time);
           setLocationName(event.location);
           setDescription(event.description);
-          setBannerPreview(event.bannerUrl || null); // assuming backend returns banner URL
+          setBannerPreview(event.bannerUrl || null);
         } else {
           toast.error(data.message || 'Failed to fetch event');
         }
-      } catch (err) {
+      } catch {
         toast.error('Something went wrong while fetching!');
       } finally {
         setFetching(false);
       }
     };
-
     fetchEvent();
   }, [id]);
 
@@ -69,9 +73,7 @@ const UpdateEvent = () => {
       setBanner(file);
 
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setBannerPreview(reader.result as string);
-      };
+      reader.onloadend = () => setBannerPreview(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
@@ -81,7 +83,6 @@ const UpdateEvent = () => {
       toast.error('Please fill all fields');
       return;
     }
-
     try {
       setLoading(true);
       const formData = new FormData();
@@ -93,21 +94,19 @@ const UpdateEvent = () => {
       formData.append('description', description);
       if (banner) formData.append('banner', banner);
 
-      const response = await fetch(`http://localhost:5000/api/admin/updateevent/${id}`, {
+      const res = await fetch(`http://localhost:5000/api/admin/updateevent/${id}`, {
         method: 'PUT',
         body: formData,
         credentials: 'include',
       });
-
-      const data = await response.json();
-
+      const data = await res.json();
       if (data.success) {
         toast.success('Event updated successfully!');
         navigate(`/user-dashboard/publish-event/${id}`);
       } else {
         toast.error(data.message || 'Failed to update event');
       }
-    } catch (err) {
+    } catch {
       toast.error('Something went wrong!');
     } finally {
       setLoading(false);
@@ -123,8 +122,8 @@ const UpdateEvent = () => {
   }
 
   return (
-    <div className="p-4 md:pr-20 md:pl-[320px] pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen font-grotesk">
-      <Card className="max-w-4xl mx-auto p-8 space-y-10 shadow-lg dark:bg-gray-800 rounded-xl">
+    <div className="pb-20 pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen sm:px-6 md:px-10">
+      <Card className="w-full max-w-4xl mx-auto p-8 space-y-10 shadow-lg dark:bg-gray-800 rounded-xl">
         <div className="space-y-1 text-center">
           <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100">Update Event</h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm pt-2">Modify event details below.</p>
@@ -156,14 +155,47 @@ const UpdateEvent = () => {
             </Select>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
+          {/* Date & Time Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Date */}
+            <div className="flex flex-col gap-3">
               <Label>Date</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between font-normal">
+                    {date ? getDateObject(date).toLocaleDateString() : 'Select date'}
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date ? getDateObject(date) : undefined}
+                    captionLayout="dropdown"
+                    onSelect={(selected) => {
+                      if (selected) {
+                        const localDate = `${selected.getFullYear()}-${String(selected.getMonth() + 1).padStart(
+                          2,
+                          '0',
+                        )}-${String(selected.getDate()).padStart(2, '0')}`;
+                        setDate(localDate);
+                        setCalendarOpen(false);
+                      }
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
-            <div className="space-y-2">
+
+            {/* Time */}
+            <div className="flex flex-col gap-3">
               <Label>Time</Label>
-              <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+              <Input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden"
+              />
             </div>
           </div>
 

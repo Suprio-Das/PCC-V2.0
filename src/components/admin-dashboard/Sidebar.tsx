@@ -9,10 +9,18 @@ import { LuLayoutDashboard } from 'react-icons/lu';
 import { FiUsers } from 'react-icons/fi';
 import { GoGitPullRequest } from 'react-icons/go';
 import { RiHistoryLine } from 'react-icons/ri';
+interface SidebarProps {
+  onToggle: (newState: boolean) => void;
+}
 
-const Sidebar = () => {
+const Sidebar = ({ onToggle }: SidebarProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const toggleSidebar = () => {
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+    if (onToggle) onToggle(newState);
+  };
   const menuItems = [
     {
       path: '/admin-dashboard/dashboard',
@@ -63,7 +71,7 @@ const Sidebar = () => {
     >
       {/* Toggle Button */}
       <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={toggleSidebar}
         className="absolute -right-4 top-6 bg-gray-200 dark:bg-gray-700 p-1 rounded-full shadow-md"
       >
         {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}

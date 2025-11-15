@@ -88,7 +88,7 @@ const ApproveBlogs = () => {
   };
 
   return (
-    <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="pb-20 pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen sm:px-6 md:px-10">
       <div className="max-w-6xl mx-auto mt-8">
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg rounded-2xl">
           <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">Approve Blogs</h1>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -16,16 +16,17 @@ import {
 import { toast } from 'sonner';
 import { Loader2, ChevronDownIcon } from 'lucide-react';
 import api from '@/Services/api';
-import Editor from '@/components/customized/Editor';
+import JoditEditor from 'jodit-react';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 
 const CreateEvents = () => {
   const navigate = useNavigate();
+  const editor = useRef(null);
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
-  const [date, setDate] = useState(''); // YYYY-MM-DD string
+  const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [locationName, setLocationName] = useState('');
   const [banner, setBanner] = useState<File | null>(null);
@@ -97,7 +98,7 @@ const CreateEvents = () => {
   };
 
   return (
-    <div className="min-h-screen md:pl-[300px] bg-gray-50 dark:bg-gray-900 pt-20 pb-10 px-4 sm:px-6 md:px-10 overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-20 px-4 sm:px-6 md:px-10 overflow-x-hidden">
       <Card className="w-full max-w-4xl mx-auto p-4 sm:p-6 md:p-8 space-y-8 shadow-lg dark:bg-gray-800 rounded-xl">
         <div className="space-y-1 text-center">
           <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100">Create A New Event</h2>
@@ -215,9 +216,7 @@ const CreateEvents = () => {
           {/* Description */}
           <div className="space-y-2">
             <Label>Description</Label>
-            <div className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg p-2 sm:p-3 h-60 sm:h-96 md:h-80 overflow-auto">
-              <Editor description={description} setDescription={setDescription} />
-            </div>
+            <JoditEditor ref={editor} value={description} onChange={setDescription} config={{ height: 300 }} />
           </div>
 
           {/* Submit Button */}
