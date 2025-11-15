@@ -124,11 +124,13 @@ const RegisteredStudents = () => {
           )}
 
           {/* Export Button */}
-          <div className="flex justify-center mb-4">
-            <button onClick={exportToExcel} className="px-4 py-2 flex items-center gap-2 join-pcc-btn">
-              Export to Excel
-            </button>
-          </div>
+          {students?.length !== 0 && (
+            <div className="flex justify-center mb-4">
+              <button onClick={exportToExcel} className="px-4 py-2 flex items-center gap-2 join-pcc-btn">
+                Export to Excel
+              </button>
+            </div>
+          )}
 
           {/* Loader */}
           {loading ? (
