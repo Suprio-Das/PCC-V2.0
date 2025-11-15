@@ -10,6 +10,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
+import api from '@/Services/api';
+import { RootState } from '@/Redux/Store';
+import { useSelector } from 'react-redux';
 
 type Blog = {
   _id: string;
@@ -18,34 +22,24 @@ type Blog = {
   thumbnail: string;
   createdAt: string;
 };
-
+interface UserType {
+  userId: string;
+}
 const UserBlog: React.FC = () => {
   const navigate = useNavigate();
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
+  const userId = user?.userId;
 
-  // Static blog data
-  const blog: Blog[] = [
-    {
-      _id: '1',
-      title: 'My First Blog',
-      category: 'Tech',
-      thumbnail: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg',
-      createdAt: '2025-10-01T10:00:00.000Z',
-    },
-    {
-      _id: '2',
-      title: 'Learning React',
-      category: 'Programming',
-      thumbnail: 'https://images.unsplash.com/photo-1581091012184-7f3870aa5e72?crop=entropy&cs=tinysrgb&fit=max&fm=jpg',
-      createdAt: '2025-10-15T14:30:00.000Z',
-    },
-    {
-      _id: '3',
-      title: 'Web Development Tips',
-      category: 'Web',
-      thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg',
-      createdAt: '2025-10-20T08:15:00.000Z',
-    },
-  ];
+  useEffect(() => {
+    const fetchPublishedBlogs = async () => {
+      const res = await api.get(`/api/student/getpublishedblogs/${userId}`);
+      if (res.data.blogs.length !== 0) {
+        setBlogs(res.data.blogs);
+      }
+    };
+    fetchPublishedBlogs();
+  }, []);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -65,7 +59,7 @@ const UserBlog: React.FC = () => {
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Your Blogs</h1>
 
-          {blog.length === 0 ? (
+          {blogs.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-center py-10">
               No blogs found. Start creating your first blog!
             </p>
@@ -82,7 +76,7 @@ const UserBlog: React.FC = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {blog.map((item) => (
+                  {blogs.map((item) => (
                     <TableRow key={item._id} className="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                       <TableCell className="flex gap-4 items-center py-3">
                         <img
