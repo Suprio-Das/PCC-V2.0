@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { FiUsers } from 'react-icons/fi';
 import { GoGitPullRequest } from 'react-icons/go';
+import { RiHistoryLine } from 'react-icons/ri';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -42,6 +43,11 @@ const Sidebar = () => {
       path: '/admin-dashboard/approve-members',
       label: 'Members Request',
       icon: <GoGitPullRequest size={22} />,
+    },
+    {
+      path: '/admin-dashboard/payments',
+      label: 'Payments',
+      icon: <RiHistoryLine size={22} />,
     },
     {
       path: '/admin-dashboard/settings',

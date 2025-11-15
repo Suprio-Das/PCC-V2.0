@@ -28,6 +28,7 @@ import WriteBlog from '@/pages/userDashboard/WriteBlog';
 import UpdateBlog from '@/pages/userDashboard/UpdateBlog';
 import RegisteredEvents from '@/pages/userDashboard/RegisteredEvents';
 import Settings from '@/pages/userDashboard/Settings';
+import AdminSettings from '@/pages/adminDashboard/AdminSettings';
 import Dashboard from '@/pages/adminDashboard/Dashboard';
 import Events from '@/pages/adminDashboard/Events';
 import CreateEvents from '@/pages/adminDashboard/CreateEvents';
@@ -44,6 +45,7 @@ import { AdminDashboard } from '@/pages/adminDashboard/AdminDashboard';
 import { FullLeaderboard } from '@/pages/blog/FullLeaderboard';
 import { ProfilePage } from '@/pages/blog/ProfilePage';
 import RegisteredStudents from '@/pages/adminDashboard/RegisteredStudents';
+import Payments from '@/pages/adminDashboard/Payments';
 
 function AppRouter() {
   const dispatch = useDispatch<AppDispatch>();
@@ -96,7 +98,8 @@ function AppRouter() {
               <Route path="approve-blogs" element={<ApproveBlogs />} />
               <Route path="members" element={<Members />} />
               <Route path="approve-members" element={<ApproveMembers />} />
-              <Route path="settings" element={<Settings />} />
+              <Route path="payments" element={<Payments />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
           </Route>
 

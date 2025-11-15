@@ -14,22 +14,25 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronDownIcon } from 'lucide-react';
 import api from '@/Services/api';
 import Editor from '@/components/customized/Editor';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 
 const CreateEvents = () => {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(''); // YYYY-MM-DD string
   const [time, setTime] = useState('');
   const [locationName, setLocationName] = useState('');
   const [banner, setBanner] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   const handleBanner = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -67,11 +70,9 @@ const CreateEvents = () => {
 
       if (response?.data?.success === true) {
         toast.success('Event created successfully!');
-        navigate('/admin-dashboard/events', {
-          state: { title, category, date, time, locationName, description },
-        });
+        navigate('/admin-dashboard/events');
 
-        // Reset
+        // Reset form
         setTitle('');
         setCategory('');
         setDate('');
@@ -90,20 +91,32 @@ const CreateEvents = () => {
     }
   };
 
+  const getDateObject = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   return (
-    <div className="p-4 md:pr-20 md:pl-[320px] pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen font-grotesk">
-      <Card className="max-w-4xl mx-auto p-8 space-y-10 shadow-lg dark:bg-gray-800 rounded-xl">
+    <div className="min-h-screen md:pl-[300px] bg-gray-50 dark:bg-gray-900 pt-20 pb-10 px-4 sm:px-6 md:px-10 overflow-x-hidden">
+      <Card className="w-full max-w-4xl mx-auto p-4 sm:p-6 md:p-8 space-y-8 shadow-lg dark:bg-gray-800 rounded-xl">
         <div className="space-y-1 text-center">
           <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100">Create A New Event</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm pt-2">Add all event details to create a new event.</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm pt-1">Add all event details to create a new event.</p>
         </div>
 
         <div className="space-y-4 font-garamond">
+          {/* Title */}
           <div className="space-y-2">
             <Label>Title</Label>
-            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" />
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Event title"
+              className="w-full"
+            />
           </div>
 
+          {/* Category */}
           <div className="space-y-2">
             <Label>Category</Label>
             <Select onValueChange={(val) => setCategory(val)}>
@@ -124,37 +137,90 @@ const CreateEvents = () => {
             </Select>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Date</Label>
-              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          {/* Date & Time */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Date Picker */}
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="date-picker" className="px-1">
+                Date
+              </Label>
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between font-normal">
+                    {date ? getDateObject(date).toLocaleDateString() : 'Select date'}
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date ? getDateObject(date) : undefined}
+                    captionLayout="dropdown"
+                    onSelect={(selectedDate) => {
+                      if (selectedDate) {
+                        const localDate =
+                          selectedDate.getFullYear() +
+                          '-' +
+                          String(selectedDate.getMonth() + 1).padStart(2, '0') +
+                          '-' +
+                          String(selectedDate.getDate()).padStart(2, '0');
+                        setDate(localDate);
+                        setCalendarOpen(false);
+                      }
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
-            <div className="space-y-2">
-              <Label>Time</Label>
-              <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+
+            {/* Time */}
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="time-picker" className="px-1">
+                Time
+              </Label>
+              <Input
+                type="time"
+                id="time-picker"
+                step="1"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              />
             </div>
           </div>
 
+          {/* Location */}
           <div className="space-y-2">
             <Label>Location</Label>
-            <Input value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="Location" />
+            <Input
+              value={locationName}
+              onChange={(e) => setLocationName(e.target.value)}
+              placeholder="Event location"
+            />
           </div>
 
+          {/* Banner */}
           <div className="space-y-2">
             <Label>Banner</Label>
             <Input type="file" accept="image/*" onChange={handleBanner} />
             {bannerPreview && (
-              <img src={bannerPreview} alt="Banner Preview" className="mt-2 max-h-40 object-cover rounded" />
+              <img
+                src={bannerPreview}
+                alt="Banner Preview"
+                className="mt-2 w-full h-auto max-h-56 object-cover rounded-lg border"
+              />
             )}
           </div>
 
+          {/* Description */}
           <div className="space-y-2">
             <Label>Description</Label>
-            <div className="text-gray-900">
+            <div className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg p-2 sm:p-3 h-60 sm:h-96 md:h-80 overflow-auto">
               <Editor description={description} setDescription={setDescription} />
             </div>
           </div>
 
+          {/* Submit Button */}
           <div className="flex justify-end">
             <Button
               type="button"
