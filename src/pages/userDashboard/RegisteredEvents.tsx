@@ -30,7 +30,7 @@ const RegisteredEvents = () => {
       _id: '1',
       title: 'React Workshop',
       date: '2025-11-05T10:00:00.000Z',
-      location: 'Dhaka',
+      location: 'Chittagong',
       category: 'Web Development',
     },
     {
@@ -44,7 +44,7 @@ const RegisteredEvents = () => {
       _id: '3',
       title: 'Photography Meetup',
       date: '2025-11-20T16:00:00.000Z',
-      location: 'Sylhet',
+      location: 'Chittagong',
       category: 'Photography',
     },
   ]);

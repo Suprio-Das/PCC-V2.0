@@ -17,7 +17,7 @@ const PaymentHistory = () => {
       _id: '1',
       transactionId: 'TXN-20251026-001',
       date: '2025-10-26 10:45 AM',
-      method: 'Credit Card',
+      method: 'Bkash',
       amount: 40,
     },
     {
@@ -31,7 +31,7 @@ const PaymentHistory = () => {
       _id: '3',
       transactionId: 'TXN-20250812-003',
       date: '2025-08-12 08:10 PM',
-      method: 'Nagad',
+      method: 'Bkash',
       amount: 40,
     },
   ]);
@@ -64,7 +64,7 @@ const PaymentHistory = () => {
                       <TableCell className="font-mono">{pmt.transactionId}</TableCell>
                       <TableCell>{pmt.date}</TableCell>
                       <TableCell>{pmt.method}</TableCell>
-                      <TableCell className="font-semibold text-green-600">${pmt.amount}</TableCell>
+                      <TableCell className="font-semibold text-green-600">TK. {pmt.amount}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

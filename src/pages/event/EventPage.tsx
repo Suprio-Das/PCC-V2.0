@@ -45,10 +45,10 @@ export const EventPage = () => {
         <section
           className="relative min-h-screen bg-cover bg-center flex flex-col justify-center items-center text-center"
           style={{
-            backgroundImage: "url('https://demo.graygrids.com/themes/eventgrids/assets/images/hero/hero-bg.jpg')",
+            backgroundImage: "url('src/assets/event-bg.jpg')",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-green-600/70 via-green-700/70 to-green-900/70"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-600/70 via-gray-700/70 to-gray-900/70"></div>
 
           <div className="relative z-10 px-4">
             <p className="flex justify-center items-center gap-2 text-white text-sm px-4 py-2 rounded-full mb-4 backdrop-blur-md">
