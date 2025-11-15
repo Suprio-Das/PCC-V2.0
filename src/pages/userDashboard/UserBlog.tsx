@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import api from '@/Services/api';
 import { RootState } from '@/Redux/Store';
 import { useSelector } from 'react-redux';
+import { Loader2 } from 'lucide-react';
 
 type Blog = {
   _id: string;
@@ -28,14 +29,17 @@ interface UserType {
 const UserBlog: React.FC = () => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(false);
   const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
   const userId = user?.userId;
 
   useEffect(() => {
     const fetchPublishedBlogs = async () => {
+      setLoading(true);
       const res = await api.get(`/api/student/getpublishedblogs/${userId}`);
       if (res.data.blogs.length !== 0) {
         setBlogs(res.data.blogs);
+        setLoading(false);
       }
     };
     fetchPublishedBlogs();
@@ -58,8 +62,11 @@ const UserBlog: React.FC = () => {
       <div className="max-w-6xl mx-auto mt-8 font-grotesk">
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Your Blogs</h1>
-
-          {blogs.length === 0 ? (
+          {loading ? (
+            <div className="py-10 flex justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-600 dark:text-gray-300" />
+            </div>
+          ) : blogs.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-center py-10">
               No blogs found. Start creating your first blog!
             </p>
