@@ -161,6 +161,15 @@ const Events = () => {
                           <DropdownMenuItem onClick={() => navigate(`/events/${event._id}`)}>
                             <Edit className="mr-2 size-4" /> Edit
                           </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              navigate(`/admin-dashboard/events/${event._id}/registered-students`, {
+                                state: { event },
+                              })
+                            }
+                          >
+                            <ClipboardCheck className="mr-2 size-4" /> Registered
+                          </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => deleteEvent(event._id)} className="text-red-500">
                             <Trash2 className="mr-2 size-4" /> Delete
                           </DropdownMenuItem>
@@ -200,6 +209,15 @@ const Events = () => {
                         <DropdownMenuContent className="w-40 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
                           <DropdownMenuItem onClick={() => navigate(`/events/${event._id}`)}>
                             <Edit className="mr-2" /> Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              navigate(`/admin-dashboard/events/${event._id}/registered-students`, {
+                                state: { event },
+                              })
+                            }
+                          >
+                            <ClipboardCheck className="mr-2 size-4" /> Registered
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => deleteEvent(event._id)} className="text-red-500">
                             <Trash2 className="mr-2" /> Delete
