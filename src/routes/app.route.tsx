@@ -46,6 +46,7 @@ import { FullLeaderboard } from '@/pages/blog/FullLeaderboard';
 import { ProfilePage } from '@/pages/blog/ProfilePage';
 import RegisteredStudents from '@/pages/adminDashboard/RegisteredStudents';
 import Payments from '@/pages/adminDashboard/Payments';
+import BlogView from '@/pages/blog/BlogView';
 
 function AppRouter() {
   const dispatch = useDispatch<AppDispatch>();
@@ -76,6 +77,7 @@ function AppRouter() {
           <Route path={RoutePaths.ADVISOR} element={<AdvisorPage />} />
           <Route path={RoutePaths.EXECUTIVE} element={<ExecutivePage />} />
           <Route path={RoutePaths.BLOG} element={<BlogPage />} />
+          <Route path={RoutePaths.BLOGVIEW} element={<BlogView />} />
           <Route path={RoutePaths.FULLLEADERBOARD} element={<FullLeaderboard />} />
           <Route path={RoutePaths.PROFILE} element={<ProfilePage />} />
           <Route path={RoutePaths.EVENTS} element={<EventPage />} />
