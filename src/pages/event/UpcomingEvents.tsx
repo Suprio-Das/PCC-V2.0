@@ -46,12 +46,12 @@ export const UpcomingEvents = () => {
             id: event._id,
             title: event.title,
             banner: event.banner,
-            date: eventDate.getDate(),
+            date: String(eventDate.getDate()).padStart(2, '0'),
             month: monthNames[eventDate.getMonth()],
             time: event.time,
             location: event.location,
             description: event.description,
-            registered: event.registered, // ⬅ added
+            registered: event.registered,
           };
         });
         setUpcomingEvents(events);
