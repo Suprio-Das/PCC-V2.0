@@ -91,8 +91,8 @@ const CreateEvents = () => {
       });
 
       if (response?.data?.success === true) {
-        toast.success('Event created successfully!');
         navigate('/admin-dashboard/events');
+        toast.success('Event created successfully!');
 
         setTitle('');
         setCategory('');

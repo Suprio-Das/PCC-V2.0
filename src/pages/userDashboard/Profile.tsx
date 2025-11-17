@@ -19,11 +19,14 @@ import userLogo from '../../assets/user.jpg';
 import api from '@/Services/api';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/Redux/Store';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const Profile = () => {
   const [open, setOpen] = useState(false);
   const user = useSelector((state: RootState) => state.Auth.user);
   const [studentInfo, setStudentInfo] = useState<any>({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchStudentInfo = async () => {
@@ -37,7 +40,10 @@ const Profile = () => {
 
   const handleUpdateStudentDetails = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
+      setLoading(true);
+
       const formData = new FormData();
       formData.append('name', studentInfo.name || '');
       formData.append('linkedin', studentInfo.linkedinprofile || '');
@@ -52,13 +58,15 @@ const Profile = () => {
       });
 
       if (response.data.success) {
-        alert('Profile updated successfully!');
+        toast.success('Profile updated successfully!');
         setOpen(false);
       } else {
-        alert('Failed to update profile');
+        toast.error(response.data.message || 'Failed to update profile');
       }
     } catch (error) {
-      alert('Something went wrong while updating your profile.');
+      toast.error('Something went wrong while updating your profile.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -145,6 +153,7 @@ const Profile = () => {
                   <div>
                     <Label>Description</Label>
                     <Textarea
+                      maxLength={100}
                       value={studentInfo?.bio || ''}
                       onChange={(e) => setStudentInfo({ ...studentInfo, bio: e.target.value })}
                       className="text-gray-600 mt-2"
@@ -161,8 +170,13 @@ const Profile = () => {
                   </div>
 
                   <DialogFooter>
-                    <Button type="submit" className="w-full join-pcc-btn">
-                      Update
+                    <Button
+                      type="submit"
+                      className="w-full join-pcc-btn flex items-center justify-center gap-2"
+                      disabled={loading}
+                    >
+                      {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                      {loading ? 'Updating...' : 'Update'}
                     </Button>
                   </DialogFooter>
                 </form>
