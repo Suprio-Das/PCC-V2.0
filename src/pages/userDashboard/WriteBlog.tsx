@@ -77,7 +77,7 @@ const WriteBlog: React.FC = () => {
       });
 
       if (res.data.success === true) {
-        toast.success('Blog created successfully!');
+        toast.success('Blog created successfully! Please wait for the approval');
         setTitle('');
         setCategory('');
         setDescription('');

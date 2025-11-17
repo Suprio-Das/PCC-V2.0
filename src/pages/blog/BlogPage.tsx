@@ -1,9 +1,13 @@
 import { Navbar } from '@/components/Navbar';
-import { BlogCard, staticBlogs } from '../../pages/blog/BlogCard';
+import { BlogCard } from '../../pages/blog/BlogCard';
 import { motion } from 'framer-motion';
 import { Footer } from '@/components/Footer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
+import api from '@/Services/api';
+import { Loader2 } from 'lucide-react';
 
 // Dummy Leaderboard Data
 const leaderboardData = [
@@ -63,42 +67,42 @@ const leaderboardData = [
     totalLikes: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
-  {
-    id: 9,
-    name: 'Imran Hossain',
-    totalBlogs: 6,
-    totalLikes: 85,
-    avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
-  },
-  {
-    id: 10,
-    name: 'Imran Hossain',
-    totalBlogs: 6,
-    totalLikes: 85,
-    avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
-  },
 ];
 
 export const BlogPage = () => {
   const navigate = useNavigate();
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Pagination
   const blogsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(staticBlogs.length / blogsPerPage);
 
-  // Slice current page blogs only
-  const currentBlogs = staticBlogs.slice((currentPage - 1) * blogsPerPage, currentPage * blogsPerPage);
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await api.get('/api/public/getblogs');
+        if (res.data.success) {
+          setBlogs(res.data.allBlogs);
+        }
+      } catch (err) {
+        toast.error('Failed to fetch blogs');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const totalPages = Math.ceil(blogs.length / blogsPerPage);
+  const currentBlogs = blogs.slice((currentPage - 1) * blogsPerPage, currentPage * blogsPerPage);
 
   const goToPage = (pageNum: number) => setCurrentPage(pageNum);
-  const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
-  const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
+  const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const handlePrev = () => currentPage > 1 && setCurrentPage(currentPage - 1);
 
-  // Leaderboard sorted by totalBlogs
+  // Leaderboard
   const sortedLeaderboard = [...leaderboardData].sort((a, b) => b.totalBlogs - a.totalBlogs);
   const topLeaderboard = sortedLeaderboard.slice(0, 8);
 
@@ -137,42 +141,50 @@ export const BlogPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Side - Blog Cards */}
               <div className="lg:col-span-2 space-y-6">
-                {currentBlogs.map((blog) => (
-                  <BlogCard key={blog.id} blog={blog} />
-                ))}
+                {loading ? (
+                  <div className="flex justify-center py-10">
+                    <Loader2 className="h-10 w-10 animate-spin text-gray-600 dark:text-gray-300" />
+                  </div>
+                ) : currentBlogs.length === 0 ? (
+                  <p className="text-center text-white">No blogs found.</p>
+                ) : (
+                  currentBlogs.map((blog) => <BlogCard key={blog._id} blog={blog} />)
+                )}
 
                 {/* Pagination Buttons */}
-                <div className="flex justify-center items-center gap-3 mt-8">
-                  <button
-                    onClick={handlePrev}
-                    disabled={currentPage === 1}
-                    className="join-pcc-btn disabled:opacity-40 dark:text-white"
-                  >
-                    Prev
-                  </button>
-
-                  {[...Array(totalPages)].map((_, i) => (
+                {currentBlogs.length > 0 && (
+                  <div className="flex justify-center items-center gap-3 mt-8">
                     <button
-                      key={i}
-                      onClick={() => goToPage(i + 1)}
-                      className={`px-4 py-2 rounded-lg border ${
-                        currentPage === i + 1
-                          ? 'bg-green-600 text-white border-green-600'
-                          : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-green-100 dark:hover:bg-gray-600'
-                      } transition`}
+                      onClick={handlePrev}
+                      disabled={currentPage === 1}
+                      className="join-pcc-btn disabled:opacity-40 dark:text-white"
                     >
-                      {i + 1}
+                      Prev
                     </button>
-                  ))}
 
-                  <button
-                    onClick={handleNext}
-                    disabled={currentPage === totalPages}
-                    className="disabled:opacity-40 join-pcc-btn dark:text-white"
-                  >
-                    Next
-                  </button>
-                </div>
+                    {[...Array(totalPages)].map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => goToPage(i + 1)}
+                        className={`px-4 py-2 rounded-lg border ${
+                          currentPage === i + 1
+                            ? 'bg-green-600 text-white border-green-600'
+                            : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-green-100 dark:hover:bg-gray-600'
+                        } transition`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={handleNext}
+                      disabled={currentPage === totalPages}
+                      className="disabled:opacity-40 join-pcc-btn dark:text-white"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Right Side - Leaderboard */}
@@ -213,6 +225,7 @@ export const BlogPage = () => {
         </section>
       </div>
       <Footer />
+      <Toaster richColors />
     </>
   );
 };
