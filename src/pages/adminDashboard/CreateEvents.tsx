@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 import { Loader2, ChevronDownIcon } from 'lucide-react';
 import api from '@/Services/api';
 import JoditEditor from 'jodit-react';
@@ -282,6 +283,7 @@ const CreateEvents = () => {
           </div>
         </form>
       </Card>
+      <Toaster richColors />
     </div>
   );
 };

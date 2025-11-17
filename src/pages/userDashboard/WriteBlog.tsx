@@ -14,54 +14,84 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 import { Loader2 } from 'lucide-react';
 import JoditEditor from 'jodit-react';
+import api from '@/Services/api';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/Redux/Store';
+
+interface UserType {
+  userId: string;
+}
 
 const WriteBlog: React.FC = () => {
   const navigate = useNavigate();
   const editor = useRef(null);
 
+  const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
+  const userId = user?.userId;
+
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
-  const [banner, setBanner] = useState<File | null>(null);
-  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Handle banner upload & preview
   const handleBanner = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setBanner(file);
+      setThumbnail(file);
 
       const reader = new FileReader();
-      reader.onloadend = () => setBannerPreview(reader.result as string);
+      reader.onloadend = () => setThumbnailPreview(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
-  const createBlogHandler = () => {
-    if (!title || !category || !description || !banner) {
+  const createBlogHandler = async () => {
+    if (!title || !category || !description || !thumbnail) {
       toast.error('Please fill all fields');
+      return;
+    }
+
+    if (!userId) {
+      toast.error('User not logged in');
       return;
     }
 
     setLoading(true);
 
-    setTimeout(() => {
-      toast.success('Blog created successfully (static mode)');
+    try {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('category', category);
+      formData.append('description', description);
+      formData.append('thumbnail', thumbnail);
+
+      const res = await api.post(`/api/student/writeblog/${userId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
+      });
+
+      if (res.data.success === true) {
+        toast.success('Blog created successfully!');
+        setTitle('');
+        setCategory('');
+        setDescription('');
+        setThumbnail(null);
+        setThumbnailPreview(null);
+        navigate('/user-dashboard/your-blog');
+      } else {
+        toast.error(res.data.message || 'Failed to create blog');
+      }
+    } catch (err) {
+      toast.error('Something went wrong!');
+    } finally {
       setLoading(false);
-
-      // Reset form
-      setTitle('');
-      setCategory('');
-      setDescription('');
-      setBanner(null);
-      setBannerPreview(null);
-
-      // Redirect to blog list or blog view
-      navigate('/user-dashboard/blogs');
-    }, 1000); // simulate API call
+    }
   };
 
   return (
@@ -102,7 +132,7 @@ const WriteBlog: React.FC = () => {
                   <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
                   <SelectItem value="Blogging">Blogging</SelectItem>
                   <SelectItem value="Photography">Photography</SelectItem>
-                  <SelectItem value="Cooking">Artificial Intelligence</SelectItem>
+                  <SelectItem value="AI">Artificial Intelligence</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -112,9 +142,9 @@ const WriteBlog: React.FC = () => {
           <div className="space-y-2">
             <Label>Banner</Label>
             <Input type="file" accept="image/*" onChange={handleBanner} />
-            {bannerPreview && (
+            {thumbnailPreview && (
               <img
-                src={bannerPreview}
+                src={thumbnailPreview}
                 alt="Banner Preview"
                 className="mt-2 w-full h-auto max-h-56 object-cover rounded-lg border"
               />
@@ -124,7 +154,13 @@ const WriteBlog: React.FC = () => {
           {/* Description */}
           <div className="space-y-2">
             <Label>Description</Label>
-            <JoditEditor ref={editor} value={description} onChange={setDescription} config={{ height: 300 }} />
+            <JoditEditor
+              key={description} // this ensures editor updates when you reset description
+              ref={editor}
+              value={description}
+              onBlur={(newContent) => setDescription(newContent)}
+              config={{ height: 300 }}
+            />
           </div>
 
           {/* Submit */}
@@ -140,6 +176,7 @@ const WriteBlog: React.FC = () => {
           </div>
         </div>
       </Card>
+      <Toaster richColors />
     </div>
   );
 };
