@@ -208,7 +208,11 @@ const UpdateEvent = () => {
             <Label>Banner</Label>
             <Input type="file" accept="image/*" onChange={handleBanner} />
             {bannerPreview && (
-              <img src={bannerPreview} alt="Banner Preview" className="mt-2 max-h-40 object-cover rounded" />
+              <img
+                src={bannerPreview}
+                alt="Banner Preview"
+                className="mt-2 w-full h-auto max-h-56 object-cover rounded-lg border"
+              />
             )}
           </div>
 
