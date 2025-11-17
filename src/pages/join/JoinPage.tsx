@@ -168,7 +168,20 @@ export const JoinPage = () => {
                         <FormItem>
                           <FormLabel>Full Name *</FormLabel>
                           <FormControl>
-                            <Input placeholder="Your Name" {...field} />
+                            <Input
+                              placeholder="Your Name"
+                              {...field}
+                              onChange={(e) => {
+                                const cleanValue = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+
+                                const formatted = cleanValue
+                                  .split(' ')
+                                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                                  .join(' ');
+
+                                field.onChange(formatted);
+                              }}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -184,15 +197,20 @@ export const JoinPage = () => {
                           <FormLabel>University ID *</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="CSE 123456"
+                              placeholder="e.g. CSE 02807555"
                               {...field}
                               onFocus={handleIdFocus}
                               onChange={(e) => {
                                 let val = e.target.value;
+
+                                // Ensure it starts with 'CSE '
                                 if (!val.startsWith('CSE ')) {
                                   val = 'CSE ' + val.replace(/^CSE\s*/, '');
                                 }
-                                field.onChange(val);
+
+                                const parts = val.split('CSE ');
+                                const numbersOnly = parts[1].replace(/\D/g, '');
+                                field.onChange('CSE ' + numbersOnly);
                               }}
                             />
                           </FormControl>
@@ -209,7 +227,15 @@ export const JoinPage = () => {
                         <FormItem>
                           <FormLabel>Batch *</FormLabel>
                           <FormControl>
-                            <Input maxLength={2} placeholder="e.g. 28" {...field} />
+                            <Input
+                              maxLength={2}
+                              placeholder="e.g. 28"
+                              {...field}
+                              onChange={(e) => {
+                                const numbersOnly = e.target.value.replace(/\D/g, '');
+                                field.onChange(numbersOnly.slice(0, 2));
+                              }}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -224,7 +250,15 @@ export const JoinPage = () => {
                         <FormItem>
                           <FormLabel>Section *</FormLabel>
                           <FormControl>
-                            <Input maxLength={1} placeholder="A" {...field} />
+                            <Input
+                              maxLength={1}
+                              placeholder="A"
+                              {...field}
+                              onChange={(e) => {
+                                const lettersOnly = e.target.value.replace(/[^a-zA-Z]/g, '');
+                                field.onChange(lettersOnly.slice(0, 1).toUpperCase());
+                              }}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -288,7 +322,14 @@ export const JoinPage = () => {
                         <FormItem>
                           <FormLabel>Email *</FormLabel>
                           <FormControl>
-                            <Input placeholder="youremail@gmail.com" {...field} />
+                            <Input
+                              placeholder="youremail@gmail.com"
+                              {...field}
+                              onChange={(e) => {
+                                const cleanValue = e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '');
+                                field.onChange(cleanValue);
+                              }}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -305,10 +346,13 @@ export const JoinPage = () => {
                           <FormControl>
                             <Input
                               type="text"
-                              inputMode="numeric"
-                              pattern="[0-9]*"
                               placeholder="01XXXXXXXXX"
+                              maxLength={11}
                               {...field}
+                              onChange={(e) => {
+                                const onlyNumbers = e.target.value.replace(/[^0-9]/g, '').slice(0, 11);
+                                field.onChange(onlyNumbers);
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -371,6 +415,7 @@ export const JoinPage = () => {
                     <FormField
                       control={form.control}
                       name="agreeTerms"
+                      rules={{ required: 'You must agree to the PCIU Monthly Fee Policy' }}
                       render={({ field }) => (
                         <FormItem className="md:col-span-2">
                           <div className="flex items-start gap-2">

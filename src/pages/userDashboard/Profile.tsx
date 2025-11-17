@@ -63,7 +63,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="pt-24 md:pt-32 md:pr-20 md:pl-[320px] min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-950 dark:to-black transition-colors">
+    <div className="pb-20 pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen sm:px-6 md:px-10">
       <div className="flex flex-col items-center px-4 sm:px-6 md:w-[320px] mx-auto">
         {/* Avatar */}
         <div className="relative group w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 mb-5">

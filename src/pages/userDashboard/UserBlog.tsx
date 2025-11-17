@@ -61,7 +61,7 @@ const UserBlog: React.FC = () => {
   };
 
   return (
-    <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="pb-20 pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen sm:px-6 md:px-10">
       <div className="max-w-6xl mx-auto mt-8 font-grotesk">
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Your Blogs</h1>
@@ -117,13 +117,13 @@ const UserBlog: React.FC = () => {
                               className="font-grotesk"
                               onClick={() => navigate(`/dashboard/write-blog/${item._id}`)}
                             >
-                              <Edit className="mr-2" /> Edit
+                              <Edit className="mr-2 size-4" /> Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className="text-red-500 font-grotesk"
                               onClick={() => deleteBlog(item._id)}
                             >
-                              <Trash2 className="mr-2" /> Delete
+                              <Trash2 className="mr-2 size-4" /> Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

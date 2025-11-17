@@ -2,6 +2,7 @@ import { Card } from '@/components/ui/card';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 type Due = {
   _id: string;
@@ -16,19 +17,27 @@ const MakePayment = () => {
     { _id: '2', month: 'November 2025', amount: 40, status: 'Pending' },
     { _id: '3', month: 'December 2025', amount: 40, status: 'Pending' },
   ]);
+  const [loading, setLoading] = useState(false);
 
   const pendingDues = dues.filter((d) => d.status === 'Pending');
   const totalDue: number = pendingDues.reduce((sum, d) => sum + d.amount, 0);
 
   const payAllDues = () => {
     if (pendingDues.length === 0) return;
-    const updatedDues: Due[] = dues.map((d) => ({ ...d, status: 'Paid' }));
-    setDues(updatedDues);
-    toast.success('All pending dues have been paid (static mode)');
+
+    setLoading(true);
+
+    // Simulate API call delay
+    setTimeout(() => {
+      const updatedDues: Due[] = dues.map((d) => ({ ...d, status: 'Paid' }));
+      setDues(updatedDues);
+      setLoading(false);
+      toast.success('All pending dues have been paid (static mode)');
+    }, 1000);
   };
 
   return (
-    <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="pb-20 pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen sm:px-6 md:px-10">
       <div className="max-w-3xl mx-auto mt-8 font-grotesk">
         <Card className="w-full p-8 space-y-6 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl text-center">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Club Fees</h1>
@@ -42,11 +51,8 @@ const MakePayment = () => {
 
               <div className="text-4xl font-bold text-green-600 dark:text-green-400 my-4">TK. {totalDue}</div>
 
-              <Button
-                onClick={payAllDues}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full text-lg font-medium transition-all"
-              >
-                Pay Now
+              <Button onClick={payAllDues} className="join-pcc-btn" disabled={loading}>
+                {loading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Pay Now'}
               </Button>
             </>
           ) : (

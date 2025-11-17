@@ -8,7 +8,7 @@ type UserType = {
   id: number;
   name: string;
   totalBlogs: number;
-  totalLikes: number;
+  totalStars: number;
   avatar: string;
 };
 
@@ -18,91 +18,91 @@ const leaderboardData: UserType[] = [
     id: 1,
     name: 'Jarin Tasnin Anika',
     totalBlogs: 15,
-    totalLikes: 230,
+    totalStars: 230,
     avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
   },
   {
     id: 2,
     name: 'Suprio Das',
     totalBlogs: 12,
-    totalLikes: 180,
+    totalStars: 180,
     avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
   },
   {
     id: 3,
     name: 'Arif Hossain',
     totalBlogs: 10,
-    totalLikes: 140,
+    totalStars: 140,
     avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
   },
   {
     id: 4,
     name: 'Sabrina Khan',
     totalBlogs: 9,
-    totalLikes: 120,
+    totalStars: 120,
     avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
   },
   {
     id: 5,
     name: 'Rafiq Ahmed',
     totalBlogs: 8,
-    totalLikes: 110,
+    totalStars: 110,
     avatar: 'https://randomuser.me/api/portraits/men/50.jpg',
   },
   {
     id: 6,
     name: 'Tania Rahman',
     totalBlogs: 7,
-    totalLikes: 95,
+    totalStars: 95,
     avatar: 'https://randomuser.me/api/portraits/women/21.jpg',
   },
   {
     id: 7,
     name: 'Imran Hossain',
     totalBlogs: 6,
-    totalLikes: 85,
+    totalStars: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
   {
     id: 8,
     name: 'Imran Hossain',
     totalBlogs: 6,
-    totalLikes: 85,
+    totalStars: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
   {
     id: 9,
     name: 'Imran Hossain',
     totalBlogs: 6,
-    totalLikes: 85,
+    totalStars: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
   {
     id: 10,
     name: 'Imran Hossain',
     totalBlogs: 6,
-    totalLikes: 85,
+    totalStars: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
   {
     id: 11,
     name: 'Imran Hossain',
     totalBlogs: 6,
-    totalLikes: 85,
+    totalStars: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
   {
     id: 11,
     name: 'Imran Hossain',
     totalBlogs: 6,
-    totalLikes: 85,
+    totalStars: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
   {
     id: 12,
     name: 'Imran Hossain',
     totalBlogs: 6,
-    totalLikes: 85,
+    totalStars: 85,
     avatar: 'https://randomuser.me/api/portraits/men/60.jpg',
   },
 ];
@@ -141,12 +141,12 @@ export const FullLeaderboard = () => {
                 </div>
                 <span className="mt-1 font-bold text-gray-800 dark:text-gray-100 text-base">2</span>
                 <Link to={`/profile/${top3[1].id}`}>
-                  <p className="text-lg font-semibold font-garamond dark:text-gray-300 mt-1 hover:underline">
+                  <p className="text-sm md:text-lg font-semibold font-garamond dark:text-gray-300 mt-1 hover:underline">
                     {top3[1].name}
                   </p>
                 </Link>
-                <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">Blogs: {top3[1].totalBlogs}</p>
-                <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">Likes: {top3[1].totalLikes}</p>
+                <p className="text-xs md:text-sm text-gray-800 dark:text-gray-300 mt-1">Blogs: {top3[1].totalBlogs}</p>
+                <p className="text-xs md:text-sm text-gray-800 dark:text-gray-300 mt-1">Stars: {top3[1].totalStars}</p>
               </div>
             )}
 
@@ -159,12 +159,12 @@ export const FullLeaderboard = () => {
                 </div>
                 <span className="mt-1 font-bold text-gray-800 dark:text-gray-100 text-lg">1</span>
                 <Link to={`/profile/${top3[0].id}`}>
-                  <p className="text-lg font-semibold font-garamond dark:text-gray-300 mt-1 hover:underline">
+                  <p className="text-sm md:text-lg font-semibold font-garamond dark:text-gray-300 mt-1 hover:underline">
                     {top3[0].name}
                   </p>
                 </Link>
-                <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">Blogs: {top3[0].totalBlogs}</p>
-                <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">Likes: {top3[0].totalLikes}</p>
+                <p className="text-xs md:text-sm text-gray-800 dark:text-gray-300 mt-1">Blogs: {top3[0].totalBlogs}</p>
+                <p className="text-xs md:text-sm text-gray-800 dark:text-gray-300 mt-1">Stars: {top3[0].totalStars}</p>
               </div>
             )}
 
@@ -179,12 +179,12 @@ export const FullLeaderboard = () => {
                 <span className="mt-1 font-bold text-gray-800 dark:text-gray-100 text-base">3</span>
                 <Link to={`/profile/${top3[2].id}`}>
                   {' '}
-                  <p className="text-lg font-semibold font-garamond dark:text-gray-300 mt-1 hover:underline">
+                  <p className="text-sm md:text-lg font-semibold font-garamond dark:text-gray-300 mt-1 hover:underline">
                     {top3[2].name}
                   </p>
                 </Link>
-                <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">Blogs: {top3[2].totalBlogs}</p>
-                <p className="text-sm text-gray-800 dark:text-gray-300 mt-1">Likes: {top3[2].totalLikes}</p>
+                <p className="text-xs md:text-sm text-gray-800 dark:text-gray-300 mt-1">Blogs: {top3[2].totalBlogs}</p>
+                <p className="text-xs md:text-sm text-gray-800 dark:text-gray-300 mt-1">Stars: {top3[2].totalStars}</p>
               </div>
             )}
           </div>
@@ -218,7 +218,7 @@ export const FullLeaderboard = () => {
                     </p>
                   </Link>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {user.totalBlogs} blogs • {user.totalLikes} likes
+                    {user.totalBlogs} blogs • {user.totalStars} stars
                   </p>
                 </div>
               </div>
