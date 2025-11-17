@@ -5,8 +5,8 @@ import { FaCalendarAlt, FaClock, FaMapMarkerAlt } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import DOMPurify from 'dompurify';
 import { Loader2 } from 'lucide-react';
-import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 
 interface UpcomingEvent {
   id: string;
@@ -17,6 +17,7 @@ interface UpcomingEvent {
   location: string;
   description: string;
   banner: string;
+  registered: string[];
 }
 
 interface UserType {
@@ -50,13 +51,12 @@ export const UpcomingEvents = () => {
             time: event.time,
             location: event.location,
             description: event.description,
+            registered: event.registered, // ⬅ added
           };
         });
         setUpcomingEvents(events);
-        setLoading(false);
-      } else {
-        setLoading(false);
       }
+      setLoading(false);
     };
     fetchEvents();
   }, []);
@@ -67,18 +67,25 @@ export const UpcomingEvents = () => {
     try {
       const res = await api.post(`/api/student/registerevent/${id}`, { userId });
       if (res.data.success === true) {
-        toast.success(`Event registered successfully`);
+        toast.success('Event registered successfully');
+
+        setSelectedEvent((prev) => (prev ? { ...prev, registered: [...prev.registered, userId] } : prev));
+
+        setUpcomingEvents((prev) =>
+          prev.map((e) => (e.id === id ? { ...e, registered: [...e.registered, userId] } : e)),
+        );
       }
     } catch (error) {
-      toast.error(`Event registration is not completed`);
+      toast.error('Event registration failed');
     } finally {
       setRegisterLoading(false);
     }
   };
 
+  const alreadyRegistered = selectedEvent?.registered?.includes(userId ?? '');
+
   return (
     <section id="upcoming-events" className="w-[95%] mx-auto mb-24">
-      {/* Heading */}
       <div className="text-center mt-16 mb-10">
         <p className="text-green-500 uppercase tracking-wide mb-2 text-sm md:text-base">— Upcoming Events —</p>
         <h2 className="text-2xl md:text-4xl font-bold text-gray-800 dark:text-white">Exciting Events Coming Soon</h2>
@@ -87,8 +94,6 @@ export const UpcomingEvents = () => {
         </p>
       </div>
 
-      {/* Event Cards */}
-      {/* Event Cards */}
       <div className="bg-green-50 dark:bg-gray-800 py-10 md:py-12 rounded-xl">
         <div className="w-[95%] md:w-[90%] mx-auto flex flex-col gap-6">
           {loading ? (
@@ -103,7 +108,6 @@ export const UpcomingEvents = () => {
                 key={event.id}
                 className="flex flex-col md:flex-row md:items-center bg-white dark:bg-gray-700 shadow-md rounded-lg p-5 md:p-6 hover:border-l-4 hover:border-green-500 transition-all duration-300"
               >
-                {/* Date */}
                 <div className="flex items-center justify-center md:justify-start gap-3 mb-4 md:mb-0 md:pr-6">
                   <p className="text-4xl md:text-5xl font-bold text-green-600 dark:text-green-400 leading-none">
                     {event.date}
@@ -116,7 +120,6 @@ export const UpcomingEvents = () => {
 
                 <div className="hidden md:block w-[1px] bg-gray-300 h-16 mx-6"></div>
 
-                {/* Content */}
                 <div className="flex-1 text-center md:text-left">
                   <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-white">{event.title}</h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 flex justify-center md:justify-start items-center gap-2 mt-1">
@@ -124,7 +127,6 @@ export const UpcomingEvents = () => {
                   </p>
                 </div>
 
-                {/* Read More Button */}
                 <div className="mt-4 md:mt-0 flex justify-center md:justify-end">
                   <button onClick={() => setSelectedEvent(event)} className="join-pcc-btn px-6 py-2">
                     Read More
@@ -147,19 +149,16 @@ export const UpcomingEvents = () => {
               ✕
             </button>
 
-            {/* Image */}
             <img
               src={selectedEvent.banner}
               alt={selectedEvent.title}
               className="w-full h-52 md:h-64 object-cover rounded-md mb-4"
             />
 
-            {/* Title */}
             <h3 className="text-xl md:text-2xl font-bold text-green-600 dark:text-green-400 mb-3">
               {selectedEvent.title}
             </h3>
 
-            {/* Event Info */}
             <p className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-300 mb-4">
               <span className="flex items-center gap-1">
                 <FaCalendarAlt /> {selectedEvent.date} {selectedEvent.month}
@@ -179,19 +178,21 @@ export const UpcomingEvents = () => {
               }}
             ></p>
 
-            {/* Register Button */}
             <div className="flex justify-end mt-6">
               <button
-                disabled={!userId || registerLoading}
+                disabled={!userId || registerLoading || alreadyRegistered}
                 onClick={() => RegisterEvent(selectedEvent.id)}
-                className={`join-pcc-btn px-6 py-2 text-sm md:text-base flex items-center gap-2 ${!userId || registerLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`join-pcc-btn px-6 py-2 text-sm md:text-base flex items-center gap-2
+                  ${!userId || registerLoading || alreadyRegistered ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {registerLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
-                ) : userId ? (
-                  'Register Now'
-                ) : (
+                ) : !userId ? (
                   'Login Required'
+                ) : alreadyRegistered ? (
+                  'Already Registered'
+                ) : (
+                  'Register Now'
                 )}
               </button>
             </div>
