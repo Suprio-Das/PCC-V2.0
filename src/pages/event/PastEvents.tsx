@@ -53,7 +53,8 @@ export const PastEvents = () => {
   ];
 
   return (
-    <section id="past-events" className="w-[95%] mx-auto mb-24">
+    <section className="w-[95%] mx-auto mb-24">
+      {/* Heading */}
       <div className="text-center mt-24 mb-12">
         <p className="text-green-500 mb-2 tracking-wider uppercase">— Past Events —</p>
         <h2 className="text-2xl md:text-4xl font-extrabold text-gray-800 dark:text-white mb-3">
@@ -65,26 +66,38 @@ export const PastEvents = () => {
         </p>
       </div>
 
-      <div className="bg-green-50 dark:bg-gray-800 py-12 rounded-xl">
-        <div className="w-[90%] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="bg-green-50 dark:bg-gray-800 py-10 md:py-12 rounded-xl">
+        <div className="w-[95%] md:w-[90%] mx-auto flex flex-col gap-6">
           {pastEvents.map((event) => (
             <div
               key={event.id}
-              className="bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden border border-green-100 dark:border-green-900 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+              className="flex flex-col md:flex-row md:items-center bg-white dark:bg-gray-700 shadow-md rounded-lg p-5 md:p-6 hover:border-l-4 hover:border-green-500 transition-all duration-300"
             >
-              <img src={event.image} alt={event.title} className="w-full h-48 object-cover" />
-              <div className="p-6">
-                <div className="flex items-center gap-3 mb-3 text-green-600 dark:text-green-400">
-                  <FaCalendarAlt />
-                  <span className="text-sm font-semibold">
-                    {event.date} {event.month} • {event.time}
-                  </span>
+              {/* Date Section */}
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-4 md:mb-0 md:pr-6">
+                <p className="text-4xl md:text-5xl font-bold text-green-600 dark:text-green-400 leading-none">
+                  {event.date}
+                </p>
+                <div>
+                  <p className="text-sm text-gray-500 dark:text-gray-300">{event.month}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-300">{event.time}</p>
                 </div>
-                <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-white mb-2">{event.title}</h3>
-                <p className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300 mb-4">
+              </div>
+
+              {/* Divider */}
+              <div className="hidden md:block w-[1px] bg-gray-300 h-16 mx-6"></div>
+
+              {/* Content */}
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-white">{event.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 flex justify-center md:justify-start items-center gap-2 mt-1">
                   <FaMapMarkerAlt /> {event.location}
                 </p>
-                <button onClick={() => setSelectedEvent(event)} className="join-pcc-btn">
+              </div>
+
+              {/* Button */}
+              <div className="mt-4 md:mt-0 flex justify-center md:justify-end">
+                <button onClick={() => setSelectedEvent(event)} className="join-pcc-btn px-6 py-2 text-sm md:text-base">
                   Read More
                 </button>
               </div>
@@ -93,22 +106,30 @@ export const PastEvents = () => {
         </div>
       </div>
 
-      {/* MODAL  */}
+      {/* Modal */}
       {selectedEvent && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 px-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-[90%] md:w-[600px] p-6 relative overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg md:max-w-2xl p-6 relative">
             <button
               onClick={() => setSelectedEvent(null)}
-              className="absolute top-3 right-3 text-gray-600 dark:text-gray-300 text-xl hover:text-green-500"
+              className="absolute top-3 right-3 text-gray-700 dark:text-gray-300 hover:text-black"
             >
-              ✖
+              ✕
             </button>
+
+            {/* Image */}
             <img
               src={selectedEvent.image}
               alt={selectedEvent.title}
-              className="w-full h-56 object-cover rounded-md mb-4"
+              className="w-full h-52 md:h-64 object-cover rounded-md mb-4"
             />
-            <h3 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-3">{selectedEvent.title}</h3>
+
+            {/* Title */}
+            <h3 className="text-xl md:text-2xl font-bold text-green-600 dark:text-green-400 mb-3">
+              {selectedEvent.title}
+            </h3>
+
+            {/* Details */}
             <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-300 mb-4">
               <span className="flex items-center gap-1">
                 <FaCalendarAlt /> {selectedEvent.date} {selectedEvent.month}
@@ -120,12 +141,11 @@ export const PastEvents = () => {
                 <FaMapMarkerAlt /> {selectedEvent.location}
               </span>
             </div>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{selectedEvent.description}</p>
-            <div className="flex justify-end mt-6">
-              <button onClick={() => setSelectedEvent(null)} className="join-pcc-btn">
-                Close
-              </button>
-            </div>
+
+            {/* Description */}
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm md:text-base">
+              {selectedEvent.description}
+            </p>
           </div>
         </div>
       )}
