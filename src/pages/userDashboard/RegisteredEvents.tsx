@@ -9,8 +9,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Edit, Loader2, Trash2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import api from '@/Services/api';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/Redux/Store';
 
 type Event = {
   _id: string;
@@ -20,39 +23,33 @@ type Event = {
   category: string;
 };
 
+interface UserType {
+  userId: string;
+}
+
 const RegisteredEvents = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Simulate API call
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(false);
+  const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
+  const userId = user?.userId;
+
   useEffect(() => {
-    setTimeout(() => {
-      setEvents([
-        {
-          _id: '1',
-          title: 'React Workshop',
-          date: '2025-11-05T10:00:00.000Z',
-          location: 'Chittagong',
-          category: 'Web Development',
-        },
-        {
-          _id: '2',
-          title: 'Digital Marketing Seminar',
-          date: '2025-11-12T14:00:00.000Z',
-          location: 'Chittagong',
-          category: 'Marketing',
-        },
-        {
-          _id: '3',
-          title: 'Photography Meetup',
-          date: '2025-11-20T16:00:00.000Z',
-          location: 'Chittagong',
-          category: 'Photography',
-        },
-      ]);
-      setLoading(false);
-    }, 1000);
+    const fetchRegisteredEvents = async () => {
+      setLoading(true);
+      const res = await api.get(`/api/student/getregisteredevents/${userId}`);
+      if (res.data.success === true) {
+        setEvents(res.data.events);
+        setLoading(false);
+      } else {
+        setEvents([]);
+        setLoading(false);
+      }
+    };
+    fetchRegisteredEvents();
   }, []);
 
   const formatDate = (dateStr: string) => {
@@ -71,7 +68,7 @@ const RegisteredEvents = () => {
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Registered Events</h1>
 
-          {loading ? (
+          {loading === true ? (
             <div className="py-10 flex justify-center">
               <Loader2 className="h-8 w-8 animate-spin text-gray-600 dark:text-gray-300" />
             </div>

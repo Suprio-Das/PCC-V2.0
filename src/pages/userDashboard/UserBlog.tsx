@@ -40,6 +40,9 @@ const UserBlog: React.FC = () => {
       if (res.data.blogs.length !== 0) {
         setBlogs(res.data.blogs);
         setLoading(false);
+      } else {
+        setBlogs([]);
+        setLoading(false);
       }
     };
     fetchPublishedBlogs();
