@@ -5,9 +5,11 @@ import { FaCalendarAlt, FaClock, FaMapMarkerAlt } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import DOMPurify from 'dompurify';
 import { Loader2 } from 'lucide-react';
+import { Toaster } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 
 interface UpcomingEvent {
-  id: number;
+  id: string;
   date: string;
   month: string;
   time: string;
@@ -26,6 +28,7 @@ export const UpcomingEvents = () => {
 
   const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[]>([]);
   const [loading, setLoading] = useState(false);
+  const [registerLoading, setRegisterLoading] = useState(false);
 
   const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
   const userId = user?.userId;
@@ -57,6 +60,21 @@ export const UpcomingEvents = () => {
     };
     fetchEvents();
   }, []);
+
+  const RegisterEvent = async (id: string) => {
+    if (!userId) return;
+    setRegisterLoading(true);
+    try {
+      const res = await api.post(`/api/student/registerevent/${id}`, { userId });
+      if (res.data.success === true) {
+        toast.success(`Event registered successfully`);
+      }
+    } catch (error) {
+      toast.error(`Event registration is not completed`);
+    } finally {
+      setRegisterLoading(false);
+    }
+  };
 
   return (
     <section id="upcoming-events" className="w-[95%] mx-auto mb-24">
@@ -164,17 +182,23 @@ export const UpcomingEvents = () => {
             {/* Register Button */}
             <div className="flex justify-end mt-6">
               <button
-                disabled={!userId}
-                className={`join-pcc-btn px-6 py-2 text-sm md:text-base ${
-                  !userId ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                disabled={!userId || registerLoading}
+                onClick={() => RegisterEvent(selectedEvent.id)}
+                className={`join-pcc-btn px-6 py-2 text-sm md:text-base flex items-center gap-2 ${!userId || registerLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                {userId ? 'Register Now' : 'Login Required'}
+                {registerLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : userId ? (
+                  'Register Now'
+                ) : (
+                  'Login Required'
+                )}
               </button>
             </div>
           </div>
         </div>
       )}
+      <Toaster richColors />
     </section>
   );
 };
