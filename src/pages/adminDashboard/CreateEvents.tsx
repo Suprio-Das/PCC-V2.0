@@ -28,7 +28,7 @@ const CreateEvents = () => {
   const [category, setCategory] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-  const [locationName, setLocationName] = useState('');
+  const [location, setLocation] = useState('');
   const [banner, setBanner] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [description, setDescription] = useState('');
@@ -49,7 +49,7 @@ const CreateEvents = () => {
   };
 
   const createEventHandler = async () => {
-    if (!title || !category || !date || !time || !locationName || !description || !banner) {
+    if (!title || !category || !date || !time || !location || !description || !banner) {
       toast.error('Please fill all fields');
       return;
     }
@@ -61,24 +61,24 @@ const CreateEvents = () => {
       formData.append('category', category);
       formData.append('date', date);
       formData.append('time', time);
-      formData.append('location', locationName);
+      formData.append('location', location);
       formData.append('description', description);
       formData.append('banner', banner);
 
       const response = await api.post('/api/admin/createevent', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
       });
 
       if (response?.data?.success === true) {
         toast.success('Event created successfully!');
         navigate('/admin-dashboard/events');
 
-        // Reset form
         setTitle('');
         setCategory('');
         setDate('');
         setTime('');
-        setLocationName('');
+        setLocation('');
         setDescription('');
         setBanner(null);
         setBannerPreview(null);
@@ -105,7 +105,13 @@ const CreateEvents = () => {
           <p className="text-gray-500 dark:text-gray-400 text-sm pt-1">Add all event details to create a new event.</p>
         </div>
 
-        <div className="space-y-4 font-garamond">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            createEventHandler();
+          }}
+          className="space-y-4 font-garamond"
+        >
           {/* Title */}
           <div className="space-y-2">
             <Label>Title</Label>
@@ -193,11 +199,7 @@ const CreateEvents = () => {
           {/* Location */}
           <div className="space-y-2">
             <Label>Location</Label>
-            <Input
-              value={locationName}
-              onChange={(e) => setLocationName(e.target.value)}
-              placeholder="Event location"
-            />
+            <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Event location" />
           </div>
 
           {/* Banner */}
@@ -216,21 +218,21 @@ const CreateEvents = () => {
           {/* Description */}
           <div className="space-y-2">
             <Label>Description</Label>
-            <JoditEditor ref={editor} value={description} onChange={setDescription} config={{ height: 300 }} />
+            <JoditEditor
+              ref={editor}
+              value={description}
+              onBlur={(newContent) => setDescription(newContent)}
+              onChange={() => {}}
+            />
           </div>
 
           {/* Submit Button */}
           <div className="flex justify-end">
-            <Button
-              type="button"
-              onClick={createEventHandler}
-              disabled={loading}
-              className="flex items-center gap-2 join-pcc-btn"
-            >
+            <Button type="submit" disabled={loading} className="flex items-center gap-2 join-pcc-btn">
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Event'}
             </Button>
           </div>
-        </div>
+        </form>
       </Card>
     </div>
   );

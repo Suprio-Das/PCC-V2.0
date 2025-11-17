@@ -5,9 +5,12 @@ import { UpcomingEvents } from './UpcomingEvents';
 import { PastEvents } from './PastEvents';
 import JoinEvent from './JoinEvent';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import api from '@/Services/api';
 
 export const EventPage = () => {
-  const targetDate = new Date('2025-11-02T10:00:00').getTime();
+  const [targetDate, setTargetDate] = useState<number | null>(null);
+  const [eventTitle, setEventTitle] = useState<string>('Loading...');
+  const [eventLocation, setEventLocation] = useState<string>('PCIU Campus, Chattogram');
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -16,7 +19,44 @@ export const EventPage = () => {
     seconds: 0,
   });
 
+  // Fetch earliest event from API
   useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await api.get('/api/public/getevents');
+
+        if (response.data.success) {
+          const events = response.data.events;
+
+          // Filter valid upcoming events
+          const validEvents = events.filter((ev: any) => {
+            const d = new Date(ev.date);
+            return !isNaN(d.getTime());
+          });
+
+          validEvents.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+          if (validEvents.length > 0) {
+            const earliest = validEvents[0];
+            setTargetDate(new Date(earliest.date + 'T' + earliest.time).getTime());
+            setEventTitle(earliest.title);
+            setEventLocation(earliest.location);
+          } else {
+            setEventTitle('No Upcoming Events');
+          }
+        }
+      } catch (err) {
+        setEventTitle('Error loading events');
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  // Countdown timer
+  useEffect(() => {
+    if (!targetDate) return;
+
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const diff = targetDate - now;
@@ -53,11 +93,11 @@ export const EventPage = () => {
           <div className="relative z-10 px-4">
             <p className="flex justify-center items-center gap-2 text-white text-sm px-4 py-2 rounded-full mb-4 backdrop-blur-md">
               <FaMapMarkerAlt className="text-green-400" />
-              PCIU Campus, Chattogram
+              {eventLocation}
             </p>
-            <h1 className="text-white font-bold text-3xl md:text-5xl mb-4">
-              3rd Executive Committee Oath Taking Ceremony
-            </h1>
+
+            <h1 className="text-white font-bold text-3xl md:text-5xl mb-4">{eventTitle}</h1>
+
             <p className="text-white/80 max-w-lg mx-auto mb-6">
               Celebrate innovation, culture, and technology in one grand event — featuring speakers, music, and
               interactive sessions!
@@ -86,7 +126,7 @@ export const EventPage = () => {
           </div>
         </section>
 
-        <JoinEvent></JoinEvent>
+        <JoinEvent />
         <UpcomingEvents />
         <PastEvents />
       </div>
