@@ -29,8 +29,6 @@ interface UserType {
 
 const RegisteredEvents = () => {
   const navigate = useNavigate();
-  const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(false);
