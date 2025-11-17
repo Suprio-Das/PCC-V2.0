@@ -77,7 +77,7 @@ function AppRouter() {
           <Route path={RoutePaths.ADVISOR} element={<AdvisorPage />} />
           <Route path={RoutePaths.EXECUTIVE} element={<ExecutivePage />} />
           <Route path={RoutePaths.BLOG} element={<BlogPage />} />
-          <Route path={RoutePaths.BLOGVIEW} element={<BlogView />} />
+          <Route path="/blog-view/:id" element={<BlogView />} />
           <Route path={RoutePaths.FULLLEADERBOARD} element={<FullLeaderboard />} />
           <Route path={RoutePaths.PROFILE} element={<ProfilePage />} />
           <Route path={RoutePaths.EVENTS} element={<EventPage />} />

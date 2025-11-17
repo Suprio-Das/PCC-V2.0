@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export interface Blog {
-  id: string;
+  _id: string;
   title: string;
   name: string;
   author?: string;
@@ -11,8 +11,6 @@ export interface Blog {
 }
 
 export const BlogCard = ({ blog }: { blog: Blog }) => {
-  const navigate = useNavigate();
-
   const formattedDate = new Date(blog.createdAt || '').toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -39,12 +37,12 @@ export const BlogCard = ({ blog }: { blog: Blog }) => {
           </p>
           <p className="text-gray-700 dark:text-gray-200 text-xs line-clamp-2">{previewText}</p>
         </div>
-        <button
-          onClick={() => navigate(`/blogs/${blog.id}`)}
+        <Link
+          to={`/blog-view/${blog._id}`}
           className="text-[#1b9c85] dark:text-green-400 text-sm font-semibold hover:underline self-start"
         >
           Read More
-        </button>
+        </Link>
       </div>
     </div>
   );
