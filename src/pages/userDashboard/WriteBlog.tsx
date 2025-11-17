@@ -41,7 +41,12 @@ const WriteBlog: React.FC = () => {
   };
 
   const createBlogHandler = () => {
-    if (!title || !category || !description || !banner) {
+    const cleanDescription = description
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/g, '')
+      .trim();
+
+    if (!title || !category || !cleanDescription || !banner) {
       toast.error('Please fill all fields');
       return;
     }
@@ -52,16 +57,14 @@ const WriteBlog: React.FC = () => {
       toast.success('Blog created successfully (static mode)');
       setLoading(false);
 
-      // Reset form
       setTitle('');
       setCategory('');
       setDescription('');
       setBanner(null);
       setBannerPreview(null);
 
-      // Redirect to blog list or blog view
       navigate('/user-dashboard/blogs');
-    }, 1000); // simulate API call
+    }, 1000);
   };
 
   return (

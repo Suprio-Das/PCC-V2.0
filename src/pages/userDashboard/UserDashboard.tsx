@@ -2,6 +2,7 @@ import { Navbar } from '@/components/Navbar';
 import Sidebar from '@/components/user-dashboard/Sidebar';
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 export const UserDashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -20,6 +21,7 @@ export const UserDashboard = () => {
         >
           <Outlet />
         </div>
+        <Toaster richColors />
       </div>
     </>
   );
