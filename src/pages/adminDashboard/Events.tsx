@@ -30,7 +30,7 @@ const Events = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await api.get('/api/admin/getevents');
+        const response = await api.get('/api/public/getevents');
         if (response.data.success) {
           const sortedEvents = [...response.data.events].sort(
             (a: Event, b: Event) => new Date(a.date).getTime() - new Date(b.date).getTime(),
