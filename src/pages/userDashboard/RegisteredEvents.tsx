@@ -8,9 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Edit, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { Edit, Loader2, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import api from '@/Services/api';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/Redux/Store';
 
 // Type for static event
 type Event = {
@@ -21,33 +24,32 @@ type Event = {
   category: string;
 };
 
+interface UserType {
+  userId: string;
+}
+
 const RegisteredEvents = () => {
   const navigate = useNavigate();
 
-  // Static events data
-  const [events, setEvents] = useState<Event[]>([
-    {
-      _id: '1',
-      title: 'React Workshop',
-      date: '2025-11-05T10:00:00.000Z',
-      location: 'Chittagong',
-      category: 'Web Development',
-    },
-    {
-      _id: '2',
-      title: 'Digital Marketing Seminar',
-      date: '2025-11-12T14:00:00.000Z',
-      location: 'Chittagong',
-      category: 'Marketing',
-    },
-    {
-      _id: '3',
-      title: 'Photography Meetup',
-      date: '2025-11-20T16:00:00.000Z',
-      location: 'Chittagong',
-      category: 'Photography',
-    },
-  ]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(false);
+  const user = useSelector((state: RootState) => state.Auth.user) as UserType | null;
+  const userId = user?.userId;
+
+  useEffect(() => {
+    const fetchRegisteredEvents = async () => {
+      setLoading(true);
+      const res = await api.get(`/api/student/getregisteredevents/${userId}`);
+      if (res.data.success === true) {
+        setEvents(res.data.events);
+        setLoading(false);
+      } else {
+        setEvents([]);
+        setLoading(false);
+      }
+    };
+    fetchRegisteredEvents();
+  }, []);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -68,7 +70,11 @@ const RegisteredEvents = () => {
         <Card className="w-full p-5 space-y-4 dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow rounded-2xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">Registered Events</h1>
 
-          {events.length === 0 ? (
+          {loading === true ? (
+            <div className="py-10 flex justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-gray-600 dark:text-gray-300" />
+            </div>
+          ) : events.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-center py-10">No events found.</p>
           ) : (
             <div className="overflow-x-auto rounded-lg">
