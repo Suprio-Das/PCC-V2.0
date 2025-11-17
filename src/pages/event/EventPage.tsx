@@ -19,41 +19,47 @@ export const EventPage = () => {
     seconds: 0,
   });
 
-  // Fetch earliest event from API
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await api.get('/api/public/getevents');
+  const getCountdownEvent = async () => {
+    try {
+      const response = await api.get('/api/public/getevents');
 
-        if (response.data.success) {
-          const events = response.data.events;
+      if (response.data.success) {
+        const events = response.data.events;
 
-          // Filter valid upcoming events
-          const validEvents = events.filter((ev: any) => {
-            const d = new Date(ev.date);
-            return !isNaN(d.getTime());
-          });
-
-          validEvents.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-          if (validEvents.length > 0) {
-            const earliest = validEvents[0];
-            setTargetDate(new Date(earliest.date + 'T' + earliest.time).getTime());
-            setEventTitle(earliest.title);
-            setEventLocation(earliest.location);
-          } else {
-            setEventTitle('No Upcoming Events');
-          }
+        const ongoingEvents = events.filter((ev: any) => ev.status === 'ongoing');
+        if (ongoingEvents.length > 0) {
+          const ev = ongoingEvents[0];
+          setTargetDate(new Date(ev.date + 'T' + ev.time).getTime());
+          setEventTitle(ev.title);
+          setEventLocation(ev.location);
+          return;
         }
-      } catch (err) {
-        setEventTitle('Error loading events');
-      }
-    };
 
-    fetchEvents();
+        const upcomingEvents = events
+          .filter((ev: any) => {
+            const d = new Date(ev.date);
+            return ev.status === 'upcoming' && d.getTime() > Date.now();
+          })
+          .sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+        if (upcomingEvents.length > 0) {
+          const earliest = upcomingEvents[0];
+          setTargetDate(new Date(earliest.date + 'T' + earliest.time).getTime());
+          setEventTitle(earliest.title);
+          setEventLocation(earliest.location);
+        } else {
+          setEventTitle('No Upcoming Events');
+        }
+      }
+    } catch (err) {
+      setEventTitle('Error loading events');
+    }
+  };
+
+  useEffect(() => {
+    getCountdownEvent();
   }, []);
 
-  // Countdown timer
   useEffect(() => {
     if (!targetDate) return;
 
@@ -64,6 +70,7 @@ export const EventPage = () => {
       if (diff <= 0) {
         clearInterval(interval);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        getCountdownEvent();
         return;
       }
 
@@ -104,7 +111,7 @@ export const EventPage = () => {
             </p>
           </div>
 
-          {/* Countdown Timer */}
+          {/* Countdown */}
           <div className="absolute -bottom-16 flex flex-wrap justify-center items-center gap-4 sm:gap-6 md:gap-6 font-garamond text-gray-900 dark:text-white px-4">
             {[
               { label: 'Days', value: timeLeft.days },

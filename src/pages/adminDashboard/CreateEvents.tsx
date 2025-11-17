@@ -28,12 +28,21 @@ const CreateEvents = () => {
   const [category, setCategory] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const [endingDate, setEndingDate] = useState('');
+  const [endingTime, setEndingTime] = useState('');
   const [location, setLocation] = useState('');
   const [banner, setBanner] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
-  const [calendarOpen, setCalendarOpen] = useState(false);
+
+  const [startCalendarOpen, setStartCalendarOpen] = useState(false);
+  const [endCalendarOpen, setEndCalendarOpen] = useState(false);
+
+  const getDateObject = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
 
   const handleBanner = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -49,8 +58,16 @@ const CreateEvents = () => {
   };
 
   const createEventHandler = async () => {
-    if (!title || !category || !date || !time || !location || !description || !banner) {
+    if (!title || !category || !date || !time || !endingDate || !endingTime || !location || !description || !banner) {
       toast.error('Please fill all fields');
+      return;
+    }
+
+    const startDT = new Date(`${date} ${time}`);
+    const endDT = new Date(`${endingDate} ${endingTime}`);
+
+    if (endDT < startDT) {
+      toast.error('Ending date & time must be after the starting date & time');
       return;
     }
 
@@ -61,6 +78,8 @@ const CreateEvents = () => {
       formData.append('category', category);
       formData.append('date', date);
       formData.append('time', time);
+      formData.append('endingDate', endingDate);
+      formData.append('endingTime', endingTime);
       formData.append('location', location);
       formData.append('description', description);
       formData.append('banner', banner);
@@ -78,6 +97,8 @@ const CreateEvents = () => {
         setCategory('');
         setDate('');
         setTime('');
+        setEndingDate('');
+        setEndingTime('');
         setLocation('');
         setDescription('');
         setBanner(null);
@@ -90,11 +111,6 @@ const CreateEvents = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const getDateObject = (dateStr: string) => {
-    const [year, month, day] = dateStr.split('-').map(Number);
-    return new Date(year, month - 1, day);
   };
 
   return (
@@ -115,12 +131,7 @@ const CreateEvents = () => {
           {/* Title */}
           <div className="space-y-2">
             <Label>Title</Label>
-            <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Event title"
-              className="w-full"
-            />
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" />
           </div>
 
           {/* Category */}
@@ -144,35 +155,38 @@ const CreateEvents = () => {
             </Select>
           </div>
 
-          {/* Date & Time */}
+          {/* Starting Date & Time */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Date Picker */}
+            {/* Start Date */}
             <div className="flex flex-col gap-3">
-              <Label htmlFor="date-picker" className="px-1">
-                Date
-              </Label>
-              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+              <Label>Date</Label>
+              <Popover open={startCalendarOpen} onOpenChange={setStartCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-full justify-between font-normal">
-                    {date ? getDateObject(date).toLocaleDateString() : 'Select date'}
+                    {date ? getDateObject(date).toLocaleDateString() : 'Select start date'}
                     <ChevronDownIcon />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                <PopoverContent align="start" className="p-0">
                   <Calendar
                     mode="single"
                     selected={date ? getDateObject(date) : undefined}
                     captionLayout="dropdown"
+                    disabled={(day) => day < new Date()}
                     onSelect={(selectedDate) => {
                       if (selectedDate) {
-                        const localDate =
+                        const formatted =
                           selectedDate.getFullYear() +
                           '-' +
                           String(selectedDate.getMonth() + 1).padStart(2, '0') +
                           '-' +
                           String(selectedDate.getDate()).padStart(2, '0');
-                        setDate(localDate);
-                        setCalendarOpen(false);
+                        setDate(formatted);
+
+                        // Auto-set ending date if empty
+                        if (!endingDate) setEndingDate(formatted);
+
+                        setStartCalendarOpen(false);
                       }
                     }}
                   />
@@ -180,19 +194,53 @@ const CreateEvents = () => {
               </Popover>
             </div>
 
-            {/* Time */}
+            {/* Start Time */}
             <div className="flex flex-col gap-3">
-              <Label htmlFor="time-picker" className="px-1">
-                Time
-              </Label>
-              <Input
-                type="time"
-                id="time-picker"
-                step="1"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-              />
+              <Label>Time</Label>
+              <Input type="time" step="1" value={time} onChange={(e) => setTime(e.target.value)} />
+            </div>
+          </div>
+
+          {/* Ending Date & Time */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* End Date */}
+            <div className="flex flex-col gap-3">
+              <Label>Ending Date</Label>
+              <Popover open={endCalendarOpen} onOpenChange={setEndCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-between font-normal">
+                    {endingDate ? getDateObject(endingDate).toLocaleDateString() : 'Select ending date'}
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="p-0">
+                  <Calendar
+                    mode="single"
+                    selected={endingDate ? getDateObject(endingDate) : undefined}
+                    captionLayout="dropdown"
+                    disabled={(day) => day < (date ? getDateObject(date) : new Date())}
+                    onSelect={(selectedDate) => {
+                      if (selectedDate) {
+                        const formatted =
+                          selectedDate.getFullYear() +
+                          '-' +
+                          String(selectedDate.getMonth() + 1).padStart(2, '0') +
+                          '-' +
+                          String(selectedDate.getDate()).padStart(2, '0');
+
+                        setEndingDate(formatted);
+                        setEndCalendarOpen(false);
+                      }
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* End Time */}
+            <div className="flex flex-col gap-3">
+              <Label>Ending Time</Label>
+              <Input type="time" step="1" value={endingTime} onChange={(e) => setEndingTime(e.target.value)} />
             </div>
           </div>
 
@@ -210,7 +258,7 @@ const CreateEvents = () => {
               <img
                 src={bannerPreview}
                 alt="Banner Preview"
-                className="mt-2 w-full h-auto max-h-56 object-cover rounded-lg border"
+                className="mt-2 w-full max-h-56 object-cover rounded-lg border"
               />
             )}
           </div>

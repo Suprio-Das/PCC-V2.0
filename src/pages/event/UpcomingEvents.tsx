@@ -37,27 +37,45 @@ export const UpcomingEvents = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
-      const res = await api.get('/api/public/getevents');
-      if (res.data.success) {
-        const events = res.data.events.map((event: any) => {
-          const eventDate = new Date(event.date);
+      try {
+        const res = await api.get('/api/public/getevents');
+        if (res.data.success) {
           const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-          return {
-            id: event._id,
-            title: event.title,
-            banner: event.banner,
-            date: String(eventDate.getDate()).padStart(2, '0'),
-            month: monthNames[eventDate.getMonth()],
-            time: event.time,
-            location: event.location,
-            description: event.description,
-            registered: event.registered,
-          };
-        });
-        setUpcomingEvents(events);
+
+          // Map and filter events
+          const events = res.data.events
+            .filter((event: any) => event.status === 'ongoing' || event.status === 'upcoming')
+            .map((event: any) => {
+              const eventStart = new Date(`${event.date} ${event.time}`);
+              return {
+                id: event._id,
+                title: event.title,
+                banner: event.banner,
+                date: String(eventStart.getDate()).padStart(2, '0'),
+                month: monthNames[eventStart.getMonth()],
+                time: event.time,
+                location: event.location,
+                description: event.description,
+                registered: event.registered,
+                status: event.status,
+                startDateTime: eventStart.getTime(),
+              };
+            })
+            .sort((a: any, b: any) => {
+              if (a.status === 'ongoing' && b.status !== 'ongoing') return -1;
+              if (b.status === 'ongoing' && a.status !== 'ongoing') return 1;
+              return a.startDateTime - b.startDateTime;
+            });
+
+          setUpcomingEvents(events);
+        }
+      } catch (err) {
+        toast.error('Failed to fetch events');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
+
     fetchEvents();
   }, []);
 
