@@ -49,7 +49,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="pb-10 md:pr-20 pt-20 md:pl-[320px] min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="pb-20 pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen sm:px-6 md:px-10">
       <div className="max-w-3xl mx-auto mt-8 font-grotesk">
         <Card className="w-full p-6 space-y-6 dark:bg-gray-800 shadow-lg rounded-xl">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 text-center">Account Settings</h1>
@@ -89,11 +89,7 @@ const Settings = () => {
             </div>
 
             <div className="flex justify-end">
-              <Button
-                onClick={handleChangePassword}
-                disabled={loading}
-                className="bg-green-500 hover:bg-green-600 text-white"
-              >
+              <Button onClick={handleChangePassword} disabled={loading} className="join-pcc-btn">
                 {loading ? 'Saving...' : 'Change Password'}
               </Button>
             </div>

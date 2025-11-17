@@ -5,7 +5,6 @@
   border-radius: 9999px;
   color: #15803d;
   font-family: 'Garamond', serif;
-  /* font-weight: 600; */
   cursor: pointer;
   overflow: hidden;
   background: transparent;
@@ -17,6 +16,9 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.dark .join-pcc-btn {
+  color: #ffffff !important;
+}
 
 .join-pcc-btn:hover {
   background-color: #16a34a;

@@ -1,7 +1,9 @@
-import { Button } from '@/components/ui/button';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -11,85 +13,86 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-
-// Dummy blog type
-type Blog = {
-  _id: string;
-  title: string;
-  category: string;
-};
+import JoditEditor from 'jodit-react';
 
 const WriteBlog: React.FC = () => {
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const editor = useRef(null);
+
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
-  const [blogs, setBlogs] = useState<Blog[]>([]); // Local blog state for static mode
-  const navigate = useNavigate();
+  const [description, setDescription] = useState('');
+  const [banner, setBanner] = useState<File | null>(null);
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const getSelectedCategory = (value: string) => setCategory(value);
+  // Handle banner upload & preview
+  const handleBanner = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setBanner(file);
 
-  const createBlogHandler = async () => {
-    if (!title || !category) {
+      const reader = new FileReader();
+      reader.onloadend = () => setBannerPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const createBlogHandler = () => {
+    if (!title || !category || !description || !banner) {
       toast.error('Please fill all fields');
       return;
     }
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      const newBlog: Blog = {
-        _id: Date.now().toString(),
-        title,
-        category,
-      };
-
-      setBlogs([...blogs, newBlog]);
-
-      navigate(`/user-dashboard/write-blog/${newBlog._id}`);
+    setTimeout(() => {
       toast.success('Blog created successfully (static mode)');
+      setLoading(false);
 
       // Reset form
       setTitle('');
       setCategory('');
-    } catch (error) {
-      toast.error('Something went wrong!');
-    } finally {
-      setLoading(false);
-    }
+      setDescription('');
+      setBanner(null);
+      setBannerPreview(null);
+
+      // Redirect to blog list or blog view
+      navigate('/user-dashboard/blogs');
+    }, 1000); // simulate API call
   };
 
   return (
-    <div className="p-4 md:pr-20 h-screen md:pl-[320px] pt-40 bg-gray-50 dark:bg-gray-900 font-grotesk">
-      <Card className="max-w-3xl mx-auto p-8 space-y-6 shadow-lg dark:bg-gray-800 rounded-xl">
-        <div className="space-y-2">
-          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100 text-center font-grotesk">
-            Create a New Blog
-          </h2>
-          <p className="text-center text-gray-600 dark:text-gray-300 text-sm">
-            Share your thoughts, tutorials, or stories by creating a new blog.
+    <div className="pb-20 pt-20 bg-gray-50 dark:bg-gray-900 min-h-screen sm:px-6 md:px-10">
+      <Card className="max-w-4xl mx-auto p-6 md:p-8 space-y-8 shadow-lg dark:bg-gray-800 rounded-xl">
+        {/* Heading */}
+        <div className="text-center space-y-2">
+          <h2 className="text-2xl font-extrabold text-gray-900 dark:text-gray-100">Create a New Blog</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            Add all blog details to share your thoughts, tutorials, or stories.
           </p>
         </div>
 
-        <div className="space-y-5">
+        {/* Form */}
+        <div className="space-y-6 font-garamond">
+          {/* Title */}
           <div className="space-y-2">
-            <Label className="text-gray-700 dark:text-gray-300">Title</Label>
+            <Label>Title</Label>
             <Input
-              type="text"
-              placeholder="Enter your blog title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-gray-500 focus:border-gray-500"
+              placeholder="Enter your blog title"
+              className="w-full"
             />
           </div>
 
+          {/* Category */}
           <div className="space-y-2">
-            <Label className="text-gray-700 dark:text-gray-300">Category</Label>
-            <Select onValueChange={getSelectedCategory}>
-              <SelectTrigger className="w-full md:w-72 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-gray-500 focus:border-gray-500">
+            <Label>Category</Label>
+            <Select onValueChange={(val) => setCategory(val)}>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
@@ -99,17 +102,38 @@ const WriteBlog: React.FC = () => {
                   <SelectItem value="Digital Marketing">Digital Marketing</SelectItem>
                   <SelectItem value="Blogging">Blogging</SelectItem>
                   <SelectItem value="Photography">Photography</SelectItem>
-                  <SelectItem value="Cooking">Cooking</SelectItem>
+                  <SelectItem value="Cooking">Artificial Intelligence</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
           </div>
 
+          {/* Banner */}
+          <div className="space-y-2">
+            <Label>Banner</Label>
+            <Input type="file" accept="image/*" onChange={handleBanner} />
+            {bannerPreview && (
+              <img
+                src={bannerPreview}
+                alt="Banner Preview"
+                className="mt-2 w-full h-auto max-h-56 object-cover rounded-lg border"
+              />
+            )}
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <Label>Description</Label>
+            <JoditEditor ref={editor} value={description} onChange={setDescription} config={{ height: 300 }} />
+          </div>
+
+          {/* Submit */}
           <div className="flex justify-end">
             <Button
-              className="flex items-center gap-2 rounded-full btn btn-outline border-[0.5px] border-green-600 bg-[#edf6ee] shadow-none text-black hover:text-white px-6 py-2  hover:opacity-90 transition dark:hover:text-black"
-              disabled={loading}
+              type="button"
               onClick={createBlogHandler}
+              disabled={loading}
+              className="flex items-center gap-2 join-pcc-btn"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create Blog'}
             </Button>
