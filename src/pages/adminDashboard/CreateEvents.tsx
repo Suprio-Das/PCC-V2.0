@@ -196,9 +196,24 @@ const CreateEvents = () => {
             </div>
 
             {/* Start Time */}
-            <div className="flex flex-col gap-3">
+            {/* <div className="flex flex-col gap-3">
               <Label>Time</Label>
               <Input type="time" step="1" value={time} onChange={(e) => setTime(e.target.value)} />
+            </div> */}
+            <div className="flex flex-col gap-3">
+              {' '}
+              <Label htmlFor="time-picker" className="px-1">
+                {' '}
+                Time{' '}
+              </Label>{' '}
+              <Input
+                type="time"
+                id="time-picker"
+                step="1"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              />{' '}
             </div>
           </div>
 
@@ -239,9 +254,24 @@ const CreateEvents = () => {
             </div>
 
             {/* End Time */}
-            <div className="flex flex-col gap-3">
+            {/* <div className="flex flex-col gap-3">
               <Label>Ending Time</Label>
               <Input type="time" step="1" value={endingTime} onChange={(e) => setEndingTime(e.target.value)} />
+            </div> */}
+            <div className="flex flex-col gap-3">
+              {' '}
+              <Label htmlFor="time-picker" className="px-1">
+                {' '}
+                Ending Time{' '}
+              </Label>{' '}
+              <Input
+                type="time"
+                id="time-picker"
+                step="1"
+                value={endingTime}
+                onChange={(e) => setEndingTime(e.target.value)}
+                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              />{' '}
             </div>
           </div>
 
