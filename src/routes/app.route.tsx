@@ -47,6 +47,7 @@ import { ProfilePage } from '@/pages/blog/ProfilePage';
 import RegisteredStudents from '@/pages/adminDashboard/RegisteredStudents';
 import Payments from '@/pages/adminDashboard/Payments';
 import BlogView from '@/pages/blog/BlogView';
+import GalleryPage from '@/pages/gallery/GalleryPage';
 
 function AppRouter() {
   const dispatch = useDispatch<AppDispatch>();
@@ -83,6 +84,7 @@ function AppRouter() {
           <Route path={RoutePaths.EVENTS} element={<EventPage />} />
           <Route path={RoutePaths.TIMELINE} element={<TimelinePage />} />
           <Route path={RoutePaths.PEOPLE} element={<LeadershipPage />} />
+          <Route path={RoutePaths.GALLERY} element={<GalleryPage />} />
           <Route path={RoutePaths.CONTACT} element={<ContactPage />} />
           <Route path={RoutePaths.JOIN} element={<JoinPage />} />
           <Route path={RoutePaths.SIGN_IN} element={<SignInPage />} />
@@ -94,7 +96,6 @@ function AppRouter() {
               <Route index element={<Dashboard />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="events" element={<Events />} />
-              {/* <Route path="registered-students" element={<RegisteredStudents />} /> */}
               <Route path="events/:id/registered-students" element={<RegisteredStudents />} />
               <Route path="create-events" element={<CreateEvents />} />
               <Route path="update-events" element={<UpdateEvent />} />

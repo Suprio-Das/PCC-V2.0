@@ -51,6 +51,7 @@ const routeList: RouteProps[] = [
   { href: RoutePaths.ABOUT, label: 'About' },
   { href: RoutePaths.BLOG, label: 'Blog' },
   { href: RoutePaths.EVENTS, label: 'Events' },
+  { href: RoutePaths.GALLERY, label: 'Gallery' },
   { href: RoutePaths.CONTACT, label: 'Contact Us' },
 ];
 
