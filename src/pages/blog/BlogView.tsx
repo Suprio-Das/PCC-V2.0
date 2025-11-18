@@ -80,7 +80,7 @@ export default function BlogViewStatic() {
         );
       }
     } catch (error) {
-      toast.error('Error occured while starring.');
+      toast.error('Admin can not star');
     }
   };
 
