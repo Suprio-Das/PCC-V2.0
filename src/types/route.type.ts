@@ -4,6 +4,7 @@ export enum RoutePaths {
   BLOG = '/blog',
   BLOGVIEW = '/blog-view/:id',
   FULLLEADERBOARD = '/leaderboard',
+  GALLERY = '/gallery',
   PROFILE = '/profile',
   EVENTS = '/events',
   TIMELINE = '/timeline',

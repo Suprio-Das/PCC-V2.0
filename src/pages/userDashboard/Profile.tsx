@@ -114,7 +114,7 @@ const Profile = () => {
               <DialogContent className="w-full sm:w-[400px] md:w-[450px] rounded-2xl font-grotesk max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="text-center text-2xl font-semibold font-garamond">Update Profile</DialogTitle>
-                  <DialogDescription className="text-center text-gray-500 font-poppins">
+                  <DialogDescription className="text-center text-gray-500 font-poppins dark:text-gray-300">
                     Update your info to stay connected
                   </DialogDescription>
                 </DialogHeader>
@@ -126,7 +126,7 @@ const Profile = () => {
                       <Input
                         value={studentInfo?.name || ''}
                         onChange={(e) => setStudentInfo({ ...studentInfo, name: e.target.value })}
-                        className="text-gray-600 mt-2"
+                        className="text-gray-600 mt-2 dark:text-white"
                       />
                     </div>
                   </div>
@@ -137,7 +137,7 @@ const Profile = () => {
                       <Input
                         value={studentInfo?.linkedinprofile || ''}
                         onChange={(e) => setStudentInfo({ ...studentInfo, linkedinprofile: e.target.value })}
-                        className="text-gray-600 mt-2"
+                        className="text-gray-600 mt-2 dark:text-white"
                       />
                     </div>
                     <div>
@@ -145,7 +145,7 @@ const Profile = () => {
                       <Input
                         value={studentInfo?.githubprofile || ''}
                         onChange={(e) => setStudentInfo({ ...studentInfo, githubprofile: e.target.value })}
-                        className="text-gray-600 mt-2"
+                        className="text-gray-600 mt-2 dark:text-white"
                       />
                     </div>
                   </div>
@@ -156,7 +156,7 @@ const Profile = () => {
                       maxLength={100}
                       value={studentInfo?.bio || ''}
                       onChange={(e) => setStudentInfo({ ...studentInfo, bio: e.target.value })}
-                      className="text-gray-600 mt-2"
+                      className="text-gray-600 mt-2 dark:text-white"
                     />
                   </div>
 
