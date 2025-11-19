@@ -115,7 +115,7 @@ function AppRouter() {
               <Route path="registered-events" element={<RegisteredEvents />} />
               <Route path="your-blog" element={<UserBlog />} />
               <Route path="write-blog" element={<WriteBlog />} />
-              <Route path="update-blog" element={<UpdateBlog />} />
+              <Route path="/user-dashboard/update-blog/:id" element={<UpdateBlog />} />
               <Route path="dues" element={<MakePayment />} />
               <Route path="payment-history" element={<PaymentHistory />} />
               <Route path="settings" element={<Settings />} />

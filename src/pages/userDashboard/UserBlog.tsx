@@ -96,7 +96,7 @@ const UserBlog: React.FC = () => {
                         />
                         <h2
                           className="hover:underline font-semibold text-gray-800 dark:text-gray-100 cursor-pointer font-grotesk"
-                          onClick={() => navigate(`/blog-view/${item._id}`)}
+                          onClick={() => navigate(`/blogs/${item._id}`)}
                         >
                           {item.title}
                         </h2>
@@ -115,7 +115,7 @@ const UserBlog: React.FC = () => {
                           <DropdownMenuContent className="w-40 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-1">
                             <DropdownMenuItem
                               className="font-grotesk"
-                              onClick={() => navigate(`/dashboard/write-blog/${item._id}`)}
+                              onClick={() => navigate(`/user-dashboard/update-blog/${item._id}`)}
                             >
                               <Edit className="mr-2 size-4" /> Edit
                             </DropdownMenuItem>
