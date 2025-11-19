@@ -96,7 +96,7 @@ const UserBlog: React.FC = () => {
                         />
                         <h2
                           className="hover:underline font-semibold text-gray-800 dark:text-gray-100 cursor-pointer font-grotesk"
-                          onClick={() => navigate(`/blogs/${item._id}`)}
+                          onClick={() => navigate(`/blog-view/${item._id}`)}
                         >
                           {item.title}
                         </h2>
