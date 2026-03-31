@@ -50,7 +50,7 @@ export const Advisor = () => {
 
   return (
     <section id="advisor" className="container py-16 px-6 md:px-12 flex flex-col gap-10 items-center">
-      {/* Section Header (unchanged) */}
+      {/* Section Header */}
       <header className="flex flex-col gap-2 text-center">
         <p className="text-green-500 text-sm md:text-xl font-garamond">People in Charge</p>
         <h2
@@ -64,12 +64,12 @@ export const Advisor = () => {
 
       {/* Advisor Panel Section */}
       <div className="w-full flex flex-col items-center gap-8">
-        {/* Panel Title */}
+        {/* Title */}
         <div className="bg-green-100 border border-green-400 rounded px-6 py-3 mb-4">
           <h3 className="font-semibold text-lg text-green-800 md:text-2xl">Advisor Panel</h3>
         </div>
 
-        {/* Card Grid */}
+        {/* Card */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
           {AdvisorPanelList.map((person, idx) => (
             <Card
@@ -102,7 +102,7 @@ export const Advisor = () => {
           ))}
         </div>
 
-        {/* Button (unchanged) */}
+        {/* Button */}
         <button
           className="join-pcc-btn font-garamond flex items-center gap-2 mt-4 text-green-700 transition hover:text-white btn"
           onClick={() => navigate('/advisor')}
